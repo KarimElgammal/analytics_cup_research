@@ -1,4 +1,4 @@
-# SkillCorner X PySport Analytics Cup 2026
+# SkillCorner X PySport Analytics Cup
 This repository contains the submission template for the SkillCorner X PySport Analytics Cup **Research Track**. 
 Your submission for the **Research Track** should be on the `main` branch of your own fork of this repository.
 
