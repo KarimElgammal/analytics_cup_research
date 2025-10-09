@@ -2,6 +2,8 @@
 This repository contains the submission template for the SkillCorner X PySport Analytics Cup **Research Track**. 
 Your submission for the **Research Track** should be on the `main` branch of your own fork of this repository.
 
+Find the Analytics Cup dataset (and tutorials) on the [**SkillCorner Open Data Repository**](https://github.com/SkillCorner/opendata).
+
 ## Submitting
 Make sure your `main` branch contains:
 1. A single Jupyter Notebook in the root of this repository called `submission.ipynb`
