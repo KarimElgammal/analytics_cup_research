@@ -17,7 +17,7 @@ Finally:
 - Make sure your GitHub repository does **not** contain big data files. The tracking data should be loaded directly from the [Analytics Cup Data GitHub Repository](https://github.com/SkillCorner/opendata).For more information on how to load the data directly from GitHub please see this [Jupyter Notebook](https://github.com/SkillCorner/opendata/blob/master/resources/getting-started-skc-tracking-kloppy.ipynb).
 - Make sure the `submission.ipynb` notebook runs on a clean environment.
 
-_⚠️ Not adhering to these submission rules may result in a point deduction._
+_⚠️ Not adhering to these submission rules and the [**Analytics Cup Rules**](https://pysport.org/analytics-cup/rules) may result in a point deduction._
 
 ---
 
