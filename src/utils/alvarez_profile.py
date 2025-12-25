@@ -91,18 +91,26 @@ MIN_ENTRIES_THRESHOLD = 3
 
 # Alvarez archetype description for AI insights
 ALVAREZ_DESCRIPTION = """
-Julian Alvarez is characterised by intelligent off-the-ball movement rather
-than raw dribbling ability. StatsBomb data shows 60% shot accuracy and 20%
-conversion rate in high-pressure matches including World Cup finals.
+Julian Alvarez is a modern forward archetype characterised by intelligent movement,
+spatial awareness, and clinical finishing rather than dribbling ability.
 
-Key traits mapped from event data to tracking metrics:
-- Box presence (24 touches) → High danger_rate, central/half-space preference
-- Clinical finishing (20% conversion) → Entries lead to shots
-- Intelligent movement → High separation from defenders
-- Link-up play (2 key passes) → Good passing options when receiving
-- Technical security (78.9% pass accuracy) → Moderate carry percentage
+StatsBomb metrics (World Cup, Copa América):
+- 60% shot accuracy, 20% conversion rate (clinical finisher)
+- 24 box touches per tournament (comfortable in dangerous areas)
+- 78.9% pass accuracy (calculated risk-taker in build-up)
+- Only 50% dribble success (NOT a dribbler)
+- 2 key passes (contributes to team play)
 
-He's NOT a dribbler (50% success) - he finds space through movement.
+SkillCorner target profile mapping:
+- danger_rate: 90/100 (mirrors 20% conversion)
+- avg_separation: 85/100 (finds space between lines)
+- central_pct: 75/100 (operates centrally, not wide)
+- avg_entry_speed: 70/100 (dynamic but not pace-reliant)
+- carry_pct: 40/100 (LOW - penalises dribblers)
+
+The key insight: Alvarez creates danger through intelligent positioning and timing
+rather than beating defenders with the ball. Similar players show high danger rates
+and separation values without relying on dribbling.
 """
 
 
