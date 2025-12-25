@@ -4,6 +4,8 @@ SkillCorner X PySport Analytics Cup 2026 — Research Track
 
 A player similarity study using broadcast tracking data to identify A-League players with Julian Alvarez-like characteristics.
 
+**[View Documentation](https://karimelgammal.github.io/analytics_cup_research/)**
+
 ---
 
 ## Abstract
@@ -20,17 +22,55 @@ Limitations include the small sample size of 10 matches, the cross-dataset mappi
 
 ---
 
-## Run Instructions
+## Quick Start
+
+### Option 1: Using uv (Recommended)
 
 ```bash
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # Clone and setup
-git clone https://github.com/YOUR_USERNAME/analytics_cup_research.git
+git clone https://github.com/KarimElgammal/analytics_cup_research.git
 cd analytics_cup_research
 
-# Run with uv
+# Create environment and install dependencies
 uv venv --python 3.12
 uv pip install -r requirements.txt
+
+# Run the notebook
 uv run jupyter notebook submission.ipynb
+```
+
+### Option 2: Using pip
+
+```bash
+git clone https://github.com/KarimElgammal/analytics_cup_research.git
+cd analytics_cup_research
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+jupyter notebook submission.ipynb
+```
+
+---
+
+## Usage
+
+```python
+from src.core import Archetype, PlayerProfiler, SimilarityEngine
+
+# Build player profiles from SkillCorner data
+profiler = PlayerProfiler.from_skillcorner(min_entries=3)
+
+# Compute similarity against Alvarez archetype
+engine = SimilarityEngine(Archetype.alvarez())
+engine.fit(profiler.profiles)
+rankings = engine.rank(top_n=10)
+
+# Display results
+for row in rankings.to_dicts():
+    print(f"{row['rank']}. {row['player_name']} - {row['similarity_score']}%")
 ```
 
 ---
@@ -41,21 +81,26 @@ uv run jupyter notebook submission.ipynb
 analytics_cup_research/
 ├── submission.ipynb              # Research notebook
 ├── requirements.txt              # Dependencies
-├── docs/
-│   └── methodology.md           # Technical derivation of Alvarez target profile
+├── mkdocs.yml                    # Documentation config
+├── docs/                         # Documentation
+│   ├── index.md
+│   ├── getting-started.md
+│   ├── examples.md
+│   ├── methodology.md            # Technical derivation
+│   ├── guide/                    # User guides
+│   └── api/                      # API reference
 └── src/
-    ├── data/loader.py           # Data loading
-    ├── analysis/
-    │   ├── entries.py           # Entry detection
-    │   ├── profiles.py          # Player profiles
-    │   ├── similarity.py        # Similarity scoring
-    │   └── danger_model.py      # ML model
-    └── visualization/
-        ├── pitch.py             # Pitch plots
-        └── radar.py             # Radar charts
+    ├── core/                     # Core classes
+    │   ├── archetype.py          # Archetype definition
+    │   ├── profiler.py           # Player profiling
+    │   ├── similarity.py         # Similarity engine
+    │   └── report.py             # AI reports
+    ├── data/                     # Data loading
+    ├── analysis/                 # Analysis functions
+    └── visualization/            # Plotting functions
 ```
 
-For detailed technical documentation on how the Alvarez target profile was derived from StatsBomb data and mapped to SkillCorner metrics, see [docs/methodology.md](docs/methodology.md).
+For detailed technical documentation, see [docs/methodology.md](docs/methodology.md) or visit the [full documentation](https://karimelgammal.github.io/analytics_cup_research/).
 
 ---
 
