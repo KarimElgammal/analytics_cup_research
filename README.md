@@ -1,31 +1,62 @@
-# SkillCorner X PySport Analytics Cup
-This repository contains the submission template for the SkillCorner X PySport Analytics Cup **Research Track**. 
-Your submission for the **Research Track** should be on the `main` branch of your own fork of this repository.
+# Finding Alvarez in the A-League
 
-Find the Analytics Cup [**dataset**](https://github.com/SkillCorner/opendata/tree/master/data) and [**tutorials**](https://github.com/SkillCorner/opendata/tree/master/resources) on the [**SkillCorner Open Data Repository**](https://github.com/SkillCorner/opendata).
+SkillCorner X PySport Analytics Cup 2026 — Research Track
 
-## Submitting
-Make sure your `main` branch contains:
-1. A single Jupyter Notebook in the root of this repository called `submission.ipynb`
-    - This Juypter Notebook can not contain more than 2000 words.
-    - All other code should also be contained in this repository, but should be imported into the notebook from the `src` folder.
-2. An abstract of maximum 500 words that follows the **Research Track Abstract Template**.
-    - The abstract can contain a maximum of 2 figures, 2 tables or 1 figure and 1 table.
-3. Submit your GitHub repository on the [Analytics Cup Pretalx page](https://pretalx.pysport.org)
-
-Finally:
-- Make sure your GitHub repository does **not** contain big data files. The tracking data should be loaded directly from the [Analytics Cup Data GitHub Repository](https://github.com/SkillCorner/opendata).For more information on how to load the data directly from GitHub please see this [Jupyter Notebook](https://github.com/SkillCorner/opendata/blob/master/resources/getting-started-skc-tracking-kloppy.ipynb).
-- Make sure the `submission.ipynb` notebook runs on a clean environment.
-
-_⚠️ Not adhering to these submission rules and the [**Analytics Cup Rules**](https://pysport.org/analytics-cup/rules) may result in a point deduction or disqualification._
+A player similarity study using broadcast tracking data to identify A-League players with Julian Alvarez-like characteristics.
 
 ---
 
-## Research Track Abstract Template (max. 500 words)
-#### Introduction
+## Abstract
 
-#### Methods
+Julian Alvarez represents a modern forward archetype characterised by intelligent movement, spatial awareness, and clinical finishing. This research asks whether SkillCorner tracking data can identify A-League players with similar characteristics.
 
-#### Results
+I derived the Alvarez archetype from StatsBomb free event data covering World Cup and Copa América matches. Key metrics include 60% shot accuracy, 20% conversion rate, 24 box touches, and notably only 50% dribble success — indicating he creates danger through movement and positioning rather than dribbling.
 
-#### Conclusion
+Using SkillCorner's Game Intelligence data from 10 A-League matches, I detected 245 final third entries and built player profiles based on spatial positioning, zone preferences, and outcome rates. To calibrate the similarity weights, I trained a GradientBoosting classifier to predict dangerous entries, achieving a cross-validated AUC of 0.656. The feature importances informed weight selection, with separation, entry speed, and defensive line distance emerging as the strongest predictors.
+
+The analysis identified several A-League players exhibiting Alvarez-like characteristics. Top candidates share high danger rates (entries frequently leading to shots), good separation values (finding space between defensive lines), and central zone preferences matching Alvarez's comfort in dangerous areas.
+
+Limitations include the small sample size of 10 matches, the cross-dataset mapping from StatsBomb events to SkillCorner tracking, and the absence of position labels. Despite these constraints, this approach demonstrates that tracking data can support archetype-based player identification for scouting and recruitment purposes.
+
+---
+
+## Run Instructions
+
+```bash
+# Clone and setup
+git clone https://github.com/YOUR_USERNAME/analytics_cup_research.git
+cd analytics_cup_research
+
+# Run with uv
+uv venv --python 3.12
+uv pip install -r requirements.txt
+uv run jupyter notebook submission.ipynb
+```
+
+---
+
+## Project Structure
+
+```
+analytics_cup_research/
+├── submission.ipynb              # Research notebook
+├── requirements.txt              # Dependencies
+├── docs/
+│   └── methodology.md           # Technical derivation of Alvarez target profile
+└── src/
+    ├── data/loader.py           # Data loading
+    ├── analysis/
+    │   ├── entries.py           # Entry detection
+    │   ├── profiles.py          # Player profiles
+    │   ├── similarity.py        # Similarity scoring
+    │   └── danger_model.py      # ML model
+    └── visualization/
+        ├── pitch.py             # Pitch plots
+        └── radar.py             # Radar charts
+```
+
+For detailed technical documentation on how the Alvarez target profile was derived from StatsBomb data and mapped to SkillCorner metrics, see [docs/methodology.md](docs/methodology.md).
+
+---
+
+SkillCorner X PySport Analytics Cup 2026 — Research Track Submission
