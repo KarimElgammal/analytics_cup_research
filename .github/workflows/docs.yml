@@ -29,8 +29,8 @@
 
         - name: Install dependencies
           run: |
+            pip install -r requirements.txt
             pip install mkdocs-material mkdocstrings[python]
-            pip install polars numpy matplotlib
 
         - name: Build docs
           env:
@@ -55,3 +55,4 @@
         - name: Deploy to GitHub Pages
           id: deployment
           uses: actions/deploy-pages@v4
+
