@@ -34,6 +34,8 @@
             pip install -e .
 
         - name: Build docs
+          env:
+            PYTHONPATH: ${{ github.workspace }}
           run: mkdocs build
 
         - name: Setup Pages
