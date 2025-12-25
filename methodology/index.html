@@ -587,10 +587,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#computed-player-profiles" class="md-nav__link">
+  <a href="#computed-player-profiles-world-cup-2022" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Computed Player Profiles
+        Computed Player Profiles (World Cup 2022)
       
     </span>
   </a>
@@ -1622,10 +1622,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#computed-player-profiles" class="md-nav__link">
+  <a href="#computed-player-profiles-world-cup-2022" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Computed Player Profiles
+        Computed Player Profiles (World Cup 2022)
       
     </span>
   </a>
@@ -2186,6 +2186,10 @@
 
 
 <h1 id="methodology-finding-alvarez-in-the-a-league">Methodology: Finding Alvarez in the A-League<a class="headerlink" href="#methodology-finding-alvarez-in-the-a-league" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Online Documentation</strong>: <a href="https://karimelgammal.github.io/analytics_cup_research/">karimelgammal.github.io/analytics_cup_research</a></p>
+<p><strong>Repository</strong>: <a href="https://github.com/KarimElgammal/analytics_cup_research">github.com/KarimElgammal/analytics_cup_research</a></p>
+</blockquote>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p>This document explains how I derive player archetypes from StatsBomb event data and map them to SkillCorner tracking metrics for player similarity analysis.</p>
 <hr />
@@ -2320,21 +2324,28 @@
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="s2">&quot;alvarez&quot;</span><span class="p">:</span> <span class="p">{</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>        <span class="s2">&quot;player_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Julián Álvarez&quot;</span><span class="p">,</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Julian Alvarez&quot;</span><span class="p">,</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="s2">&quot;competitions&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">43</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;FIFA World Cup 2022&quot;</span><span class="p">)],</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="p">},</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="s2">&quot;messi&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>        <span class="s2">&quot;player_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lionel Andrés Messi Cuccittini&quot;</span><span class="p">,</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>        <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lionel Messi&quot;</span><span class="p">,</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        <span class="s2">&quot;competitions&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">43</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;FIFA World Cup 2022&quot;</span><span class="p">)],</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="p">},</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="s2">&quot;mbappe&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        <span class="s2">&quot;player_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Kylian Mbappé Lottin&quot;</span><span class="p">,</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>        <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Kylian Mbappe&quot;</span><span class="p">,</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        <span class="s2">&quot;competitions&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">43</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;FIFA World Cup 2022&quot;</span><span class="p">)],</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="p">},</span>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="p">}</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="s2">&quot;Forward&quot;</span><span class="p">,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;Movement-focused, intelligent runs, clinical finishing&quot;</span><span class="p">,</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="s2">&quot;competitions&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">43</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;FIFA World Cup 2022&quot;</span><span class="p">)],</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="p">},</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="s2">&quot;giroud&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        <span class="s2">&quot;player_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Olivier Giroud&quot;</span><span class="p">,</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>        <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Olivier Giroud&quot;</span><span class="p">,</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>        <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="s2">&quot;Forward&quot;</span><span class="p">,</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;Target man, hold-up play, aerial threat, 0</span><span class="si">% d</span><span class="s2">ribble reliance&quot;</span><span class="p">,</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>        <span class="s2">&quot;competitions&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">43</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;FIFA World Cup 2022&quot;</span><span class="p">)],</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="p">},</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="s2">&quot;kane&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>        <span class="s2">&quot;player_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Harry Kane&quot;</span><span class="p">,</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>        <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Harry Kane&quot;</span><span class="p">,</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>        <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="s2">&quot;Forward&quot;</span><span class="p">,</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>        <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;Complete forward, link-up play, clinical finishing&quot;</span><span class="p">,</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>        <span class="s2">&quot;competitions&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">43</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;FIFA World Cup 2022&quot;</span><span class="p">)],</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="p">},</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="c1"># ... plus lewandowski, rashford, en_nesyri, gvardiol, romero, lloris, livakovic</span>
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="p">}</span>
 </span></code></pre></div>
-<h3 id="computed-player-profiles">Computed Player Profiles<a class="headerlink" href="#computed-player-profiles" title="Permanent link">&para;</a></h3>
+<h3 id="computed-player-profiles-world-cup-2022">Computed Player Profiles (World Cup 2022)<a class="headerlink" href="#computed-player-profiles-world-cup-2022" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2354,22 +2365,29 @@
 <td>Movement-focused</td>
 </tr>
 <tr>
-<td>Messi</td>
-<td>26.5%</td>
-<td>64.7%</td>
-<td>72.2%</td>
-<td>Skilled dribbler</td>
+<td>Giroud</td>
+<td>23.5%</td>
+<td>58.8%</td>
+<td>0.0%</td>
+<td>Target man</td>
 </tr>
 <tr>
-<td>Mbappe</td>
-<td>32.5%</td>
-<td>60.0%</td>
-<td>57.8%</td>
+<td>Kane</td>
+<td>16.7%</td>
+<td>50.0%</td>
+<td>43%</td>
+<td>Complete forward</td>
+</tr>
+<tr>
+<td>Rashford</td>
+<td>27.3%</td>
+<td>54.5%</td>
+<td>60%</td>
 <td>Pace + dribbling</td>
 </tr>
 </tbody>
 </table>
-<p>The key difference: Alvarez's 0% dribble success (he doesn't attempt many) vs Messi's 72.2% confirms their different styles.</p>
+<p>The key insight: Both Alvarez and Giroud have 0% dribble success — they create through movement, not dribbling. This distinguishes them from pace-reliant players like Rashford.</p>
 <hr />
 <h2 id="part-2-mapping-statsbomb-skillcorner">Part 2: Mapping StatsBomb → SkillCorner<a class="headerlink" href="#part-2-mapping-statsbomb-skillcorner" title="Permanent link">&para;</a></h2>
 <h3 id="the-challenge">The Challenge<a class="headerlink" href="#the-challenge" title="Permanent link">&para;</a></h3>
@@ -2385,12 +2403,12 @@
 </thead>
 <tbody>
 <tr>
-<td>20% conversion rate</td>
+<td>36.4% conversion rate</td>
 <td><code>danger_rate</code></td>
 <td>Entries leading to shots proxy finishing quality</td>
 </tr>
 <tr>
-<td>24 box touches</td>
+<td>8 box touches</td>
 <td><code>central_pct</code></td>
 <td>Central entries = box presence</td>
 </tr>
@@ -2400,12 +2418,12 @@
 <td>Finding space between lines</td>
 </tr>
 <tr>
-<td>NOT a dribbler (50%)</td>
+<td>NOT a dribbler (0%)</td>
 <td><code>carry_pct</code> (LOW weight)</td>
 <td>Carries ≠ dribbles in tracking</td>
 </tr>
 <tr>
-<td>Link-up play (2 key passes)</td>
+<td>Link-up play</td>
 <td><code>avg_passing_options</code></td>
 <td>More options = better link-up</td>
 </tr>
