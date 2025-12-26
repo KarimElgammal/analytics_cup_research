@@ -4,7 +4,7 @@ SkillCorner X PySport Analytics Cup 2026 - Research Track
 
 A player similarity study using broadcast tracking data to identify A-League players with characteristics matching world-class archetypes.
 
-**[View Documentation](https://karimelgammal.github.io/analytics_cup_research/)**
+**[View Documentation](https://karimelgammal.github.io/analytics_cup_research/)** | **[Live Demo](https://huggingface.co/spaces/KarimElgammal/analytics-cup-research)**
 
 ---
 
