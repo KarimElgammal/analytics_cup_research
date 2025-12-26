@@ -47,6 +47,11 @@ st.set_page_config(
     layout="wide",
 )
 
+# Sidebar links
+st.sidebar.markdown("### Links")
+st.sidebar.markdown("[Documentation](https://karimelgammal.github.io/analytics_cup_research/) | [GitHub](https://github.com/KarimElgammal/analytics_cup_research)")
+st.sidebar.markdown("---")
+
 st.title("\u26BD Archetype Comparison Tool")
 
 # Position selector at the top
