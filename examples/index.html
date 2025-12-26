@@ -978,6 +978,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#code-ai-scouting-insights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code: AI Scouting Insights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Code: AI Scouting Insights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-ai-output-forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example AI Output (Forward)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-ai-output-defender" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example AI Output (Defender)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-ai-output-goalkeeper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example AI Output (Goalkeeper)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1114,6 +1164,56 @@
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-ai-scouting-insights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code: AI Scouting Insights
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Code: AI Scouting Insights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-ai-output-forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example AI Output (Forward)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-ai-output-defender" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example AI Output (Defender)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-ai-output-goalkeeper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example AI Output (Goalkeeper)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1313,6 +1413,47 @@
 </span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="n">explanation</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="n">player_name</span><span class="p">)</span>
 </span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">explanation</span><span class="p">[</span><span class="s1">&#39;similarity_score&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
 </span></code></pre></div>
+<hr />
+<h2 id="code-ai-scouting-insights">Code: AI Scouting Insights<a class="headerlink" href="#code-ai-scouting-insights" title="Permanent link">&para;</a></h2>
+<p>Generate position-aware AI recommendations:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.ai_insights</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_similarity_insight</span><span class="p">,</span> <span class="n">has_valid_token</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># check token exists</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">if</span> <span class="n">has_valid_token</span><span class="p">():</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="c1"># forward analysis</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="n">insight</span> <span class="o">=</span> <span class="n">generate_similarity_insight</span><span class="p">(</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="n">forward_rankings</span><span class="p">,</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;alvarez&quot;</span><span class="p">),</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>        <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>        <span class="n">position_type</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="p">)</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">insight</span><span class="p">)</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="c1"># defender analysis</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    <span class="n">insight</span> <span class="o">=</span> <span class="n">generate_similarity_insight</span><span class="p">(</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>        <span class="n">defender_rankings</span><span class="p">,</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>        <span class="n">defender_archetype</span><span class="p">,</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>        <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>        <span class="n">position_type</span><span class="o">=</span><span class="s2">&quot;defender&quot;</span><span class="p">,</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>    <span class="p">)</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">insight</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="example-ai-output-forward">Example AI Output (Forward)<a class="headerlink" href="#example-ai-output-forward" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>Z. Clough</strong> from Adelaide United emerges as the closest match with 88.7% similarity. His 50% danger rate mirrors Alvarez's clinical finishing, though with fewer entries (4 vs typical 8+).</p>
+<p>The key difference between Clough and the archetype lies in movement patterns. While he shows strong separation (8.2m), his central percentage is lower than target.</p>
+<p>For development potential, <strong>T. Payne</strong> at 22 offers interesting upside. His entry speed and willingness to attack centrally align with Alvarez's profile.</p>
+</blockquote>
+<h3 id="example-ai-output-defender">Example AI Output (Defender)<a class="headerlink" href="#example-ai-output-defender" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>N. Paull</strong> leads the rankings with 82.4% similarity to Gvardiol. His stop danger rate of 68% and pressing rate of 72% suggest a similarly aggressive defensive approach.</p>
+<p>Unlike Gvardiol who excels at carrying the ball out, Paull shows lower progression metrics but stronger tackling numbers. This suggests a more traditional centre-back profile.</p>
+</blockquote>
+<h3 id="example-ai-output-goalkeeper">Example AI Output (Goalkeeper)<a class="headerlink" href="#example-ai-output-goalkeeper" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>H. Devenish-Meares</strong> shows 91.2% similarity to Lloris with excellent pass success (87%) and quick distribution tendency.</p>
+<p>At 22, he represents the strongest development prospect among the top candidates. His preference for short distribution matches the sweeper-keeper archetype.</p>
+</blockquote>
 
 
 
