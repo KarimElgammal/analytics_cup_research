@@ -2,6 +2,8 @@
 # Deploy everything: GitHub, Docs, and HuggingFace Space
 set -e
 
+cd "$(dirname "$0")/.."
+
 echo "=== Deploying to GitHub ==="
 git add -A
 git commit -m "${1:-Update}" --allow-empty || true
@@ -13,7 +15,10 @@ PYTHONPATH=. uv run mkdocs gh-deploy --force
 
 echo ""
 echo "=== Deploying to HuggingFace Space ==="
-git push hf main
+hf upload KarimElgammal/analytics-cup-research . . --repo-type=space \
+    --exclude="docs/assets/*" --exclude=".git/*" --exclude=".venv/*" \
+    --exclude="site/*" --exclude="__pycache__/*" --exclude="*.pyc" \
+    --exclude=".rate_limits.json" --exclude="github_token.txt" --exclude="hf_token.txt"
 
 echo ""
 echo "=== All deployments complete! ==="

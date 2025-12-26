@@ -2,6 +2,8 @@
 # Deploy to GitHub and rebuild docs
 set -e
 
+cd "$(dirname "$0")/.."
+
 echo "=== Pushing to GitHub ==="
 git add -A
 git commit -m "${1:-Update}" --allow-empty || true
