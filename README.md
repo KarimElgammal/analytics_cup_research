@@ -17,6 +17,8 @@ A player similarity study using broadcast tracking data to identify A-League pla
 
 **[View Documentation](https://karimelgammal.github.io/analytics_cup_research/)** | **[Live Demo](https://huggingface.co/spaces/KarimElgammal/analytics-cup-research)**
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/KarimElgammal/analytics_cup_research/HEAD?labpath=submission.ipynb)
+
 ---
 
 ## Abstract
