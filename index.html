@@ -469,6 +469,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#quick-example" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -996,6 +1007,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#quick-example" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1064,11 +1086,11 @@
 <p>SkillCorner Scout is a Python library for identifying players who match specific playing styles using broadcast tracking data. Define an archetype (like Julian Alvarez's intelligent movement style), and find similar players in any league with SkillCorner coverage.</p>
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>10 Pre-built Archetypes</strong>: Computed from real StatsBomb World Cup 2022 data</li>
+<li><strong>12 Pre-built Archetypes</strong>: Computed from real StatsBomb World Cup 2022 data</li>
+<li><strong>ML-Calibrated Weights</strong>: GradientBoosting models for each position type</li>
 <li><strong>Profile Building</strong>: Automatically extract player profiles from SkillCorner tracking data</li>
-<li><strong>Similarity Scoring</strong>: Rank players by ML-calibrated weighted cosine similarity</li>
-<li><strong>AI Reports</strong>: Generate natural language scouting reports using LLM APIs</li>
-<li><strong>Custom Archetypes</strong>: Create your own archetypes with target profiles</li>
+<li><strong>Similarity Scoring</strong>: Rank players by weighted cosine similarity</li>
+<li><strong>Interactive App</strong>: Streamlit-based archetype comparison tool</li>
 </ul>
 <h2 id="available-archetypes">Available Archetypes<a class="headerlink" href="#available-archetypes" title="Permanent link">&para;</a></h2>
 <table>
@@ -1076,53 +1098,63 @@
 <tr>
 <th>Position</th>
 <th>Players</th>
+<th>ML Model AUC</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Forward</strong></td>
 <td>Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri</td>
+<td>0.656</td>
 </tr>
 <tr>
 <td><strong>Defender</strong></td>
-<td>Gvardiol, Romero</td>
+<td>Gvardiol, Romero, Hakimi</td>
+<td>0.845</td>
 </tr>
 <tr>
 <td><strong>Goalkeeper</strong></td>
-<td>Lloris, Livakovic</td>
+<td>Lloris, Livakovic, Bounou</td>
+<td>0.993</td>
 </tr>
 </tbody>
 </table>
+<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Clone and run (handles everything automatically)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/KarimElgammal/analytics_cup_research.git
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>analytics_cup_research
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./run_archetype_compare.sh
+</span></code></pre></div>
 <h2 id="quick-example">Quick Example<a class="headerlink" href="#quick-example" title="Permanent link">&para;</a></h2>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.similarity</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimilarityEngine</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Load archetype from StatsBomb data (10 players available)</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;alvarez&quot;</span><span class="p">)</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">archetype</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>  <span class="c1"># Shows actual World Cup 2022 stats</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># See all available archetypes</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">Archetype</span><span class="o">.</span><span class="n">list_available</span><span class="p">())</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># [&#39;alvarez&#39;, &#39;giroud&#39;, &#39;kane&#39;, &#39;lewandowski&#39;, &#39;rashford&#39;, &#39;en_nesyri&#39;,</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;romero&#39;, &#39;lloris&#39;, &#39;livakovic&#39;]</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Compute similarity rankings against your player profiles</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">SimilarityEngine</span><span class="p">(</span><span class="n">archetype</span><span class="p">)</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>  <span class="c1"># Your SkillCorner player profiles</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="n">rankings</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="c1"># Display results</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rankings</span><span class="o">.</span><span class="n">to_dicts</span><span class="p">():</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;rank&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;similarity_score&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.similarity</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimilarityEngine</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Load archetype from StatsBomb data (12 players available)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;alvarez&quot;</span><span class="p">)</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">archetype</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>  <span class="c1"># Shows actual World Cup 2022 stats</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># See all available archetypes</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">Archetype</span><span class="o">.</span><span class="n">list_available</span><span class="p">())</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># [&#39;alvarez&#39;, &#39;giroud&#39;, &#39;kane&#39;, &#39;lewandowski&#39;, &#39;rashford&#39;, &#39;en_nesyri&#39;,</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;romero&#39;, &#39;hakimi&#39;, &#39;lloris&#39;, &#39;livakovic&#39;, &#39;bounou&#39;]</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># Compute similarity rankings against your player profiles</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">SimilarityEngine</span><span class="p">(</span><span class="n">archetype</span><span class="p">)</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="n">engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>  <span class="c1"># Your SkillCorner player profiles</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="n">rankings</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="c1"># Display results</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rankings</span><span class="o">.</span><span class="n">to_dicts</span><span class="p">():</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;rank&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;similarity_score&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
 </span></code></pre></div>
 <h2 id="a-league-results">A-League Results<a class="headerlink" href="#a-league-results" title="Permanent link">&para;</a></h2>
-<p>Using 10 A-League matches, the analysis identified <strong>Z. Clough</strong> (Adelaide United) as the closest match to the Alvarez archetype with an 88.7% similarity score. See <a href="examples/">Examples</a> for full results and figures.</p>
+<p>Using 10 A-League matches, the analysis identified <strong>Z. Clough</strong> (Adelaide United) as the closest match to the Alvarez archetype with an 87.9% similarity score. See <a href="examples/">Examples</a> for full results and figures.</p>
 <h2 id="project-origin">Project Origin<a class="headerlink" href="#project-origin" title="Permanent link">&para;</a></h2>
-<p>Developed for the SkillCorner X PySport Analytics Cup 2026 Research Track. The research question: "Can SkillCorner tracking data identify A-League players with Julian Alvarez-like characteristics?"</p>
+<p>Developed for the SkillCorner X PySport Analytics Cup 2026 Research Track. The research question: "Can SkillCorner tracking data identify A-League players with specific archetype characteristics?"</p>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="getting-started/">Getting Started</a> - Installation and setup</li>
-<li><a href="methodology/">Methodology</a> - Full technical documentation with player selection rationale</li>
+<li><a href="methodology/">Methodology</a> - Full technical documentation with ML model details</li>
 <li><a href="guide/archetypes/">User Guide</a> - Learn how to define archetypes</li>
 <li><a href="examples/">Examples</a> - Full A-League results with figures</li>
 <li><a href="api/archetype/">API Reference</a> - Complete API documentation</li>

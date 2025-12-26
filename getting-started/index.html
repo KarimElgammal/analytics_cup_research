@@ -476,15 +476,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#quick-start-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        Quick Start (Recommended)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Installation">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manual-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Installation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manual Installation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -515,13 +526,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-setup" class="md-nav__link">
+  <a href="#running" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Data Setup
+        Running
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Running">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interactive-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive App
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#research-notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Research Notebook
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -541,17 +580,6 @@
     <span class="md-ellipsis">
       
         Available Archetypes
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#running-the-notebook" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Running the Notebook
       
     </span>
   </a>
@@ -993,15 +1021,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#quick-start-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        Quick Start (Recommended)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Installation">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manual-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Installation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manual Installation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1032,13 +1071,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-setup" class="md-nav__link">
+  <a href="#running" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Data Setup
+        Running
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Running">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interactive-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive App
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#research-notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Research Notebook
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1058,17 +1125,6 @@
     <span class="md-ellipsis">
       
         Available Archetypes
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#running-the-notebook" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Running the Notebook
       
     </span>
   </a>
@@ -1096,20 +1152,28 @@
 
 
 <h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
-<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<h3 id="option-1-using-uv-recommended">Option 1: Using uv (Recommended)<a class="headerlink" href="#option-1-using-uv-recommended" title="Permanent link">&para;</a></h3>
-<p><a href="https://docs.astral.sh/uv/">uv</a> is a fast Python package manager. Install it first:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># macOS/Linux</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Windows</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>powershell<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span>
+<h2 id="quick-start-recommended">Quick Start (Recommended)<a class="headerlink" href="#quick-start-recommended" title="Permanent link">&para;</a></h2>
+<p>The app launcher handles everything automatically:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/KarimElgammal/analytics_cup_research.git
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>analytics_cup_research
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./run_archetype_compare.sh
 </span></code></pre></div>
-<p>Then set up the project:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/KarimElgammal/analytics_cup_research.git
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>analytics_cup_research
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>uv<span class="w"> </span>venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<p>This will:
+1. Install <code>uv</code> if not present
+2. Create a Python 3.12 virtual environment
+3. Install all dependencies
+4. Launch the Streamlit app</p>
+<h2 id="manual-installation">Manual Installation<a class="headerlink" href="#manual-installation" title="Permanent link">&para;</a></h2>
+<h3 id="option-1-using-uv-recommended">Option 1: Using uv (Recommended)<a class="headerlink" href="#option-1-using-uv-recommended" title="Permanent link">&para;</a></h3>
+<p><a href="https://docs.astral.sh/uv/">uv</a> is a fast Python package manager:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Install uv</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Setup project</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/KarimElgammal/analytics_cup_research.git
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nb">cd</span><span class="w"> </span>analytics_cup_research
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>uv<span class="w"> </span>venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 </span></code></pre></div>
 <h3 id="option-2-using-pip">Option 2: Using pip<a class="headerlink" href="#option-2-using-pip" title="Permanent link">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/KarimElgammal/analytics_cup_research.git
@@ -1118,59 +1182,57 @@
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate<span class="w">  </span><span class="c1"># On Windows: .venv\Scripts\activate</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 </span></code></pre></div>
-<h2 id="data-setup">Data Setup<a class="headerlink" href="#data-setup" title="Permanent link">&para;</a></h2>
-<p>Place your SkillCorner tracking data in the <code>data/</code> directory:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>data/
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── match_1234/
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│   ├── match_data.json
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│   └── dynamic_events.csv
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>└── match_5678/
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    └── ...
+<h2 id="running">Running<a class="headerlink" href="#running" title="Permanent link">&para;</a></h2>
+<h3 id="interactive-app">Interactive App<a class="headerlink" href="#interactive-app" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./run_archetype_compare.sh
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># Or manually:</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>uv<span class="w"> </span>run<span class="w"> </span>streamlit<span class="w"> </span>run<span class="w"> </span>archetype_compare.py
+</span></code></pre></div>
+<h3 id="research-notebook">Research Notebook<a class="headerlink" href="#research-notebook" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>uv<span class="w"> </span>run<span class="w"> </span>jupyter<span class="w"> </span>notebook<span class="w"> </span>submission.ipynb
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># Or with pip:</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>jupyter<span class="w"> </span>notebook<span class="w"> </span>submission.ipynb
 </span></code></pre></div>
 <h2 id="basic-usage">Basic Usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h2>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.data.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_all_events</span><span class="p">,</span> <span class="n">add_team_names</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.entries</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_entries</span><span class="p">,</span> <span class="n">classify_entries</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.profiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_player_profiles</span><span class="p">,</span> <span class="n">filter_profiles</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.similarity</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimilarityEngine</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Load and process SkillCorner data</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">events</span> <span class="o">=</span> <span class="n">load_all_events</span><span class="p">()</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">events</span> <span class="o">=</span> <span class="n">add_team_names</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">detect_entries</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">classify_entries</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">build_player_profiles</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">filter_profiles</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">min_entries</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="c1"># Load archetype from StatsBomb data (10 available)</span>
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;alvarez&quot;</span><span class="p">)</span>
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="nb">print</span><span class="p">(</span><span class="n">archetype</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>  <span class="c1"># Shows actual stats</span>
-</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>
-</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="c1"># Compute similarity rankings</span>
-</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">SimilarityEngine</span><span class="p">(</span><span class="n">archetype</span><span class="p">)</span>
-</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="n">engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>
-</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="n">rankings</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>
-</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="c1"># Display results</span>
-</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rankings</span><span class="o">.</span><span class="n">to_dicts</span><span class="p">():</span>
-</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;rank&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;similarity_score&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.similarity</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimilarityEngine</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.data.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_all_events</span><span class="p">,</span> <span class="n">add_team_names</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.entries</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_entries</span><span class="p">,</span> <span class="n">classify_entries</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.profiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_player_profiles</span><span class="p">,</span> <span class="n">filter_profiles</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># Load and process SkillCorner data</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">events</span> <span class="o">=</span> <span class="n">load_all_events</span><span class="p">()</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">events</span> <span class="o">=</span> <span class="n">add_team_names</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">detect_entries</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">classify_entries</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">build_player_profiles</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">filter_profiles</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">min_entries</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="c1"># Load archetype from StatsBomb data (12 available)</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;alvarez&quot;</span><span class="p">)</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="nb">print</span><span class="p">(</span><span class="n">archetype</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>  <span class="c1"># Shows actual stats</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="c1"># Compute similarity rankings</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">SimilarityEngine</span><span class="p">(</span><span class="n">archetype</span><span class="p">)</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="n">engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="n">rankings</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="c1"># Display results</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rankings</span><span class="o">.</span><span class="n">to_dicts</span><span class="p">():</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;rank&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;similarity_score&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
 </span></code></pre></div>
 <h2 id="available-archetypes">Available Archetypes<a class="headerlink" href="#available-archetypes" title="Permanent link">&para;</a></h2>
-<p>Load any of these 10 pre-built archetypes:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># List all available</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">Archetype</span><span class="o">.</span><span class="n">list_available</span><span class="p">()</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># [&#39;alvarez&#39;, &#39;giroud&#39;, &#39;kane&#39;, &#39;lewandowski&#39;, &#39;rashford&#39;, &#39;en_nesyri&#39;,</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;romero&#39;, &#39;lloris&#39;, &#39;livakovic&#39;]</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># Load specific archetype</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;giroud&quot;</span><span class="p">)</span>  <span class="c1"># Target man style</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;rashford&quot;</span><span class="p">)</span>  <span class="c1"># Pace/dribbling style</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;gvardiol&quot;</span><span class="p">)</span>  <span class="c1"># Ball-playing defender</span>
-</span></code></pre></div>
-<h2 id="running-the-notebook">Running the Notebook<a class="headerlink" href="#running-the-notebook" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>uv<span class="w"> </span>run<span class="w"> </span>jupyter<span class="w"> </span>notebook<span class="w"> </span>submission.ipynb
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># Or with pip:</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>jupyter<span class="w"> </span>notebook<span class="w"> </span>submission.ipynb
+<p>Load any of these 12 pre-built archetypes:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># List all available</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">Archetype</span><span class="o">.</span><span class="n">list_available</span><span class="p">()</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># [&#39;alvarez&#39;, &#39;giroud&#39;, &#39;kane&#39;, &#39;lewandowski&#39;, &#39;rashford&#39;, &#39;en_nesyri&#39;,</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;romero&#39;, &#39;hakimi&#39;, &#39;lloris&#39;, &#39;livakovic&#39;, &#39;bounou&#39;]</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1"># Load specific archetype</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;giroud&quot;</span><span class="p">)</span>   <span class="c1"># Target man style</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;rashford&quot;</span><span class="p">)</span> <span class="c1"># Pace/dribbling style</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;gvardiol&quot;</span><span class="p">)</span> <span class="c1"># Ball-playing CB</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;hakimi&quot;</span><span class="p">)</span>   <span class="c1"># Attacking full-back</span>
 </span></code></pre></div>
 
 

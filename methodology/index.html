@@ -809,22 +809,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-6-ml-model-for-weight-validation" class="md-nav__link">
+  <a href="#part-6-ml-models-for-weight-calibration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Part 6: ML Model for Weight Validation
+        Part 6: ML Models for Weight Calibration
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Part 6: ML Model for Weight Validation">
+    <nav class="md-nav" aria-label="Part 6: ML Models for Weight Calibration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gradientboosting-feature-importance" class="md-nav__link">
+  <a href="#gradientboosting-models-by-position" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GradientBoosting Feature Importance
+        GradientBoosting Models by Position
       
     </span>
   </a>
@@ -832,10 +832,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ml-feature-importances" class="md-nav__link">
+  <a href="#forward-feature-importances-auc-0656" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ML Feature Importances
+        Forward Feature Importances (AUC 0.656)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defender-feature-importances-auc-0845" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Defender Feature Importances (AUC 0.845)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#goalkeeper-feature-importances-auc-0993" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Goalkeeper Feature Importances (AUC 0.993)
       
     </span>
   </a>
@@ -1844,22 +1866,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-6-ml-model-for-weight-validation" class="md-nav__link">
+  <a href="#part-6-ml-models-for-weight-calibration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Part 6: ML Model for Weight Validation
+        Part 6: ML Models for Weight Calibration
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Part 6: ML Model for Weight Validation">
+    <nav class="md-nav" aria-label="Part 6: ML Models for Weight Calibration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gradientboosting-feature-importance" class="md-nav__link">
+  <a href="#gradientboosting-models-by-position" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GradientBoosting Feature Importance
+        GradientBoosting Models by Position
       
     </span>
   </a>
@@ -1867,10 +1889,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ml-feature-importances" class="md-nav__link">
+  <a href="#forward-feature-importances-auc-0656" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ML Feature Importances
+        Forward Feature Importances (AUC 0.656)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defender-feature-importances-auc-0845" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Defender Feature Importances (AUC 0.845)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#goalkeeper-feature-importances-auc-0993" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Goalkeeper Feature Importances (AUC 0.993)
       
     </span>
   </a>
@@ -2201,10 +2245,10 @@
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;alvarez&quot;</span><span class="p">)</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">archetype</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>  <span class="c1"># Shows actual stats</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Available players (10 archetypes across 3 positions)</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Available players (12 archetypes across 3 positions)</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">Archetype</span><span class="o">.</span><span class="n">list_available</span><span class="p">()</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># [&#39;alvarez&#39;, &#39;giroud&#39;, &#39;kane&#39;, &#39;lewandowski&#39;, &#39;rashford&#39;, &#39;en_nesyri&#39;,</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;romero&#39;, &#39;lloris&#39;, &#39;livakovic&#39;]</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;romero&#39;, &#39;hakimi&#39;, &#39;lloris&#39;, &#39;livakovic&#39;, &#39;bounou&#39;]</span>
 </span></code></pre></div>
 <p>The <code>src/statsbomb/</code> package handles:
 - <strong>loader.py</strong>: Fetches events from StatsBomb free data API
@@ -2634,17 +2678,46 @@
 For features where lower is better (direction=-1), target = 10th percentile.</p>
 <hr />
 <hr />
-<h2 id="part-6-ml-model-for-weight-validation">Part 6: ML Model for Weight Validation<a class="headerlink" href="#part-6-ml-model-for-weight-validation" title="Permanent link">&para;</a></h2>
-<h3 id="gradientboosting-feature-importance">GradientBoosting Feature Importance<a class="headerlink" href="#gradientboosting-feature-importance" title="Permanent link">&para;</a></h3>
-<p>I trained a GradientBoosting classifier to predict which entries lead to shots:</p>
+<h2 id="part-6-ml-models-for-weight-calibration">Part 6: ML Models for Weight Calibration<a class="headerlink" href="#part-6-ml-models-for-weight-calibration" title="Permanent link">&para;</a></h2>
+<h3 id="gradientboosting-models-by-position">GradientBoosting Models by Position<a class="headerlink" href="#gradientboosting-models-by-position" title="Permanent link">&para;</a></h3>
+<p>I trained GradientBoosting classifiers for each position type to empirically determine feature importance:</p>
+<table>
+<thead>
+<tr>
+<th>Position</th>
+<th>Target Variable</th>
+<th>AUC</th>
+<th>Events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Forwards</strong></td>
+<td>lead_to_shot</td>
+<td>0.656 ± 0.027</td>
+<td>245 entries</td>
+</tr>
+<tr>
+<td><strong>Defenders</strong></td>
+<td>stop_possession_danger</td>
+<td>0.845 ± 0.016</td>
+<td>8,911 engagements</td>
+</tr>
+<tr>
+<td><strong>Goalkeepers</strong></td>
+<td>pass_success</td>
+<td>0.993 ± 0.011</td>
+<td>497 distributions</td>
+</tr>
+</tbody>
+</table>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradientBoostingClassifier</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
 </span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">model</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">cv_scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">)</span>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># CV AUC: 0.656 ± 0.027</span>
 </span></code></pre></div>
-<h3 id="ml-feature-importances">ML Feature Importances<a class="headerlink" href="#ml-feature-importances" title="Permanent link">&para;</a></h3>
+<h3 id="forward-feature-importances-auc-0656">Forward Feature Importances (AUC 0.656)<a class="headerlink" href="#forward-feature-importances-auc-0656" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2676,16 +2749,71 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 </tr>
 <tr>
 <td><code>n_passing_options_ahead</code></td>
-<td><strong>1.2%</strong></td>
+<td>1.2%</td>
 <td>2%</td>
-</tr>
-<tr>
-<td><code>entry_method_num</code></td>
-<td><strong>0.0%</strong></td>
-<td>0%</td>
 </tr>
 </tbody>
 </table>
+<h3 id="defender-feature-importances-auc-0845">Defender Feature Importances (AUC 0.845)<a class="headerlink" href="#defender-feature-importances-auc-0845" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>ML Importance</th>
+<th>Final Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x_start</code> (position)</td>
+<td>52.9%</td>
+<td>(location)</td>
+</tr>
+<tr>
+<td><code>speed_avg</code></td>
+<td>17.4%</td>
+<td>(engagement speed)</td>
+</tr>
+<tr>
+<td><code>interplayer_distance_start</code></td>
+<td>11.4%</td>
+<td><strong>17%</strong></td>
+</tr>
+<tr>
+<td><code>engagement_type_num</code></td>
+<td>2.7%</td>
+<td>4%</td>
+</tr>
+<tr>
+<td><code>goal_side_start</code></td>
+<td>1.9%</td>
+<td>3%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="goalkeeper-feature-importances-auc-0993">Goalkeeper Feature Importances (AUC 0.993)<a class="headerlink" href="#goalkeeper-feature-importances-auc-0993" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>ML Importance</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pass_distance</code></td>
+<td><strong>98.6%</strong></td>
+<td>Shorter = more success</td>
+</tr>
+<tr>
+<td>Other features</td>
+<td>&lt;2%</td>
+<td>Style differentiators</td>
+</tr>
+</tbody>
+</table>
+<p>The goalkeeper model achieves near-perfect AUC because pass distance strongly predicts success. For archetype comparison, we balance this with style differentiators (long/short pass preference).</p>
 <h3 id="key-insight-why-key-passes-dont-predict-danger">Key Insight: Why Key Passes Don't Predict Danger<a class="headerlink" href="#key-insight-why-key-passes-dont-predict-danger" title="Permanent link">&para;</a></h3>
 <p>StatsBomb <strong>key passes</strong> (event-level: pass leads to shot) ≠ SkillCorner <strong>passing options</strong> (state-level: options available at entry).</p>
 <ul>
