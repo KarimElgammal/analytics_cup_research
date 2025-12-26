@@ -208,3 +208,5 @@ __marimo__/
 github_token.txt
 hf_token.txt
 .rate_limits.json
+# Claude
+CLAUDE.md
