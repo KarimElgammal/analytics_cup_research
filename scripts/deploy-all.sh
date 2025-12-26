@@ -18,7 +18,7 @@ echo "=== Deploying to HuggingFace Space ==="
 
 # Add HF frontmatter to README temporarily
 HF_FRONTMATTER="---
-title: Archetype Comparison Tool
+title: Finding Alvarez in the A-League
 emoji: ⚽
 colorFrom: green
 colorTo: blue

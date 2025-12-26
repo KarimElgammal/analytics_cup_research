@@ -42,7 +42,7 @@ from src.utils.rate_limiter import (
 )
 
 st.set_page_config(
-    page_title="Archetype Comparison",
+    page_title="Finding Alvarez in the A-League",
     page_icon="\u26BD",
     layout="wide",
 )
@@ -52,7 +52,7 @@ st.sidebar.markdown("### Links")
 st.sidebar.markdown("[Documentation](https://karimelgammal.github.io/analytics_cup_research/) | [GitHub](https://github.com/KarimElgammal/analytics_cup_research)")
 st.sidebar.markdown("---")
 
-st.title("\u26BD Archetype Comparison Tool")
+st.title("\u26BD Finding Alvarez (and Others) in the A-League")
 
 # Position selector at the top
 position = st.radio(
