@@ -192,3 +192,304 @@ def print_importance_report(result: dict) -> str:
         lines.append(f"| {feat} | {imp:.3f} |")
 
     return "\n".join(lines)
+
+
+# =============================================================================
+# DEFENDER MODEL
+# =============================================================================
+
+def prepare_defender_features(engagements: pl.DataFrame) -> Tuple[np.ndarray, np.ndarray, list[str]]:
+    """
+    Prepare features and labels for defender success prediction.
+
+    Target: stop_possession_danger (stopped the attack)
+    """
+    feature_cols = [
+        "interplayer_distance_start",
+        "goal_side_start",
+        "pressing_chain_length",
+        "speed_avg",
+        "x_start",
+        "y_start",
+    ]
+
+    # Engagement subtype encoding: counter_press=3, pressing=2, recovery_press=1, other=0
+    if "event_subtype" in engagements.columns:
+        engagements = engagements.with_columns(
+            pl.when(pl.col("event_subtype") == "counter_press").then(3)
+            .when(pl.col("event_subtype") == "pressing").then(2)
+            .when(pl.col("event_subtype") == "recovery_press").then(1)
+            .otherwise(0)
+            .alias("engagement_type_num")
+        )
+        feature_cols.append("engagement_type_num")
+
+    # Third encoding: attacking=2, middle=1, defensive=0
+    if "third_start" in engagements.columns:
+        engagements = engagements.with_columns(
+            pl.when(pl.col("third_start") == "attacking_third").then(2)
+            .when(pl.col("third_start") == "middle_third").then(1)
+            .otherwise(0)
+            .alias("third_num")
+        )
+        feature_cols.append("third_num")
+
+    # Add pressing chain indicator
+    if "pressing_chain" in engagements.columns:
+        engagements = engagements.with_columns(
+            pl.col("pressing_chain").cast(pl.Int32).alias("pressing_chain_num")
+        )
+        feature_cols.append("pressing_chain_num")
+
+    # Filter to available columns
+    available_cols = [c for c in feature_cols if c in engagements.columns]
+
+    # Target: stop_possession_danger
+    if "stop_possession_danger" in engagements.columns:
+        y = engagements["stop_possession_danger"].to_numpy().astype(int)
+    else:
+        raise ValueError("No stop_possession_danger label found")
+
+    X = engagements.select(available_cols).to_numpy()
+    X = np.nan_to_num(X, nan=0.0)
+
+    return X, y, available_cols
+
+
+def train_defender_model(engagements: pl.DataFrame) -> dict:
+    """
+    Train gradient boosting model to predict successful defensive actions.
+
+    Returns dict with model, feature importances, and metrics.
+    """
+    from sklearn.model_selection import cross_val_score
+    from sklearn.ensemble import GradientBoostingClassifier
+
+    X, y, feature_names = prepare_defender_features(engagements)
+
+    try:
+        import lightgbm as lgb
+        model = lgb.LGBMClassifier(
+            n_estimators=100,
+            max_depth=4,
+            learning_rate=0.1,
+            class_weight='balanced',
+            random_state=42,
+            verbose=-1
+        )
+        model_name = "LightGBM"
+    except ImportError:
+        model = GradientBoostingClassifier(
+            n_estimators=100,
+            max_depth=4,
+            learning_rate=0.1,
+            random_state=42
+        )
+        model_name = "GradientBoosting"
+
+    cv_scores = cross_val_score(model, X, y, cv=5, scoring='roc_auc')
+    model.fit(X, y)
+
+    importances = dict(zip(feature_names, model.feature_importances_))
+    importances = dict(sorted(importances.items(), key=lambda x: x[1], reverse=True))
+
+    return {
+        "model": model,
+        "model_name": model_name,
+        "feature_importances": importances,
+        "cv_auc_mean": cv_scores.mean(),
+        "cv_auc_std": cv_scores.std(),
+        "feature_names": feature_names,
+        "n_samples": len(y),
+        "n_positive": int(y.sum()),
+        "positive_rate": y.mean(),
+    }
+
+
+def get_defender_weights(importances: dict) -> dict:
+    """
+    Convert defender model feature importances to similarity weights.
+    """
+    # Mapping from model features to profile features
+    feature_mapping = {
+        "interplayer_distance_start": "avg_engagement_distance",
+        "goal_side_start": "goal_side_rate",
+        "pressing_chain_num": "pressing_rate",
+        "pressing_chain_length": "avg_pressing_chain_length",
+        "third_num": "middle_third_pct",
+        "engagement_type_num": "pressing_rate",
+    }
+
+    weights = {}
+    for model_feat, importance in importances.items():
+        if model_feat in feature_mapping:
+            profile_feat = feature_mapping[model_feat]
+            # Accumulate if same target
+            weights[profile_feat] = weights.get(profile_feat, 0) + importance
+
+    # Add outcome-based weights (these are what we're predicting, so key metrics)
+    weights["stop_danger_rate"] = 0.20
+    weights["reduce_danger_rate"] = 0.10
+    weights["beaten_by_possession_rate"] = 0.10
+    weights["beaten_by_movement_rate"] = 0.05
+    weights["force_backward_rate"] = 0.05
+
+    # Normalize to sum to 1
+    total = sum(weights.values())
+    if total > 0:
+        weights = {k: round(v / total, 3) for k, v in weights.items()}
+
+    return weights
+
+
+# =============================================================================
+# GOALKEEPER MODEL
+# =============================================================================
+
+def prepare_goalkeeper_features(distributions: pl.DataFrame) -> Tuple[np.ndarray, np.ndarray, list[str]]:
+    """
+    Prepare features and labels for goalkeeper pass success prediction.
+
+    Target: pass_outcome == 'successful'
+    """
+    feature_cols = [
+        "pass_distance",
+        "n_passing_options",
+        "speed_avg",
+    ]
+
+    # Pass range encoding: long=2, medium=1, short=0
+    if "pass_range" in distributions.columns:
+        distributions = distributions.with_columns(
+            pl.when(pl.col("pass_range") == "long").then(2)
+            .when(pl.col("pass_range") == "medium").then(1)
+            .otherwise(0)
+            .alias("pass_range_num")
+        )
+        feature_cols.append("pass_range_num")
+
+    # High pass indicator
+    if "high_pass" in distributions.columns:
+        distributions = distributions.with_columns(
+            pl.col("high_pass").cast(pl.Int32).alias("high_pass_num")
+        )
+        feature_cols.append("high_pass_num")
+
+    # Quick pass indicator
+    if "quick_pass" in distributions.columns:
+        distributions = distributions.with_columns(
+            pl.col("quick_pass").cast(pl.Int32).alias("quick_pass_num")
+        )
+        feature_cols.append("quick_pass_num")
+
+    # Hand pass indicator
+    if "hand_pass" in distributions.columns:
+        distributions = distributions.with_columns(
+            pl.col("hand_pass").cast(pl.Int32).alias("hand_pass_num")
+        )
+        feature_cols.append("hand_pass_num")
+
+    # Target third encoding
+    if "third_end" in distributions.columns:
+        distributions = distributions.with_columns(
+            pl.when(pl.col("third_end") == "attacking_third").then(2)
+            .when(pl.col("third_end") == "middle_third").then(1)
+            .otherwise(0)
+            .alias("target_third_num")
+        )
+        feature_cols.append("target_third_num")
+
+    available_cols = [c for c in feature_cols if c in distributions.columns]
+
+    # Target: pass success (filter out nulls first)
+    if "pass_outcome" in distributions.columns:
+        distributions = distributions.filter(pl.col("pass_outcome").is_not_null())
+        y = (distributions["pass_outcome"] == "successful").to_numpy().astype(int)
+    else:
+        raise ValueError("No pass_outcome label found")
+
+    X = distributions.select(available_cols).to_numpy()
+    X = np.nan_to_num(X, nan=0.0)
+
+    return X, y, available_cols
+
+
+def train_goalkeeper_model(distributions: pl.DataFrame) -> dict:
+    """
+    Train gradient boosting model to predict successful goalkeeper distributions.
+
+    Returns dict with model, feature importances, and metrics.
+    """
+    from sklearn.model_selection import cross_val_score
+    from sklearn.ensemble import GradientBoostingClassifier
+
+    X, y, feature_names = prepare_goalkeeper_features(distributions)
+
+    try:
+        import lightgbm as lgb
+        model = lgb.LGBMClassifier(
+            n_estimators=100,
+            max_depth=4,
+            learning_rate=0.1,
+            class_weight='balanced',
+            random_state=42,
+            verbose=-1
+        )
+        model_name = "LightGBM"
+    except ImportError:
+        model = GradientBoostingClassifier(
+            n_estimators=100,
+            max_depth=4,
+            learning_rate=0.1,
+            random_state=42
+        )
+        model_name = "GradientBoosting"
+
+    cv_scores = cross_val_score(model, X, y, cv=5, scoring='roc_auc')
+    model.fit(X, y)
+
+    importances = dict(zip(feature_names, model.feature_importances_))
+    importances = dict(sorted(importances.items(), key=lambda x: x[1], reverse=True))
+
+    return {
+        "model": model,
+        "model_name": model_name,
+        "feature_importances": importances,
+        "cv_auc_mean": cv_scores.mean(),
+        "cv_auc_std": cv_scores.std(),
+        "feature_names": feature_names,
+        "n_samples": len(y),
+        "n_positive": int(y.sum()),
+        "positive_rate": y.mean(),
+    }
+
+
+def get_goalkeeper_weights(importances: dict) -> dict:
+    """
+    Convert goalkeeper model feature importances to similarity weights.
+    """
+    feature_mapping = {
+        "pass_distance": "avg_pass_distance",
+        "pass_range_num": "long_pass_pct",
+        "high_pass_num": "high_pass_pct",
+        "quick_pass_num": "quick_distribution_pct",
+        "hand_pass_num": "hand_pass_pct",
+        "n_passing_options": "avg_passing_options",
+        "target_third_num": "to_middle_third_pct",
+    }
+
+    weights = {}
+    for model_feat, importance in importances.items():
+        if model_feat in feature_mapping:
+            profile_feat = feature_mapping[model_feat]
+            weights[profile_feat] = importance
+
+    # Add pass success rate (the target itself)
+    weights["pass_success_rate"] = 0.20
+
+    # Normalize to sum to 1
+    total = sum(weights.values())
+    if total > 0:
+        weights = {k: round(v / total, 3) for k, v in weights.items()}
+
+    return weights

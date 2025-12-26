@@ -91,6 +91,16 @@ PLAYER_REGISTRY: dict[str, dict] = {
             (43, 106, "FIFA World Cup 2022"),
         ],
     },
+    "hakimi": {
+        "player_name": "Achraf Hakimi Mouh",
+        "display_name": "Achraf Hakimi",
+        "position": "Defender",
+        "nationality": "Morocco",
+        "style": "Attacking wing-back, pace, overlapping runs, crossing ability",
+        "competitions": [
+            (43, 106, "FIFA World Cup 2022"),
+        ],
+    },
     # === GOALKEEPERS ===
     "lloris": {
         "player_name": "Hugo Lloris",

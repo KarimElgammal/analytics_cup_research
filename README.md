@@ -1,6 +1,6 @@
-# Finding Alvarez in the A-League
+# Finding Alvarez (and Others) in the A-League
 
-SkillCorner X PySport Analytics Cup 2026 — Research Track
+SkillCorner X PySport Analytics Cup 2026 - Research Track
 
 A player similarity study using broadcast tracking data to identify A-League players with characteristics matching world-class archetypes.
 
@@ -14,46 +14,79 @@ This research demonstrates how SkillCorner tracking data can identify A-League p
 
 The system supports three position types:
 - **Forwards** (6 archetypes): Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri
-- **Defenders** (2 archetypes): Gvardiol, Romero
+- **Defenders** (3 archetypes): Gvardiol, Romero, Hakimi
 - **Goalkeepers** (3 archetypes): Lloris, Livakovic, Bounou
 
-Each position uses different event data: forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events. A GradientBoosting classifier (AUC 0.656) calibrated the similarity weights for forwards.
+Each position uses different event data: forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events. GradientBoosting classifiers calibrated the similarity weights (Forwards AUC 0.656, Defenders AUC 0.845, Goalkeepers AUC 0.993).
 
-Top candidates include Z. Clough (Adelaide) matching Alvarez's movement-focused style, H. Steele (Central Coast) matching Gvardiol's ball-playing CB profile, and M. Sutton (Western United) matching Lloris's sweeper-keeper distribution.
+Top candidates include Z. Clough (Adelaide) matching Alvarez's movement-focused style, L. Rose matching Gvardiol's ball-playing CB profile, and M. Sutton (Western United) matching Lloris's sweeper-keeper distribution.
 
 ---
 
-## Quick Start
+## Installation
 
-### Run the Interactive App
+### Option 1: Quick Start (Recommended)
+
+The app launcher handles everything automatically:
 
 ```bash
-# Clone and setup
 git clone https://github.com/KarimElgammal/analytics_cup_research.git
 cd analytics_cup_research
+./run.sh
+```
+
+This will:
+1. Install `uv` if not present
+2. Create a Python 3.12 virtual environment
+3. Install all dependencies
+4. Launch the Streamlit app
+
+### Option 2: Manual Setup
+
+```bash
+git clone https://github.com/KarimElgammal/analytics_cup_research.git
+cd analytics_cup_research
+
+# Using uv (recommended)
 uv venv --python 3.12
 uv pip install -r requirements.txt
 
-# Run the archetype comparison tool
-./run_archetype_compare.sh
+# Or using pip
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-### Run the Notebook
+---
+
+## Running
+
+### Interactive App (Archetype Comparison)
+
+```bash
+./run.sh
+# Or manually:
+uv run streamlit run app.py
+```
+
+### Research Notebook
 
 ```bash
 uv run jupyter notebook submission.ipynb
+# Or with pip:
+jupyter notebook submission.ipynb
 ```
 
 ---
 
 ## Archetype Comparison Tool
 
-The interactive Streamlit app (`archetype_compare.py`) allows comparison across all positions:
+The interactive Streamlit app (`app.py`) allows comparison across all positions:
 
 | Position | Data Source | Players | Archetypes |
 |----------|-------------|---------|------------|
 | Forwards | Final third entries (245) | 31 | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri |
-| Defenders | Defensive engagements (8,911) | 185 | Gvardiol, Romero |
+| Defenders | Defensive engagements (8,911) | 185 | Gvardiol, Romero, Hakimi |
 | Goalkeepers | Distribution events (522) | 13 | Lloris, Livakovic, Bounou |
 
 ---
@@ -62,11 +95,11 @@ The interactive Streamlit app (`archetype_compare.py`) allows comparison across 
 
 ```
 analytics_cup_research/
-├── submission.ipynb              # Research notebook
-├── archetype_compare.py          # Streamlit app
-├── run_archetype_compare.sh      # App launcher
+├── submission.ipynb              # Research notebook (main deliverable)
+├── app.py                        # Streamlit app
+├── run.sh                        # Self-contained app launcher
 ├── requirements.txt              # Dependencies
-├── docs/                         # Documentation
+├── docs/                         # MkDocs documentation
 └── src/
     ├── core/                     # Archetype, Similarity engine
     ├── data/                     # Data loading
@@ -79,4 +112,37 @@ For detailed technical documentation, see [docs/methodology.md](docs/methodology
 
 ---
 
-SkillCorner X PySport Analytics Cup 2026 — Research Track Submission
+## AI Insights (Optional)
+
+The app includes AI-powered scouting insights. To enable:
+
+### Local Development
+
+```bash
+# Option 1: GitHub Models (recommended)
+echo "your_github_token" > github_token.txt
+
+# Option 2: HuggingFace
+echo "your_hf_token" > hf_token.txt
+```
+
+### HuggingFace Spaces Deployment
+
+1. Create a new Space at [huggingface.co/new-space](https://huggingface.co/new-space)
+2. Select Streamlit SDK
+3. Push this repo to the Space
+4. Add secrets in Space Settings:
+   - `GITHUB_TOKEN` - GitHub token (recommended, better models)
+   - Or `HF_TOKEN` - HuggingFace token
+
+Both work on HF Spaces via environment variables. Token files are gitignored - users never see your tokens.
+
+**Available Models:**
+| Backend | Models |
+|---------|--------|
+| GitHub | Phi-4, GPT-4o Mini |
+| HuggingFace | Llama 3.1 8B, Llama 3.2 3B, Qwen 2.5 7B, SmolLM3 3B, Gemma 2 2B |
+
+---
+
+SkillCorner X PySport Analytics Cup 2026 - Research Track Submission

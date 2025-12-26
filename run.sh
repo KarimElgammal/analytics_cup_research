@@ -1,7 +1,16 @@
 #!/bin/bash
-# Run script for Analytics Cup Research Track submission
+# Run the Archetype Comparison Streamlit app
+# installs uv and dependencies
 
 set -e
+cd "$(dirname "$0")"
+
+# Check if uv is installed
+if ! command -v uv &> /dev/null; then
+    echo "Installing uv..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$PATH"
+fi
 
 # Create virtual environment if it doesn't exist
 if [ ! -d ".venv" ]; then
@@ -11,13 +20,8 @@ fi
 
 # Install dependencies
 echo "Installing dependencies..."
-uv pip install -r requirements.txt
+uv pip install -r requirements.txt --quiet
 
-# Run Streamlit app (if main.py exists)
-if [ -f "main.py" ]; then
-    echo "Starting Streamlit app..."
-    uv run streamlit run main.py
-else
-    echo "No main.py found. Run the Jupyter notebook instead:"
-    echo "  uv run jupyter notebook submission.ipynb"
-fi
+# Run Streamlit app
+echo "Starting Archetype Comparison Tool..."
+uv run streamlit run app.py "$@"

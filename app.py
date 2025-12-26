@@ -12,12 +12,34 @@ import streamlit as st
 import polars as pl
 
 from src.data.loader import load_all_events, add_team_names
+from src.data.player_ages import add_ages_to_profiles
 from src.analysis.entries import detect_entries, classify_entries
 from src.analysis.profiles import build_player_profiles, filter_profiles
 from src.analysis.defenders import detect_defensive_actions, build_defender_profiles, filter_defender_profiles
 from src.analysis.goalkeepers import detect_gk_actions, build_goalkeeper_profiles, filter_goalkeeper_profiles
 from src.core.archetype import Archetype
 from src.core.similarity import SimilarityEngine
+from src.visualization.radar import (
+    plot_radar_comparison,
+    plot_similarity_ranking,
+    normalize_for_radar,
+)
+from src.utils.ai_insights import (
+    generate_similarity_insight,
+    has_valid_token,
+    get_available_backend,
+    get_available_models,
+    get_default_model,
+    POSITION_METRICS,
+)
+from src.utils.rate_limiter import (
+    check_daily_limit,
+    check_backend_budget,
+    increment_call,
+    get_usage_stats,
+    get_backend_from_model,
+    MAX_CALLS_PER_SESSION,
+)
 
 st.set_page_config(
     page_title="Archetype Comparison",
@@ -47,16 +69,17 @@ FORWARD_ARCHETYPES = [
     ("En-Nesyri (MAR) - Physical forward", "en_nesyri"),
 ]
 
-# Defender weights and directions
+# Defender weights - ML-calibrated (GradientBoosting, AUC 0.845)
+# Trained on 8,911 engagements to predict stop_possession_danger
 DEFENDER_WEIGHTS = {
-    "stop_danger_rate": 0.25,
-    "reduce_danger_rate": 0.15,
-    "force_backward_rate": 0.10,
-    "beaten_by_possession_rate": 0.15,
-    "beaten_by_movement_rate": 0.10,
-    "pressing_rate": 0.10,
-    "goal_side_rate": 0.10,
-    "avg_engagement_distance": 0.05,
+    "stop_danger_rate": 0.30,           # ML: outcome variable (key metric)
+    "avg_engagement_distance": 0.17,    # ML: 11.4% importance
+    "reduce_danger_rate": 0.15,         # ML: outcome variable
+    "beaten_by_possession_rate": 0.15,  # ML: outcome variable
+    "beaten_by_movement_rate": 0.08,    # ML: outcome variable
+    "force_backward_rate": 0.08,        # ML: outcome variable
+    "pressing_rate": 0.04,              # ML: 2.7% (engagement_type)
+    "goal_side_rate": 0.03,             # ML: 1.9% importance
 }
 
 DEFENDER_DIRECTIONS = {
@@ -73,15 +96,17 @@ DEFENDER_DIRECTIONS = {
     "attacking_third_pct": -1,
 }
 
-# Goalkeeper weights and directions
+# Goalkeeper weights - ML-informed (GradientBoosting, AUC 0.993)
+# Trained on 497 distributions to predict pass success
+# ML found pass_distance dominates (98.6%), but we balance for style comparison
 GOALKEEPER_WEIGHTS = {
-    "pass_success_rate": 0.25,
-    "long_pass_pct": 0.15,
-    "short_pass_pct": 0.15,
-    "avg_pass_distance": 0.15,
-    "quick_distribution_pct": 0.10,
-    "to_middle_third_pct": 0.10,
-    "avg_passing_options": 0.10,
+    "pass_success_rate": 0.20,          # ML: target variable
+    "avg_pass_distance": 0.20,          # ML: 98.6% importance (capped for balance)
+    "long_pass_pct": 0.15,              # Style differentiator
+    "short_pass_pct": 0.15,             # Style differentiator
+    "quick_distribution_pct": 0.10,     # ML: minimal but style-relevant
+    "to_middle_third_pct": 0.10,        # Progression indicator
+    "avg_passing_options": 0.10,        # ML: 0.5% importance
 }
 
 GOALKEEPER_DIRECTIONS = {
@@ -152,6 +177,23 @@ DEFENDER_ARCHETYPES = {
             "goal_side_rate": 80,
             "avg_engagement_distance": 25,
             "defensive_third_pct": 50,
+        }
+    ),
+    "hakimi": create_defender_archetype(
+        "hakimi",
+        "Achraf Hakimi (MAR) - Attacking Wing-back\n\nPace and power from the flank. "
+        "High pressing, overlapping runs, engages in middle/attacking thirds. Takes risks.",
+        {
+            "stop_danger_rate": 50,
+            "reduce_danger_rate": 60,
+            "force_backward_rate": 45,
+            "beaten_by_possession_rate": 30,
+            "beaten_by_movement_rate": 25,
+            "pressing_rate": 80,
+            "goal_side_rate": 60,
+            "avg_engagement_distance": 35,
+            "middle_third_pct": 45,
+            "attacking_third_pct": 25,
         }
     ),
 }
@@ -287,6 +329,7 @@ def load_forward_archetype(player_key: str):
 if position == "Forwards":
     profiles, n_events, n_matches = load_forward_data()
     event_type = "entries"
+    position_type = "forward"
 
     st.sidebar.header("Forward Archetype")
     selected_label = st.sidebar.selectbox(
@@ -298,20 +341,23 @@ if position == "Forwards":
     archetype = load_forward_archetype(selected_key)
 
     display_cols = [
-        "rank", "player_name", "team_name", "similarity_score",
+        "rank", "player_name", "age", "team_name", "similarity_score",
         "total_entries", "danger_rate", "avg_separation"
     ]
-    col_names = ["Rank", "Player", "Team", "Similarity %", "Entries", "Danger %", "Separation (m)"]
+    col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Entries", "Danger %", "Separation (m)"]
+    radar_features = ["danger_rate", "central_pct", "avg_separation", "avg_entry_speed", "carry_pct"]
     caption = "Forward archetypes computed from StatsBomb World Cup 2022 event data."
 
 elif position == "Defenders":
     profiles, n_events, n_matches = load_defender_data()
     event_type = "engagements"
+    position_type = "defender"
 
     st.sidebar.header("Defender Archetype")
     defender_options = [
         ("Gvardiol (CRO) - Ball-playing CB", "gvardiol"),
         ("Romero (ARG) - Aggressive CB", "romero"),
+        ("Hakimi (MAR) - Attacking Wing-back", "hakimi"),
     ]
     selected_label = st.sidebar.selectbox(
         "Select Archetype",
@@ -322,15 +368,17 @@ elif position == "Defenders":
     archetype = DEFENDER_ARCHETYPES[selected_key]
 
     display_cols = [
-        "rank", "player_name", "team_name", "similarity_score",
+        "rank", "player_name", "age", "team_name", "similarity_score",
         "total_engagements", "stop_danger_rate", "pressing_rate"
     ]
-    col_names = ["Rank", "Player", "Team", "Similarity %", "Engagements", "Stop Danger %", "Pressing %"]
+    col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Engagements", "Stop Danger %", "Pressing %"]
+    radar_features = ["stop_danger_rate", "reduce_danger_rate", "pressing_rate", "goal_side_rate", "avg_engagement_distance"]
     caption = "Defender archetypes based on known playing styles. Profiles from on-ball engagement events."
 
 else:  # Goalkeepers
     profiles, n_events, n_matches = load_goalkeeper_data()
     event_type = "distributions"
+    position_type = "goalkeeper"
 
     st.sidebar.header("Goalkeeper Archetype")
     gk_options = [
@@ -347,28 +395,56 @@ else:  # Goalkeepers
     archetype = GOALKEEPER_ARCHETYPES[selected_key]
 
     display_cols = [
-        "rank", "player_name", "team_name", "similarity_score",
+        "rank", "player_name", "age", "team_name", "similarity_score",
         "total_distributions", "pass_success_rate", "long_pass_pct"
     ]
-    col_names = ["Rank", "Player", "Team", "Similarity %", "Distributions", "Pass Success %", "Long Pass %"]
+    col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Distributions", "Pass Success %", "Long Pass %"]
+    radar_features = ["pass_success_rate", "avg_pass_distance", "long_pass_pct", "quick_distribution_pct"]
     caption = "Goalkeeper archetypes based on distribution style. Profiles from possession events."
 
 top_n = st.sidebar.slider("Number of results", min_value=5, max_value=min(20, len(profiles)), value=min(10, len(profiles)))
 
 st.sidebar.markdown("---")
-st.sidebar.markdown(f"**Data:** {n_events} {event_type} from {n_matches} matches")
-st.sidebar.markdown(f"**Players:** {len(profiles)} with sufficient data")
+st.sidebar.markdown("### Dataset Stats")
+st.sidebar.markdown(f"**Events:** {n_events:,} {event_type}")
+st.sidebar.markdown(f"**Matches:** {n_matches}")
+st.sidebar.markdown(f"**Players:** {len(profiles)} qualified")
+
+# Show ML model performance
+ml_auc = POSITION_METRICS[position_type]["auc"]
+st.sidebar.markdown("---")
+st.sidebar.markdown("### ML Model Performance")
+st.sidebar.markdown(f"**AUC Score:** {ml_auc:.3f}")
+if ml_auc >= 0.9:
+    st.sidebar.success("Excellent model reliability")
+elif ml_auc >= 0.8:
+    st.sidebar.info("Good model reliability")
+else:
+    st.sidebar.warning("Moderate model reliability")
 
 # Run similarity engine
 engine = SimilarityEngine(archetype)
 engine.fit(profiles)
 results = engine.rank(top_n=top_n)
 
-col1, col2 = st.columns([2, 1])
+# Add ages to results
+results = add_ages_to_profiles(results)
 
-with col1:
+# Archetype info panel
+st.subheader(f"Finding {archetype.name.replace('_', ' ').title()}-like Players")
+with st.expander("Archetype Profile", expanded=False):
+    st.markdown(archetype.description)
+    st.markdown("**Feature Weights:**")
+    importances = engine.get_feature_importance()
+    for item in importances[:5]:
+        pct = item["weight"] * 100
+        st.markdown(f"- `{item['feature']}`: {pct:.0f}%")
+
+# Create tabs for different views
+tab1, tab2, tab3 = st.tabs(["Rankings", "Radar Profile", "AI Insights"])
+
+with tab1:
     st.subheader(f"Top {top_n} A-League {position}")
-    st.markdown(f"*Matching: {archetype.name.title()} archetype*")
 
     available_cols = [c for c in display_cols if c in results.columns]
     df_display = results.select(available_cols).to_pandas()
@@ -390,15 +466,136 @@ with col1:
         width="stretch",
     )
 
-with col2:
-    st.subheader("Archetype Profile")
-    st.markdown(archetype.description)
+    # Bar chart visualization
+    st.markdown("#### Similarity Rankings")
+    fig_bar = plot_similarity_ranking(
+        results,
+        top_n=min(top_n, 10),
+        title=f"Top {min(top_n, 10)} {archetype.name.replace('_', ' ').title()}-like {position}",
+    )
+    st.pyplot(fig_bar)
 
-    st.markdown("**Feature Weights:**")
-    importances = engine.get_feature_importance()
-    for item in importances[:5]:
-        pct = item["weight"] * 100
-        st.markdown(f"- `{item['feature']}`: {pct:.0f}%")
+with tab2:
+    st.subheader("Radar Profile Comparison")
+
+    # Prepare data for radar chart
+    top_3 = results.head(3)
+    normalized = normalize_for_radar(top_3, radar_features)
+
+    # Build player dicts for radar
+    players_for_radar = []
+    for row in normalized.to_dicts():
+        player_dict = {"name": row.get("player_name", "Unknown")}
+        for f in radar_features:
+            norm_key = f"{f}_norm"
+            player_dict[f] = row.get(norm_key, row.get(f, 50))
+        players_for_radar.append(player_dict)
+
+    # Get target profile from archetype
+    target_profile = {}
+    if hasattr(archetype, 'target_profile'):
+        target_profile = archetype.target_profile
+    elif hasattr(archetype, 'features'):
+        for f_name, f_data in archetype.features.items():
+            if f_name in radar_features:
+                target_profile[f_name] = f_data.get("target", 50)
+
+    fig_radar = plot_radar_comparison(
+        players_for_radar,
+        features=radar_features,
+        title=f"Top 3 vs {archetype.name.replace('_', ' ').title()} Target",
+        include_alvarez=True,
+        target_profile=target_profile,
+        target_name=archetype.name.replace("_", " ").title(),
+    )
+    st.pyplot(fig_radar)
+
+    st.caption("Dashed line shows the target archetype profile. Values normalised to 0-100 scale within the dataset.")
+
+with tab3:
+    st.subheader("AI Scouting Insight")
+
+    if has_valid_token():
+        # init session state
+        if "ai_calls" not in st.session_state:
+            st.session_state.ai_calls = 0
+        if "last_insight" not in st.session_state:
+            st.session_state.last_insight = None
+        if "last_archetype" not in st.session_state:
+            st.session_state.last_archetype = None
+
+        # check limits
+        daily_ok, daily_remaining = check_daily_limit()
+        session_ok = st.session_state.ai_calls < MAX_CALLS_PER_SESSION
+
+        # Model selector
+        available_models = get_available_models()
+        if available_models:
+            model_options = {display: key for key, display in available_models}
+            default_model = get_default_model()
+            default_display = next(
+                (display for key, display in available_models if key == default_model),
+                available_models[0][1]
+            )
+            selected_display = st.selectbox(
+                "Model",
+                options=list(model_options.keys()),
+                index=list(model_options.keys()).index(default_display) if default_display in model_options else 0,
+            )
+            selected_model = model_options[selected_display]
+        else:
+            selected_model = get_default_model()
+
+        # Check backend-specific budget
+        backend = get_backend_from_model(selected_model)
+        budget_ok, budget_remaining = check_backend_budget(backend)
+
+        if not daily_ok:
+            st.warning("Daily AI insight limit reached. Try again tomorrow.")
+        elif not budget_ok:
+            st.warning(f"{backend.title()} monthly budget exhausted. Try the other backend.")
+        elif not session_ok:
+            st.info(f"You've used {MAX_CALLS_PER_SESSION} AI insights this session. Refresh to reset.")
+        else:
+            if st.button("Generate AI Insight", type="primary"):
+                with st.spinner("Generating AI scouting insight..."):
+                    insight = generate_similarity_insight(
+                        results,
+                        archetype,
+                        top_n=5,
+                        model=selected_model,
+                        position_type=position_type,
+                    )
+                    st.session_state.ai_calls += 1
+                    st.session_state.last_insight = insight
+                    st.session_state.last_archetype = archetype.name
+                    increment_call(backend=backend)
+
+        # Display last insight if it matches current archetype
+        if st.session_state.last_insight and st.session_state.last_archetype == archetype.name:
+            st.markdown(st.session_state.last_insight)
+
+        # Show usage stats
+        stats = get_usage_stats()
+        st.caption(
+            f"Session: {st.session_state.ai_calls}/{MAX_CALLS_PER_SESSION} | "
+            f"Today: {stats['daily_calls']}/{stats['daily_limit']} | "
+            f"GitHub: ${stats['github_cost']:.2f}/$2 | "
+            f"HF: ${stats['huggingface_cost']:.2f}/$2"
+        )
+    else:
+        st.info("Add a token to enable AI-powered scouting insights.")
+        st.markdown("""
+        **How to enable AI insights:**
+
+        Option 1 (HuggingFace):
+        - Save HF token to `hf_token.txt`
+
+        Option 2 (GitHub Models):
+        - Save GitHub token to `github_token.txt`
+
+        The AI will generate position-aware scouting recommendations comparing the top candidates to the selected archetype.
+        """)
 
 st.markdown("---")
 st.caption(caption + " Similarity uses weighted cosine similarity on z-score normalised features.")

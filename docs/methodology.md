@@ -12,7 +12,7 @@ This document explains how I derive player archetypes from StatsBomb event data 
 
 ## Programmatic Archetype Generation
 
-**New in v2.0**: Archetypes are now computed programmatically from real StatsBomb event data, not hardcoded values.
+Archetypes are computed programmatically from real StatsBomb event data.
 
 ```python
 from src.core.archetype import Archetype
@@ -21,10 +21,10 @@ from src.core.archetype import Archetype
 archetype = Archetype.from_statsbomb("alvarez")
 print(archetype.description)  # Shows actual stats
 
-# Available players (10 archetypes across 3 positions)
+# Available players (12 archetypes across 3 positions)
 Archetype.list_available()
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
-#  'gvardiol', 'romero', 'lloris', 'livakovic']
+#  'gvardiol', 'romero', 'hakimi', 'lloris', 'livakovic', 'bounou']
 ```
 
 The `src/statsbomb/` package handles:
@@ -37,7 +37,7 @@ The `src/statsbomb/` package handles:
 
 ## Alvarez Target Profile (Computed from StatsBomb)
 
-The archetype is now **computed from real data**. Example output from World Cup 2022:
+The archetype is **computed from real data**. Example output from World Cup 2022:
 
 | Metric | Actual Value | Interpretation |
 |--------|--------------|----------------|
@@ -136,7 +136,7 @@ PLAYER_REGISTRY = {
 | Kane | 16.7% | 50.0% | 43% | Complete forward |
 | Rashford | 27.3% | 54.5% | 60% | Pace + dribbling |
 
-The key insight: Both Alvarez and Giroud have 0% dribble success — they create through movement, not dribbling. This distinguishes them from pace-reliant players like Rashford.
+The key insight: Both Alvarez and Giroud have 0% dribble success. They create through movement, not dribbling. This distinguishes them from pace-reliant players like Rashford.
 
 ---
 
@@ -354,11 +354,17 @@ For features where lower is better (direction=-1), target = 10th percentile.
 
 ---
 
-## Part 6: ML Model for Weight Validation
+## Part 6: ML Models for Weight Calibration
 
-### GradientBoosting Feature Importance
+### GradientBoosting Models by Position
 
-I trained a GradientBoosting classifier to predict which entries lead to shots:
+I trained GradientBoosting classifiers for each position type to empirically determine feature importance:
+
+| Position | Target Variable | AUC | Events |
+|----------|-----------------|-----|--------|
+| **Forwards** | lead_to_shot | 0.656 ± 0.027 | 245 entries |
+| **Defenders** | stop_possession_danger | 0.845 ± 0.016 | 8,911 engagements |
+| **Goalkeepers** | pass_success | 0.993 ± 0.011 | 497 distributions |
 
 ```python
 from sklearn.ensemble import GradientBoostingClassifier
@@ -366,10 +372,9 @@ from sklearn.model_selection import cross_val_score
 
 model = GradientBoostingClassifier(n_estimators=100, max_depth=4)
 cv_scores = cross_val_score(model, X, y, cv=5, scoring='roc_auc')
-# CV AUC: 0.656 ± 0.027
 ```
 
-### ML Feature Importances
+### Forward Feature Importances (AUC 0.656)
 
 | Feature | ML Importance | Final Weight |
 |---------|---------------|--------------|
@@ -377,8 +382,26 @@ cv_scores = cross_val_score(model, X, y, cv=5, scoring='roc_auc')
 | `speed_avg` | 11.8% | 17% |
 | `delta_to_last_defensive_line` | 10.3% | 15% |
 | `entry_zone_num` | 8.5% | 12% |
-| `n_passing_options_ahead` | **1.2%** | 2% |
-| `entry_method_num` | **0.0%** | 0% |
+| `n_passing_options_ahead` | 1.2% | 2% |
+
+### Defender Feature Importances (AUC 0.845)
+
+| Feature | ML Importance | Final Weight |
+|---------|---------------|--------------|
+| `x_start` (position) | 52.9% | (location) |
+| `speed_avg` | 17.4% | (engagement speed) |
+| `interplayer_distance_start` | 11.4% | **17%** |
+| `engagement_type_num` | 2.7% | 4% |
+| `goal_side_start` | 1.9% | 3% |
+
+### Goalkeeper Feature Importances (AUC 0.993)
+
+| Feature | ML Importance | Notes |
+|---------|---------------|-------|
+| `pass_distance` | **98.6%** | Shorter = more success |
+| Other features | <2% | Style differentiators |
+
+The goalkeeper model achieves near-perfect AUC because pass distance strongly predicts success. For archetype comparison, we balance this with style differentiators (long/short pass preference).
 
 ### Key Insight: Why Key Passes Don't Predict Danger
 
@@ -657,3 +680,78 @@ from src.core.archetype import Archetype
 arch = Archetype.from_statsbomb("your_player")
 print(arch.description)  # Should show computed stats
 ```
+
+---
+
+## Part 10: AI-Powered Scouting Insights
+
+### Overview
+
+The tool includes optional AI-generated scouting recommendations using GitHub Models API (Phi-4 or GPT-4o-mini). These insights contextualise the similarity rankings with human-readable analysis.
+
+### How It Works
+
+The AI receives a position-aware prompt containing:
+
+1. **Position context**: forward, defender, or goalkeeper
+2. **Archetype description**: from StatsBomb profile
+3. **ML model confidence**: AUC score indicating ranking reliability
+4. **Top candidates**: player names, ages, teams, and key metrics
+5. **Dataset averages**: for comparison context
+6. **Position criteria**: what makes a great player in this position
+
+### Position-Specific Metrics
+
+Different metrics matter for different positions:
+
+| Position | Key Metrics | ML AUC |
+|----------|-------------|--------|
+| Forward | danger_rate, central_pct, separation, entry_speed | 0.656 |
+| Defender | stop_danger_rate, pressing_rate, goal_side_rate | 0.845 |
+| Goalkeeper | pass_success_rate, pass_distance, long_pass_pct | 0.993 |
+
+### Example Usage
+
+```python
+from src.utils.ai_insights import generate_similarity_insight, has_valid_token
+
+if has_valid_token():
+    insight = generate_similarity_insight(
+        ranked_players,
+        archetype,
+        top_n=5,
+        position_type="forward",
+    )
+    print(insight)
+```
+
+### Sample Output
+
+For the Alvarez archetype:
+
+> **Z. Clough** emerges as the closest match with an 88.7% similarity. His 50% danger rate mirrors Alvarez's clinical finishing, though with fewer entries.
+>
+> The key difference lies in movement patterns. While Clough shows good separation (8.2m), his central percentage is lower than target, suggesting he drifts wide.
+>
+> For development potential, **T. Payne** at 22 offers interesting upside despite a lower current similarity.
+
+### Configuration
+
+Available in `src/utils/ai_insights.py`:
+
+```python
+# position-specific metric configs
+POSITION_METRICS = {
+    "forward": {
+        "metrics": ["danger_rate", "central_pct", "avg_separation", ...],
+        "count_field": "total_entries",
+        "auc": 0.656,
+        "criteria": "Forwards are valued for creating danger...",
+    },
+    # defender and goalkeeper configs...
+}
+```
+
+### Privacy Considerations
+
+Only aggregated metrics and player names are sent to the AI. No raw tracking coordinates or identifiers beyond public player names are transmitted.

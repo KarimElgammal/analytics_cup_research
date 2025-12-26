@@ -11,6 +11,7 @@ from typing import Sequence
 
 # Features to display on radar chart (readable labels)
 RADAR_FEATURES = {
+    # Forward features
     "avg_separation": "Separation",
     "central_pct": "Central %",
     "half_space_pct": "Half-Space %",
@@ -19,6 +20,24 @@ RADAR_FEATURES = {
     "avg_passing_options": "Passing Options",
     "carry_pct": "Carry %",
     "avg_defensive_line_dist": "Depth",
+    # Defender features
+    "stop_danger_rate": "Stop Danger %",
+    "reduce_danger_rate": "Reduce Danger %",
+    "force_backward_rate": "Force Back %",
+    "pressing_rate": "Pressing %",
+    "goal_side_rate": "Goal Side %",
+    "avg_engagement_distance": "Engagement Dist",
+    "beaten_by_possession_rate": "Beaten (Ball) %",
+    "beaten_by_movement_rate": "Beaten (Move) %",
+    # Goalkeeper features
+    "pass_success_rate": "Pass Success %",
+    "avg_pass_distance": "Pass Distance",
+    "long_pass_pct": "Long Pass %",
+    "short_pass_pct": "Short Pass %",
+    "high_pass_pct": "High Pass %",
+    "quick_distribution_pct": "Quick Dist %",
+    "under_pressure_pct": "Under Pressure %",
+    "to_attacking_third_pct": "To Attack 3rd %",
 }
 
 
@@ -69,6 +88,8 @@ def plot_radar_comparison(
     title: str = "Player Profile Comparison",
     figsize: tuple[int, int] = (10, 8),
     include_alvarez: bool = True,
+    target_profile: dict | None = None,
+    target_name: str = "Target",
 ) -> plt.Figure:
     """
     Create radar chart comparing multiple player profiles.
@@ -85,7 +106,11 @@ def plot_radar_comparison(
     figsize : tuple
         Figure size
     include_alvarez : bool
-        Whether to include Alvarez target profile as reference
+        Whether to include target profile as reference (legacy name kept for compatibility)
+    target_profile : dict, optional
+        Custom target profile values. If None, uses Alvarez profile for forwards.
+    target_name : str
+        Name to display for the target profile line
 
     Returns:
     --------
@@ -105,14 +130,17 @@ def plot_radar_comparison(
     # Create figure
     fig, ax = plt.subplots(figsize=figsize, subplot_kw=dict(polar=True))
 
-    # Add Alvarez target first (so it appears behind)
+    # Add target profile first (so it appears behind)
     if include_alvarez:
-        alvarez = get_alvarez_radar_profile(features)
-        alvarez_values = [alvarez.get(f, 50) for f in features]
-        alvarez_values += alvarez_values[:1]
-        ax.plot(angles, alvarez_values, '--', linewidth=2, label='Alvarez (Target)',
+        if target_profile is not None:
+            target = {"name": f"{target_name} (Target)", **{f: target_profile.get(f, 50) for f in features}}
+        else:
+            target = get_alvarez_radar_profile(features)
+        target_values = [target.get(f, 50) for f in features]
+        target_values += target_values[:1]
+        ax.plot(angles, target_values, '--', linewidth=2, label=target.get('name', 'Target'),
                 color='#f39c12', alpha=0.8)
-        ax.fill(angles, alvarez_values, alpha=0.1, color='#f39c12')
+        ax.fill(angles, target_values, alpha=0.1, color='#f39c12')
 
     # Colors for different players
     colors = ['#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#1abc9c']

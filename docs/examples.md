@@ -2,15 +2,16 @@
 
 ## A-League Analysis Results
 
-This example shows results from analysing 10 A-League matches to find players with Julian Alvarez-like characteristics.
+This example shows results from analysing 10 A-League matches using 12 pre-built archetypes across forwards, defenders, and goalkeepers.
 
 ### Data Summary
 
-- **245** final third entries detected
-- **31** players with 3+ entries profiled
+- **245** final third entries detected (forwards)
+- **8,911** defensive engagements detected (defenders)
+- **522** goalkeeper distributions detected
 - **10** matches analysed
 
-### Top 5 Alvarez-like Players
+### Top 5 Alvarez-like Players (Forwards)
 
 | Rank | Player | Age | Team | Similarity | Danger Rate | Entries |
 |------|--------|-----|------|------------|-------------|---------|
@@ -30,32 +31,62 @@ This example shows results from analysing 10 A-League matches to find players wi
 
 ![Radar Comparison](assets/radar_comparison.png)
 
-The radar chart compares the top 3 candidates against the Alvarez target profile (dashed orange line). The target emphasises high separation, danger rate, and central positioning while setting a low carry percentage — reflecting that Alvarez creates through movement rather than dribbling.
+The radar chart compares the top 3 candidates against the Alvarez target profile (dashed orange line). The target emphasises high separation, danger rate, and central positioning while setting a low carry percentage, reflecting that Alvarez creates through movement rather than dribbling.
 
 ---
 
-## Code: Finding Alvarez-like Players
+## Code: Finding Similar Players
 
 ```python
-from src.core import Archetype, PlayerProfiler, SimilarityEngine, ScoutingReport
+from src.core.archetype import Archetype
+from src.core.similarity import SimilarityEngine
 
-# Build profiles from SkillCorner data
-profiler = PlayerProfiler.from_skillcorner(min_entries=3)
+# See all 12 available archetypes
+print(Archetype.list_available())
+# ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
+#  'gvardiol', 'romero', 'hakimi', 'lloris', 'livakovic', 'bounou']
 
-# Compute similarity against Alvarez archetype
-engine = SimilarityEngine(Archetype.alvarez())
-engine.fit(profiler.profiles)
+# Load any archetype from StatsBomb World Cup 2022 data
+archetype = Archetype.from_statsbomb("alvarez")
+print(archetype.description)  # Shows actual stats
+
+# Compute similarity against player profiles
+engine = SimilarityEngine(archetype)
+engine.fit(profiles)
 rankings = engine.rank(top_n=10)
 
 # Display results
-print(f"Analysed {len(profiler.entries)} entries from {len(profiler.profiles)} players")
 for row in rankings.to_dicts():
-    print(f"{row['rank']}. {row['player_name']} ({row.get('team_name', '')}) - {row['similarity_score']}%")
+    print(f"{row['rank']}. {row['player_name']} - {row['similarity_score']:.1f}%")
+```
 
-# Generate AI scouting report (requires GitHub token)
-report = ScoutingReport(engine)
-if report.has_valid_token():
-    print(report.generate(top_n=5))
+---
+
+## Code: Multi-Position Analysis
+
+Analyse players across different positions:
+
+```python
+from src.core.archetype import Archetype
+from src.core.similarity import SimilarityEngine
+
+# Forward analysis
+forward_archetype = Archetype.from_statsbomb("giroud")  # Target man
+engine = SimilarityEngine(forward_archetype)
+engine.fit(forward_profiles)
+forward_rankings = engine.rank(top_n=5)
+
+# Defender analysis
+defender_archetype = Archetype.from_statsbomb("hakimi")  # Attacking wing-back
+engine = SimilarityEngine(defender_archetype)
+engine.fit(defender_profiles)
+defender_rankings = engine.rank(top_n=5)
+
+# Goalkeeper analysis
+gk_archetype = Archetype.from_statsbomb("lloris")  # Sweeper-keeper
+engine = SimilarityEngine(gk_archetype)
+engine.fit(goalkeeper_profiles)
+gk_rankings = engine.rank(top_n=5)
 ```
 
 ---
@@ -65,7 +96,8 @@ if report.has_valid_token():
 Create your own archetype for different player types:
 
 ```python
-from src.core import Archetype, SimilarityEngine
+from src.core.archetype import Archetype
+from src.core.similarity import SimilarityEngine
 
 # Define a "pressing forward" archetype
 pressing_forward = Archetype.custom(
@@ -99,11 +131,14 @@ rankings = engine.rank(top_n=5)
 Find which archetype a player best matches:
 
 ```python
-from src.core import Archetype, SimilarityEngine
+from src.core.archetype import Archetype
+from src.core.similarity import SimilarityEngine
 
+# Compare against multiple archetypes
 archetypes = {
-    "alvarez": Archetype.alvarez(),
-    "pressing_forward": pressing_forward,
+    "alvarez": Archetype.from_statsbomb("alvarez"),
+    "giroud": Archetype.from_statsbomb("giroud"),
+    "rashford": Archetype.from_statsbomb("rashford"),
 }
 
 player_name = "Z. Clough"
@@ -111,7 +146,57 @@ player_name = "Z. Clough"
 print(f"Archetype fit for {player_name}:")
 for name, archetype in archetypes.items():
     engine = SimilarityEngine(archetype)
-    engine.fit(profiler.profiles)
+    engine.fit(profiles)
     explanation = engine.explain(player_name)
     print(f"  {name}: {explanation['similarity_score']:.1f}%")
 ```
+
+---
+
+## Code: AI Scouting Insights
+
+Generate position-aware AI recommendations:
+
+```python
+from src.utils.ai_insights import generate_similarity_insight, has_valid_token
+
+# check token exists
+if has_valid_token():
+    # forward analysis
+    insight = generate_similarity_insight(
+        forward_rankings,
+        Archetype.from_statsbomb("alvarez"),
+        top_n=5,
+        position_type="forward",
+    )
+    print(insight)
+
+    # defender analysis
+    insight = generate_similarity_insight(
+        defender_rankings,
+        defender_archetype,
+        top_n=5,
+        position_type="defender",
+    )
+    print(insight)
+```
+
+### Example AI Output (Forward)
+
+> **Z. Clough** from Adelaide United emerges as the closest match with 88.7% similarity. His 50% danger rate mirrors Alvarez's clinical finishing, though with fewer entries (4 vs typical 8+).
+>
+> The key difference between Clough and the archetype lies in movement patterns. While he shows strong separation (8.2m), his central percentage is lower than target.
+>
+> For development potential, **T. Payne** at 22 offers interesting upside. His entry speed and willingness to attack centrally align with Alvarez's profile.
+
+### Example AI Output (Defender)
+
+> **N. Paull** leads the rankings with 82.4% similarity to Gvardiol. His stop danger rate of 68% and pressing rate of 72% suggest a similarly aggressive defensive approach.
+>
+> Unlike Gvardiol who excels at carrying the ball out, Paull shows lower progression metrics but stronger tackling numbers. This suggests a more traditional centre-back profile.
+
+### Example AI Output (Goalkeeper)
+
+> **H. Devenish-Meares** shows 91.2% similarity to Lloris with excellent pass success (87%) and quick distribution tendency.
+>
+> At 22, he represents the strongest development prospect among the top candidates. His preference for short distribution matches the sweeper-keeper archetype.
