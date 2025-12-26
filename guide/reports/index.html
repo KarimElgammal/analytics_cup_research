@@ -716,6 +716,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#huggingface-spaces-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HuggingFace Spaces Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#basic-usage" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1152,6 +1163,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#huggingface-spaces-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HuggingFace Spaces Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#basic-usage" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1363,6 +1385,13 @@
 </ol>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HF_TOKEN</span><span class="o">=</span>your_token_here
 </span></code></pre></div>
+<h3 id="huggingface-spaces-deployment">HuggingFace Spaces Deployment<a class="headerlink" href="#huggingface-spaces-deployment" title="Permanent link">&para;</a></h3>
+<p>Both backends work on HF Spaces - add secrets in Space Settings:</p>
+<ul>
+<li><code>GITHUB_TOKEN</code> - GitHub token (recommended)</li>
+<li><code>HF_TOKEN</code> - HuggingFace token</li>
+</ul>
+<p>Token files are gitignored, so users never see your credentials.</p>
 <h3 id="basic-usage">Basic Usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h3>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.ai_insights</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">generate_similarity_insight</span><span class="p">,</span>
