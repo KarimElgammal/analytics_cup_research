@@ -1,14 +1,3 @@
----
-title: Archetype Comparison Tool
-emoji: ⚽
-colorFrom: green
-colorTo: blue
-sdk: streamlit
-sdk_version: "1.40.0"
-app_file: app.py
-pinned: false
----
-
 # Finding Alvarez (and Others) in the A-League
 
 SkillCorner X PySport Analytics Cup 2026 - Research Track
