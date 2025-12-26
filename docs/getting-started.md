@@ -49,23 +49,48 @@ data/
 ## Basic Usage
 
 ```python
-from src.core import Archetype, PlayerProfiler, SimilarityEngine
+from src.data.loader import load_all_events, add_team_names
+from src.analysis.entries import detect_entries, classify_entries
+from src.analysis.profiles import build_player_profiles, filter_profiles
+from src.core.archetype import Archetype
+from src.core.similarity import SimilarityEngine
 
-# Build player profiles from SkillCorner data
-profiler = PlayerProfiler(min_entries=3)
-profiler.load_data()
-profiler.detect_entries()
-profiler.build_profiles()
+# Load and process SkillCorner data
+events = load_all_events()
+events = add_team_names(events)
+entries = detect_entries(events)
+entries = classify_entries(entries)
+profiles = build_player_profiles(entries)
+profiles = filter_profiles(profiles, min_entries=3)
 
-# Use Alvarez archetype and compute similarity
-archetype = Archetype.alvarez()
+# Load archetype from StatsBomb data (10 available)
+archetype = Archetype.from_statsbomb("alvarez")
+print(archetype.description)  # Shows actual stats
+
+# Compute similarity rankings
 engine = SimilarityEngine(archetype)
-engine.fit(profiler.profiles)
+engine.fit(profiles)
 rankings = engine.rank(top_n=10)
 
 # Display results
 for row in rankings.to_dicts():
-    print(f"{row['rank']}. {row['player_name']} - {row['similarity_score']}%")
+    print(f"{row['rank']}. {row['player_name']} - {row['similarity_score']:.1f}%")
+```
+
+## Available Archetypes
+
+Load any of these 10 pre-built archetypes:
+
+```python
+# List all available
+Archetype.list_available()
+# ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
+#  'gvardiol', 'romero', 'lloris', 'livakovic']
+
+# Load specific archetype
+archetype = Archetype.from_statsbomb("giroud")  # Target man style
+archetype = Archetype.from_statsbomb("rashford")  # Pace/dribbling style
+archetype = Archetype.from_statsbomb("gvardiol")  # Ball-playing defender
 ```
 
 ## Running the Notebook

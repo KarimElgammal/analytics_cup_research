@@ -43,8 +43,56 @@ class Archetype:
         return warnings
 
     @classmethod
+    def from_statsbomb(cls, player_key: str, verbose: bool = False) -> Archetype:
+        """Create archetype from StatsBomb event data.
+
+        Loads real player events from StatsBomb free data, calculates
+        statistics, and builds a data-driven target profile.
+
+        Args:
+            player_key: Player identifier (e.g., "alvarez", "messi", "mbappe")
+            verbose: If True, print progress when loading data
+
+        Returns:
+            Archetype with target profile computed from actual player stats
+
+        Raises:
+            KeyError: If player_key not found in registry
+            ValueError: If no events found for the player
+
+        Example:
+            >>> archetype = Archetype.from_statsbomb("alvarez")
+            >>> print(archetype.description)
+            # Shows actual World Cup 2022 stats
+        """
+        from src.core.archetype_factory import ArchetypeFactory
+        factory = ArchetypeFactory(verbose=verbose)
+        return factory.build(player_key)
+
+    @classmethod
+    def list_available(cls) -> list[str]:
+        """List available player archetypes from StatsBomb data.
+
+        Returns:
+            List of player keys that can be used with from_statsbomb()
+
+        Example:
+            >>> Archetype.list_available()
+            ['alvarez', 'messi', 'mbappe']
+        """
+        from src.core.archetype_factory import ArchetypeFactory
+        return ArchetypeFactory().list_available()
+
+    @classmethod
     def alvarez(cls) -> Archetype:
-        """Create pre-built Julian Alvarez archetype."""
+        """Create pre-built Julian Alvarez archetype (legacy/fallback).
+
+        Note: Prefer using Archetype.from_statsbomb("alvarez") for
+        data-driven archetype computed from actual StatsBomb events.
+
+        This method provides a fallback with hardcoded values based on
+        manual research, useful when StatsBomb data is unavailable.
+        """
         archetype = cls(
             name="alvarez",
             description="Julian Alvarez: intelligent movement, spatial awareness, clinical finishing.",
@@ -68,4 +116,16 @@ class Archetype:
 
     @classmethod
     def custom(cls, name: str, description: str = "") -> Archetype:
+        """Create a custom archetype with empty profile.
+
+        Use set_feature() to define the target profile.
+
+        Args:
+            name: Archetype identifier
+            description: Human-readable description
+
+        Example:
+            >>> pressing = Archetype.custom("pressing_forward", "High-energy forward")
+            >>> pressing.set_feature("avg_entry_speed", target=85, weight=0.25, direction=1)
+        """
         return cls(name=name, description=description)

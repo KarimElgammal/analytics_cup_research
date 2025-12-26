@@ -1,150 +1,142 @@
 # Methodology: Finding Alvarez in the A-League
 
+> **Online Documentation**: [karimelgammal.github.io/analytics_cup_research](https://karimelgammal.github.io/analytics_cup_research/)
+>
+> **Repository**: [github.com/KarimElgammal/analytics_cup_research](https://github.com/KarimElgammal/analytics_cup_research)
+
 ## Overview
 
-This document explains how I derive the Julian Alvarez archetype from StatsBomb event data and map it to SkillCorner tracking metrics for player similarity analysis.
+This document explains how I derive player archetypes from StatsBomb event data and map them to SkillCorner tracking metrics for player similarity analysis.
 
 ---
 
-## Alvarez Target Profile for Radar Comparison
+## Programmatic Archetype Generation
 
-Since Alvarez does not appear in the SkillCorner A-League dataset, I constructed a target profile by mapping his StatsBomb event metrics to estimated SkillCorner tracking equivalents. Values are expressed on a normalised 0-100 scale.
-
-| Feature | Target Value | Derivation |
-|---------|--------------|------------|
-| avg_separation | 85 | StatsBomb shows 24 box touches, indicating consistent dangerous positioning. High separation from defenders required. Target set at ~95th percentile of A-League data. |
-| danger_rate | 90 | StatsBomb: 20% conversion, 60% shot accuracy in World Cup/Copa América. Elite finishing. Target at 95th percentile. |
-| central_pct | 75 | Positional data shows Alvarez operates centrally, not as wide forward. Box touches come from central runs. |
-| avg_entry_speed | 70 | Dynamic but not pace-reliant. Value comes from timing and positioning rather than raw speed. |
-| half_space_pct | 60 | Complements central play. Drifts into half-spaces but primary threat through middle. |
-| avg_passing_options | 65 | StatsBomb: 2 key passes, 78.9% pass accuracy. Good link-up player. |
-| carry_pct | 40 | CRITICAL: 50% dribble success. Alvarez is NOT a dribbler. Low target penalises dribble-reliant players. |
-
-The low carry_pct target is particularly important. While almost all A-League entries are classified as carries (98.8% mean), setting a low target means players who rely heavily on dribbling will score lower on this dimension. Alvarez creates through movement off the ball, not carrying through defenders.
-
----
-
-## Part 1: Extracting Alvarez Profile from StatsBomb
-
-### StatsBomb Free Data
-
-StatsBomb provides free event data including World Cup and Copa América matches where Alvarez played.
+**New in v2.0**: Archetypes are now computed programmatically from real StatsBomb event data, not hardcoded values.
 
 ```python
-"""Extract Alvarez profile from StatsBomb free data.
-Based on: player-focus/alvarez_marmoush_comparison.py
-"""
-import polars as pl
-import requests
+from src.core.archetype import Archetype
 
-STATSBOMB_BASE_URL = "https://raw.githubusercontent.com/statsbomb/open-data/master/data/"
-ALVAREZ_PLAYER_ID = 29560  # Found in Argentina lineup
+# Load archetype from StatsBomb data
+archetype = Archetype.from_statsbomb("alvarez")
+print(archetype.description)  # Shows actual stats
 
-def find_player_events_by_id(player_id: int, player_name: str) -> pl.DataFrame:
-    """Find all events for a specific player ID across all competitions."""
-    competitions_url = f"{STATSBOMB_BASE_URL}competitions.json"
-    competitions = requests.get(competitions_url).json()
-
-    all_events = []
-    for comp in competitions:
-        comp_id, season_id = comp['competition_id'], comp['season_id']
-        try:
-            matches_url = f"{STATSBOMB_BASE_URL}matches/{comp_id}/{season_id}.json"
-            matches = requests.get(matches_url).json()
-
-            for match in matches:
-                match_id = match['match_id']
-                # Check lineup for player
-                lineup_url = f"{STATSBOMB_BASE_URL}lineups/{match_id}.json"
-                lineups = requests.get(lineup_url).json()
-
-                player_in_match = any(
-                    player.get('player_id') == player_id
-                    for team in lineups for player in team.get('lineup', [])
-                )
-
-                if player_in_match:
-                    events_url = f"{STATSBOMB_BASE_URL}events/{match_id}.json"
-                    events = requests.get(events_url).json()
-                    player_events = [e for e in events if e.get('player', {}).get('id') == player_id]
-                    all_events.extend(player_events)
-        except Exception:
-            continue
-
-    return pl.DataFrame(all_events) if all_events else pl.DataFrame()
-
-
-def calculate_player_stats(events_df: pl.DataFrame) -> dict:
-    """Calculate key performance metrics from StatsBomb events."""
-    stats = {
-        'total_events': len(events_df),
-        'goals': 0, 'shots': 0, 'shots_on_target': 0,
-        'passes_completed': 0, 'passes_attempted': 0,
-        'dribbles_completed': 0, 'dribbles_attempted': 0,
-        'touches_in_box': 0, 'key_passes': 0
-    }
-
-    for row in events_df.iter_rows(named=True):
-        event_type = row.get('type', {})
-        event_name = event_type.get('name', '') if isinstance(event_type, dict) else str(event_type)
-
-        if event_name == 'Shot':
-            stats['shots'] += 1
-            outcome = row.get('shot', {}).get('outcome', {})
-            if isinstance(outcome, dict):
-                if outcome.get('name') == 'Goal':
-                    stats['goals'] += 1
-                if outcome.get('name') in ['Goal', 'Saved']:
-                    stats['shots_on_target'] += 1
-
-        elif event_name == 'Pass':
-            stats['passes_attempted'] += 1
-            if row.get('pass', {}).get('outcome') is None:
-                stats['passes_completed'] += 1
-            if row.get('pass', {}).get('shot_assist'):
-                stats['key_passes'] += 1
-
-        elif event_name == 'Dribble':
-            stats['dribbles_attempted'] += 1
-            outcome = row.get('dribble', {}).get('outcome', {})
-            if isinstance(outcome, dict) and outcome.get('name') == 'Complete':
-                stats['dribbles_completed'] += 1
-
-        # Box touches
-        if event_name in ['Shot', 'Pass', 'Ball Receipt*', 'Carry']:
-            location = row.get('location', [])
-            if len(location) >= 2 and location[0] >= 102:
-                stats['touches_in_box'] += 1
-
-    # Compute rates
-    if stats['passes_attempted'] > 0:
-        stats['pass_accuracy'] = stats['passes_completed'] / stats['passes_attempted'] * 100
-    if stats['dribbles_attempted'] > 0:
-        stats['dribble_success'] = stats['dribbles_completed'] / stats['dribbles_attempted'] * 100
-    if stats['shots'] > 0:
-        stats['shot_accuracy'] = stats['shots_on_target'] / stats['shots'] * 100
-        stats['conversion_rate'] = stats['goals'] / stats['shots'] * 100
-
-    return stats
-
-
-# Run extraction
-alvarez_events = find_player_events_by_id(ALVAREZ_PLAYER_ID, "Julián Álvarez")
-alvarez_stats = calculate_player_stats(alvarez_events)
-print(alvarez_stats)
+# Available players (10 archetypes across 3 positions)
+Archetype.list_available()
+# ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
+#  'gvardiol', 'romero', 'lloris', 'livakovic']
 ```
 
-### Alvarez Profile Results (from StatsBomb)
+The `src/statsbomb/` package handles:
+- **loader.py**: Fetches events from StatsBomb free data API
+- **registry.py**: Maps player keys to StatsBomb names and competition IDs
+- **stats.py**: Calculates shooting, passing, dribbling statistics
+- **mapper.py**: Converts StatsBomb metrics to SkillCorner target profiles
 
-| Metric | Value | Interpretation |
-|--------|-------|----------------|
-| Total Events | 342 | Sample across WC/Copa |
-| Shot Accuracy | 60.0% | Clinical finisher |
-| Conversion Rate | 20.0% | High-pressure performer |
-| Pass Accuracy | 78.9% | Takes calculated risks |
-| Dribble Success | 50.0% | NOT a dribbler |
-| Box Touches | 24 | Comfortable in danger |
-| Key Passes | 2 | Creates as well as finishes |
+---
+
+## Alvarez Target Profile (Computed from StatsBomb)
+
+The archetype is now **computed from real data**. Example output from World Cup 2022:
+
+| Metric | Actual Value | Interpretation |
+|--------|--------------|----------------|
+| Shots | 11 | Active in attack |
+| Goals | 4 | Clinical finisher |
+| Conversion Rate | 36.4% | Elite finishing |
+| Shot Accuracy | 72.7% | Very accurate |
+| Dribble Success | 0.0% | NOT a dribbler |
+| Box Touches | 8 | Finds dangerous positions |
+
+The low dribble success is critical: Alvarez creates through **movement and positioning**, not individual dribbling. This maps to a low `carry_pct` target, penalising dribble-reliant players.
+
+### Mapping to SkillCorner Targets
+
+| StatsBomb Metric | SkillCorner Target | Percentile Mapping |
+|------------------|--------------------|--------------------|
+| Conversion Rate | `danger_rate` | 36.4% → ~95th percentile |
+| Box Touches/90 | `avg_separation` | High box presence → good separation |
+| Pass Accuracy | `avg_passing_options` | 78.9% → ~50th percentile |
+| Dribble Success | `carry_pct` | 0% → very low target |
+
+Fixed values for tracking-specific metrics (no StatsBomb equivalent):
+- `central_pct`: 70 (forwards typically central)
+- `avg_entry_speed`: 65 (moderate, not pace-reliant)
+- `half_space_pct`: 55 (some half-space movement)
+
+---
+
+## Part 1: StatsBomb Integration (Current Implementation)
+
+### Using the StatsBomb Package
+
+The `src/statsbomb/` package provides a clean API for loading player data:
+
+```python
+from src.statsbomb.loader import StatsBombLoader
+from src.statsbomb.stats import calculate_player_stats
+from src.statsbomb.registry import get_player_info
+
+# Initialize loader
+loader = StatsBombLoader()
+
+# Get player info
+info = get_player_info("alvarez")
+# {'player_name': 'Julián Álvarez', 'display_name': 'Julian Alvarez', ...}
+
+# Load events from World Cup 2022
+events = loader.get_player_events(
+    player_name=info["player_name"],
+    competitions=[(43, 106)]  # World Cup 2022
+)
+
+# Calculate statistics
+stats = calculate_player_stats(events)
+print(f"Conversion: {stats.conversion_rate:.1f}%")
+print(f"Dribble Success: {stats.dribble_success:.1f}%")
+```
+
+### Player Registry
+
+Available players are defined in `src/statsbomb/registry.py`:
+
+```python
+PLAYER_REGISTRY = {
+    "alvarez": {
+        "player_name": "Julián Álvarez",
+        "display_name": "Julian Alvarez",
+        "position": "Forward",
+        "style": "Movement-focused, intelligent runs, clinical finishing",
+        "competitions": [(43, 106, "FIFA World Cup 2022")],
+    },
+    "giroud": {
+        "player_name": "Olivier Giroud",
+        "display_name": "Olivier Giroud",
+        "position": "Forward",
+        "style": "Target man, hold-up play, aerial threat, 0% dribble reliance",
+        "competitions": [(43, 106, "FIFA World Cup 2022")],
+    },
+    "kane": {
+        "player_name": "Harry Kane",
+        "display_name": "Harry Kane",
+        "position": "Forward",
+        "style": "Complete forward, link-up play, clinical finishing",
+        "competitions": [(43, 106, "FIFA World Cup 2022")],
+    },
+    # ... plus lewandowski, rashford, en_nesyri, gvardiol, romero, lloris, livakovic
+}
+```
+
+### Computed Player Profiles (World Cup 2022)
+
+| Player | Conversion | Shot Accuracy | Dribble Success | Style |
+|--------|------------|---------------|-----------------|-------|
+| Alvarez | 36.4% | 72.7% | 0.0% | Movement-focused |
+| Giroud | 23.5% | 58.8% | 0.0% | Target man |
+| Kane | 16.7% | 50.0% | 43% | Complete forward |
+| Rashford | 27.3% | 54.5% | 60% | Pace + dribbling |
+
+The key insight: Both Alvarez and Giroud have 0% dribble success — they create through movement, not dribbling. This distinguishes them from pace-reliant players like Rashford.
 
 ---
 
@@ -158,11 +150,11 @@ StatsBomb provides **event data** (shots, passes, dribbles), while SkillCorner p
 
 | Alvarez Trait (StatsBomb) | SkillCorner Metric | Rationale |
 |---------------------------|-------------------|-----------|
-| 20% conversion rate | `danger_rate` | Entries leading to shots proxy finishing quality |
-| 24 box touches | `central_pct` | Central entries = box presence |
+| 36.4% conversion rate | `danger_rate` | Entries leading to shots proxy finishing quality |
+| 8 box touches | `central_pct` | Central entries = box presence |
 | Intelligent movement | `avg_separation` | Finding space between lines |
-| NOT a dribbler (50%) | `carry_pct` (LOW weight) | Carries ≠ dribbles in tracking |
-| Link-up play (2 key passes) | `avg_passing_options` | More options = better link-up |
+| NOT a dribbler (0%) | `carry_pct` (LOW weight) | Carries ≠ dribbles in tracking |
+| Link-up play | `avg_passing_options` | More options = better link-up |
 | High-pressure performer | `quick_break_pct` | Counter-attacks test composure |
 
 ---
@@ -412,3 +404,256 @@ This hybrid approach combines:
 - **Domain knowledge** (Alvarez archetype from StatsBomb)
 - **ML validation** (GradientBoosting feature importance)
 - **Correlation analysis** (A-League data patterns)
+
+---
+
+## Part 7: Player Archetype Selection Criteria
+
+### Why These 10 Players?
+
+The archetypes were selected based on three key criteria:
+
+1. **Data Availability**: Players must have sufficient events in StatsBomb free data (World Cup 2022) for reliable statistics
+2. **Realistic Comparisons**: Avoiding generational talents (Messi, Mbappe) whose profiles are unrealistic targets for league-level scouting
+3. **Style Diversity**: Covering different playing styles to demonstrate the tool's versatility
+
+### Selection Process
+
+We analysed World Cup 2022 data to find players with:
+- **Forwards**: 5+ shots (sufficient sample for conversion rates)
+- **Defenders**: 200+ passes, 10+ clearances/interceptions
+- **Goalkeepers**: 10+ saves across multiple matches
+
+### Available Archetypes
+
+#### Forwards (6 players)
+
+| Player | Country | Shots | Goals | Conv% | Dribbles | Style |
+|--------|---------|-------|-------|-------|----------|-------|
+| **Alvarez** | ARG | 11 | 4 | 36.4% | 0% | Movement-focused, intelligent runs |
+| **Giroud** | FRA | 17 | 4 | 23.5% | 0% | Target man, hold-up play, aerial threat |
+| **Kane** | ENG | 12 | 2 | 16.7% | 43% | Complete forward, link-up play |
+| **Lewandowski** | POL | 12 | 2 | 16.7% | 40% | Clinical poacher, box presence |
+| **Rashford** | ENG | 11 | 3 | 27.3% | 60% | Pace, direct dribbling, wide threat |
+| **En-Nesyri** | MAR | 11 | 2 | 18.2% | 67% | Physical forward, aerial presence |
+
+#### Defenders (2 players)
+
+| Player | Country | Passes | Pass% | Clearances | Interceptions | Style |
+|--------|---------|--------|-------|------------|---------------|-------|
+| **Gvardiol** | CRO | 510 | 91% | 43 | 14 | Ball-playing CB, progressive carrier |
+| **Romero** | ARG | 372 | 89% | 26 | 9 | Aggressive CB, strong tackler |
+
+#### Goalkeepers (2 players)
+
+| Player | Country | Matches | Saves | Style |
+|--------|---------|---------|-------|-------|
+| **Lloris** | FRA | 6 | 94 | Experienced captain, commanding presence |
+| **Livakovic** | CRO | 7 | 103 | Penalty hero, high volume saves |
+
+### Why Not Messi/Mbappe?
+
+While Messi and Mbappe have extensive data in World Cup 2022, they represent **outlier profiles**:
+- **Messi**: 72% dribble success, 26% conversion - unrealistic target for most leagues
+- **Mbappe**: 60% dribble success, 28% conversion - pace/skill combination rare at any level
+
+Using these as archetypes would yield few meaningful matches in A-League or similar leagues. The selected players represent **achievable excellence** - world-class but not once-in-a-generation.
+
+---
+
+## Part 8: Using This Tool with Other SkillCorner Data
+
+### Architecture Overview
+
+The tool is designed to work with **any SkillCorner tracking data**, not just A-League:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  YOUR DATA                                                       │
+│  - SkillCorner dynamic_events.csv                               │
+│  - Any league/competition supported                              │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  src/data/loader.py                                              │
+│  - load_events(match_id) or load_all_events()                   │
+│  - Returns Polars DataFrame with tracking metrics                │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  src/analysis/                                                   │
+│  - entries.py: detect_entries(), classify_entries()            │
+│  - profiles.py: build_player_profiles()                         │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  src/core/                                                       │
+│  - archetype.py: Archetype.from_statsbomb("alvarez")            │
+│  - similarity.py: SimilarityEngine(archetype).fit(profiles)    │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  RESULTS: Ranked players by similarity to archetype             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Loading Your Own SkillCorner Data
+
+#### Option 1: Use SkillCorner Open Data (other matches)
+
+```python
+from src.data.loader import load_events
+
+# Load any match from SkillCorner open data
+# See: github.com/SkillCorner/opendata for available match IDs
+events = load_events(match_id=2017461)
+```
+
+#### Option 2: Use Local CSV Files
+
+```python
+import polars as pl
+
+# Load your own SkillCorner dynamic_events.csv
+events = pl.read_csv("path/to/your_dynamic_events.csv")
+
+# Ensure required columns exist:
+required = ["event_type", "player_id", "third_start", "third_end",
+            "speed_avg", "separation_end", "lead_to_shot"]
+```
+
+#### Option 3: Use kloppy for Any SkillCorner Data
+
+```python
+from kloppy import skillcorner
+
+# Load tracking data with kloppy
+dataset = skillcorner.load(
+    raw_data="path/to/match_data.json",
+    metadata="path/to/match_metadata.json"
+)
+
+# Convert to DataFrame
+df = dataset.to_df()
+```
+
+### Running Similarity Analysis
+
+```python
+from src.analysis.entries import detect_entries, classify_entries
+from src.analysis.profiles import build_player_profiles, filter_profiles
+from src.core.archetype import Archetype
+from src.core.similarity import SimilarityEngine
+
+# 1. Process your events
+entries = detect_entries(your_events)
+entries = classify_entries(entries)
+
+# 2. Build player profiles
+profiles = build_player_profiles(entries)
+profiles = filter_profiles(profiles, min_entries=3)
+
+# 3. Load any archetype
+archetype = Archetype.from_statsbomb("kane")  # or giroud, lewandowski, etc.
+
+# 4. Run similarity analysis
+engine = SimilarityEngine(archetype)
+engine.fit(profiles)
+results = engine.rank(top_n=10)
+
+print(results)
+```
+
+### Adding Custom Archetypes
+
+You can create custom archetypes without StatsBomb data:
+
+```python
+from src.core.archetype import Archetype
+
+# Create a custom archetype
+pressing_forward = Archetype.custom(
+    name="pressing_forward",
+    description="High-energy forward who presses from the front"
+)
+
+# Set target profile (0-100 scale)
+pressing_forward.set_feature("avg_entry_speed", target=85, weight=0.25, direction=1)
+pressing_forward.set_feature("danger_rate", target=60, weight=0.20, direction=1)
+pressing_forward.set_feature("avg_separation", target=70, weight=0.20, direction=1)
+pressing_forward.set_feature("central_pct", target=80, weight=0.15, direction=1)
+pressing_forward.set_feature("carry_pct", target=30, weight=0.10, direction=1)
+pressing_forward.set_feature("quick_break_pct", target=70, weight=0.10, direction=1)
+
+# Use with SimilarityEngine
+engine = SimilarityEngine(pressing_forward)
+engine.fit(profiles)
+```
+
+### Extending to New Leagues
+
+To use with a new league's SkillCorner data:
+
+1. **Obtain SkillCorner data** for your league (via SkillCorner API or open data)
+2. **Load events** using `load_events()` or custom loader
+3. **Run the pipeline** - entries → profiles → similarity
+4. **Interpret results** considering league context
+
+The ML-calibrated weights (separation: 23%, danger_rate: 18%, etc.) were derived from A-League data but should generalise reasonably to other leagues with similar playing styles.
+
+---
+
+## Part 9: Adding New Players to the Registry
+
+To add a new player archetype from StatsBomb data:
+
+### Step 1: Find the Player in StatsBomb
+
+```python
+from statsbombpy import sb
+
+# Check available competitions
+comps = sb.competitions()
+print(comps[['competition_id', 'season_name', 'competition_name']])
+
+# World Cup 2022 = competition_id: 43, season_id: 106
+matches = sb.matches(competition_id=43, season_id=106)
+
+# Get events and find player name
+events = sb.events(match_id=matches['match_id'].iloc[0])
+print(events['player'].unique())
+```
+
+### Step 2: Add to Registry
+
+Edit `src/statsbomb/registry.py`:
+
+```python
+PLAYER_REGISTRY = {
+    # ... existing players ...
+
+    "your_player": {
+        "player_name": "Exact Name From StatsBomb",  # Must match exactly!
+        "display_name": "Display Name",
+        "position": "Forward",  # or "Defender", "Goalkeeper"
+        "nationality": "Country",
+        "style": "Brief style description",
+        "competitions": [
+            (43, 106, "FIFA World Cup 2022"),  # (competition_id, season_id, name)
+        ],
+    },
+}
+```
+
+### Step 3: Test
+
+```python
+from src.core.archetype import Archetype
+
+arch = Archetype.from_statsbomb("your_player")
+print(arch.description)  # Should show computed stats
+```

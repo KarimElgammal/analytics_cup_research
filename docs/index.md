@@ -6,30 +6,43 @@ SkillCorner Scout is a Python library for identifying players who match specific
 
 ## Features
 
-- **Archetype Definition**: Create custom player archetypes with target profiles and weighted features
+- **11 Pre-built Archetypes**: Computed from real StatsBomb World Cup 2022 data
 - **Profile Building**: Automatically extract player profiles from SkillCorner tracking data
-- **Similarity Scoring**: Rank players by weighted cosine similarity to your target archetype
+- **Similarity Scoring**: Rank players by ML-calibrated weighted cosine similarity
 - **AI Reports**: Generate natural language scouting reports using LLM APIs
+- **Custom Archetypes**: Create your own archetypes with target profiles
+
+## Available Archetypes
+
+| Position | Players |
+|----------|---------|
+| **Forward** | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri |
+| **Defender** | Gvardiol, Romero |
+| **Goalkeeper** | Lloris, Livakovic, Bounou |
 
 ## Quick Example
 
 ```python
-from src.core import Archetype, PlayerProfiler, SimilarityEngine
+from src.core.archetype import Archetype
+from src.core.similarity import SimilarityEngine
 
-# Use the pre-built Alvarez archetype
-archetype = Archetype.alvarez()
+# Load archetype from StatsBomb data (10 players available)
+archetype = Archetype.from_statsbomb("alvarez")
+print(archetype.description)  # Shows actual World Cup 2022 stats
 
-# Build player profiles from SkillCorner data
-profiler = PlayerProfiler.from_skillcorner(min_entries=3)
+# See all available archetypes
+print(Archetype.list_available())
+# ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
+#  'gvardiol', 'romero', 'lloris', 'livakovic', 'bounou']
 
-# Compute similarity rankings
+# Compute similarity rankings against your player profiles
 engine = SimilarityEngine(archetype)
-engine.fit(profiler.profiles)
+engine.fit(profiles)  # Your SkillCorner player profiles
 rankings = engine.rank(top_n=10)
 
 # Display results
 for row in rankings.to_dicts():
-    print(f"{row['rank']}. {row['player_name']} - {row['similarity_score']}%")
+    print(f"{row['rank']}. {row['player_name']} - {row['similarity_score']:.1f}%")
 ```
 
 ## A-League Results
@@ -43,6 +56,7 @@ Developed for the SkillCorner X PySport Analytics Cup 2026 Research Track. The r
 ## Next Steps
 
 - [Getting Started](getting-started.md) - Installation and setup
+- [Methodology](methodology.md) - Full technical documentation with player selection rationale
 - [User Guide](guide/archetypes.md) - Learn how to define archetypes
 - [Examples](examples.md) - Full A-League results with figures
 - [API Reference](api/archetype.md) - Complete API documentation

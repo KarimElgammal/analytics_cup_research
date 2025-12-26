@@ -44,6 +44,7 @@ plugins:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
+  - Methodology: methodology.md
   - User Guide:
     - Defining Archetypes: guide/archetypes.md
     - Building Profiles: guide/profiler.md
