@@ -10,7 +10,7 @@ A player similarity study for identifying A-League players who match world-class
 ## Features
 
 - **12 Pre-built Archetypes**: Computed from StatsBomb World Cup 2022 data
-- **ML-Calibrated Weights**: GradientBoosting models for each position type
+- **Correlation-based Weights**: Feature weights derived from A-League data analysis
 - **Profile Building**: Automatically extract player profiles from SkillCorner tracking data
 - **Similarity Scoring**: Rank players by weighted cosine similarity
 - **AI Scouting Insights**: Statistics-aware LLM analysis via GitHub Models or HuggingFace
@@ -18,11 +18,11 @@ A player similarity study for identifying A-League players who match world-class
 
 ## Available Archetypes
 
-| Position | Players | ML Model AUC |
-|----------|---------|--------------|
-| **Forward** | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri | 0.656 |
-| **Defender** | Gvardiol, Romero, Hakimi | 0.845 |
-| **Goalkeeper** | Lloris, Livakovic, Bounou | 0.993 |
+| Position | Players | Events |
+|----------|---------|--------|
+| **Forward** | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri | 245 entries |
+| **Defender** | Gvardiol, Romero, Hakimi | 8,911 engagements |
+| **Goalkeeper** | Lloris, Livakovic, Bounou | 522 distributions |
 
 ## Quick Start
 
@@ -69,7 +69,7 @@ Developed for the SkillCorner X PySport Analytics Cup 2026 Research Track. The r
 ## Next Steps
 
 - [Getting Started](getting-started.md) - Installation and setup
-- [Methodology](methodology.md) - Full technical documentation with ML model details
+- [Methodology](methodology.md) - Full technical documentation
 - [User Guide](guide/archetypes.md) - Learn how to define archetypes
 - [AI Reports](guide/reports.md) - Position-aware AI scouting insights
 - [Examples](examples.md) - Full A-League results with figures

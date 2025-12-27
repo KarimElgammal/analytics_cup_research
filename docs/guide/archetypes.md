@@ -21,11 +21,11 @@ print(archetype.description)  # Shows actual World Cup 2022 stats
 
 ### By Position
 
-| Position | Archetypes | ML Model AUC |
-|----------|------------|--------------|
-| **Forwards** | alvarez, giroud, kane, lewandowski, rashford, en_nesyri | 0.656 |
-| **Defenders** | gvardiol, romero, hakimi | 0.845 |
-| **Goalkeepers** | lloris, livakovic, bounou | 0.993 |
+| Position | Archetypes | A-League Events |
+|----------|------------|-----------------|
+| **Forwards** | alvarez, giroud, kane, lewandowski, rashford, en_nesyri | 245 entries |
+| **Defenders** | gvardiol, romero, hakimi | 8,911 engagements |
+| **Goalkeepers** | lloris, livakovic, bounou | 522 distributions |
 
 ### Examples
 

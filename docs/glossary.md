@@ -54,13 +54,12 @@ Key metrics and terms used in the player similarity analysis.
 | Metric | Description |
 |--------|-------------|
 | **similarity_score** | Weighted cosine similarity (0-100%) between a player's profile and the target archetype. |
-| **AUC** | Area Under the ROC Curve - measures ML model reliability. Higher is better (0.5 = random, 1.0 = perfect). |
 
 ---
 
 ## Data Sources
 
-| Source | Description |
-|--------|-------------|
-| **SkillCorner** | Broadcast tracking data providing player positions, speeds, and game events from A-League matches. |
-| **StatsBomb** | Event data from World Cup 2022 used to compute archetype target profiles. |
+| Source | File | Description |
+|--------|------|-------------|
+| **SkillCorner** | `dynamic_events.csv` | Game intelligence metrics from A-League broadcast tracking (10 matches). |
+| **StatsBomb** | Free data API | Event data from World Cup 2022 used to compute archetype target profiles. |

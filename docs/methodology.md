@@ -20,8 +20,7 @@ This document explains how I derive player archetypes from StatsBomb event data 
 | **Defender archetypes** | StatsBomb API | Computed at runtime | Stats from World Cup 2022 events |
 | **Goalkeeper archetypes** | StatsBomb API | Computed at runtime | Stats from World Cup 2022 events |
 | **A-League player profiles** | SkillCorner GitHub | Computed at runtime | Loaded from dynamic_events.csv |
-| **Feature weights** | ML analysis | Static (pre-computed) | GradientBoosting run once, results hardcoded |
-| **AUC scores** | ML analysis | Static (pre-computed) | Cross-validation run once, results hardcoded |
+| **Feature weights** | Correlation analysis | Static | Derived from A-League data, hardcoded |
 | **Reference distributions** | Manual estimates | Static | Percentile thresholds for mapping |
 
 ### Archetype Computation Details
@@ -630,7 +629,7 @@ To use with a new league's SkillCorner data:
 3. **Run the pipeline** - entries → profiles → similarity
 4. **Interpret results** considering league context
 
-The ML-calibrated weights (separation: 23%, danger_rate: 18%, etc.) were derived from A-League data but should generalise reasonably to other leagues with similar playing styles.
+The feature weights (separation: 23%, danger_rate: 18%, etc.) were derived from A-League correlation analysis but should generalise reasonably to other leagues with similar playing styles.
 
 ---
 
@@ -701,20 +700,19 @@ The AI receives a position-aware prompt containing:
 
 1. **Position context**: forward, defender, or goalkeeper
 2. **Archetype description**: from StatsBomb profile
-3. **ML model confidence**: AUC score indicating ranking reliability
-4. **Top candidates**: player names, ages, teams, and key metrics
-5. **Dataset averages**: for comparison context
-6. **Position criteria**: what makes a great player in this position
+3. **Top candidates**: player names, ages, teams, and key metrics
+4. **Dataset averages**: for comparison context
+5. **Position criteria**: what makes a great player in this position
 
 ### Position-Specific Metrics
 
 Different metrics matter for different positions:
 
-| Position | Key Metrics | ML AUC |
+| Position | Key Metrics | Events |
 |----------|-------------|--------|
-| Forward | danger_rate, central_pct, separation, entry_speed | 0.656 |
-| Defender | stop_danger_rate, pressing_rate, goal_side_rate | 0.845 |
-| Goalkeeper | pass_success_rate, pass_distance, long_pass_pct | 0.993 |
+| Forward | danger_rate, central_pct, separation, entry_speed | 245 entries |
+| Defender | stop_danger_rate, pressing_rate, goal_side_rate | 8,911 engagements |
+| Goalkeeper | pass_success_rate, pass_distance, long_pass_pct | 522 distributions |
 
 ### Example Usage
 
@@ -751,7 +749,6 @@ POSITION_METRICS = {
     "forward": {
         "metrics": ["danger_rate", "central_pct", "avg_separation", ...],
         "count_field": "total_entries",
-        "auc": 0.656,
         "criteria": "Forwards are valued for creating danger...",
     },
     # defender and goalkeeper configs...

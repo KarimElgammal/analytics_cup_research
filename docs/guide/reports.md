@@ -11,7 +11,7 @@ The AI reports system supports multiple backends to generate contextual scouting
 | **GitHub Models** | Phi-4, GPT-4o Mini | `github_token.txt` or `GITHUB_TOKEN` env | $2/month |
 | **HuggingFace** | Llama 3.1/3.2, Qwen 2.5, SmolLM3, Gemma 2 | `hf_token.txt` or `HF_TOKEN` env | $2/month |
 
-Reports are position-aware and enriched with ML model confidence scores and dataset statistics.
+Reports are position-aware and enriched with dataset statistics.
 
 ## Setup
 
@@ -97,10 +97,9 @@ The prompt includes:
 
 1. Position type and archetype name
 2. Dataset size (events and players)
-3. ML model AUC score (reliability indicator)
-4. Position-specific evaluation criteria
-5. Top 5 candidates with their metrics
-6. Dataset averages for comparison
+3. Position-specific evaluation criteria
+4. Top 5 candidates with their metrics
+5. Dataset averages for comparison
 
 No raw tracking data or player identifiers beyond names are sent.
 
@@ -144,18 +143,6 @@ report = generate_player_report(
     position_type="forward",
 )
 ```
-
-## ML Model Context
-
-The AI receives the ML model's AUC score to calibrate confidence:
-
-| Position | AUC | Interpretation |
-|----------|-----|----------------|
-| Forward | 0.656 | Moderate reliability, more uncertainty |
-| Defender | 0.845 | Good reliability |
-| Goalkeeper | 0.993 | Excellent reliability |
-
-Higher AUC means the underlying similarity rankings are more trustworthy, which the AI factors into its recommendations.
 
 ## Streamlit Integration
 
