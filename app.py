@@ -470,7 +470,7 @@ with tab1:
             cmap="Greens",
         ),
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
     )
 
     # Bar chart visualization
