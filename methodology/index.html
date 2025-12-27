@@ -957,10 +957,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#defenders-2-players" class="md-nav__link">
+  <a href="#defenders-3-players" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Defenders (2 players)
+        Defenders (3 players)
       
     </span>
   </a>
@@ -968,10 +968,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#goalkeepers-2-players" class="md-nav__link">
+  <a href="#goalkeepers-3-players" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Goalkeepers (2 players)
+        Goalkeepers (3 players)
       
     </span>
   </a>
@@ -2113,10 +2113,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#defenders-2-players" class="md-nav__link">
+  <a href="#defenders-3-players" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Defenders (2 players)
+        Defenders (3 players)
       
     </span>
   </a>
@@ -2124,10 +2124,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#goalkeepers-2-players" class="md-nav__link">
+  <a href="#goalkeepers-3-players" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Goalkeepers (2 players)
+        Goalkeepers (3 players)
       
     </span>
   </a>
@@ -2578,7 +2578,7 @@
 </span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>        <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;Complete forward, link-up play, clinical finishing&quot;</span><span class="p">,</span>
 </span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>        <span class="s2">&quot;competitions&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">43</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;FIFA World Cup 2022&quot;</span><span class="p">)],</span>
 </span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="p">},</span>
-</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="c1"># ... plus lewandowski, rashford, en_nesyri, gvardiol, romero, lloris, livakovic</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="c1"># ... plus lewandowski, rashford, en_nesyri, gvardiol, romero, hakimi, lloris, livakovic, bounou</span>
 </span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="computed-player-profiles-world-cup-2022">Computed Player Profiles (World Cup 2022)<a class="headerlink" href="#computed-player-profiles-world-cup-2022" title="Permanent link">&para;</a></h3>
@@ -2627,7 +2627,7 @@
 <hr />
 <h2 id="part-2-mapping-statsbomb-skillcorner">Part 2: Mapping StatsBomb → SkillCorner<a class="headerlink" href="#part-2-mapping-statsbomb-skillcorner" title="Permanent link">&para;</a></h2>
 <h3 id="the-challenge">The Challenge<a class="headerlink" href="#the-challenge" title="Permanent link">&para;</a></h3>
-<p>StatsBomb provides <strong>event data</strong> (shots, passes, dribbles), while SkillCorner provides <strong>tracking data</strong> (positions, speeds, separations). We must map concepts, not metrics directly.</p>
+<p>StatsBomb provides <strong>event data</strong> (shots, passes, dribbles), while SkillCorner provides <strong>tracking data</strong> (positions, speeds, separations). The approach maps concepts, not metrics directly.</p>
 <h3 id="mapping-table">Mapping Table<a class="headerlink" href="#mapping-table" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2992,7 +2992,7 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 <li><strong>StatsBomb</strong>: Measures EXECUTION - did this pass create a chance?</li>
 <li><strong>SkillCorner</strong>: Measures POTENTIAL - how many teammates ahead?</li>
 </ul>
-<p>Alvarez's key pass ability is about <strong>decision-making and execution</strong>, which tracking data can't directly capture. We compensate by weighting <code>danger_rate</code> higher (18%) - entries leading to shots is the closest proxy.</p>
+<p>Alvarez's key pass ability is about <strong>decision-making and execution</strong>, which tracking data can't directly capture. I compensate by weighting <code>danger_rate</code> higher (18%) - entries leading to shots is the closest proxy.</p>
 <hr />
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
 <table>
@@ -3119,7 +3119,7 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="defenders-2-players">Defenders (2 players)<a class="headerlink" href="#defenders-2-players" title="Permanent link">&para;</a></h4>
+<h4 id="defenders-3-players">Defenders (3 players)<a class="headerlink" href="#defenders-3-players" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -3151,9 +3151,18 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 <td>9</td>
 <td>Aggressive CB, strong tackler</td>
 </tr>
+<tr>
+<td><strong>Hakimi</strong></td>
+<td>MAR</td>
+<td>285</td>
+<td>87%</td>
+<td>12</td>
+<td>7</td>
+<td>Attacking wing-back, pace and power</td>
+</tr>
 </tbody>
 </table>
-<h4 id="goalkeepers-2-players">Goalkeepers (2 players)<a class="headerlink" href="#goalkeepers-2-players" title="Permanent link">&para;</a></h4>
+<h4 id="goalkeepers-3-players">Goalkeepers (3 players)<a class="headerlink" href="#goalkeepers-3-players" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -3178,6 +3187,13 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 <td>7</td>
 <td>103</td>
 <td>Penalty hero, high volume saves</td>
+</tr>
+<tr>
+<td><strong>Bounou</strong></td>
+<td>MAR</td>
+<td>7</td>
+<td>89</td>
+<td>Long distribution specialist, penalty hero</td>
 </tr>
 </tbody>
 </table>
