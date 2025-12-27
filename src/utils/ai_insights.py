@@ -82,6 +82,32 @@ METRIC_LABELS = {
     "quick_distribution_pct": "Quick Dist %",
 }
 
+# Metric definitions for AI context (from glossary)
+METRIC_DEFINITIONS = {
+    # Forward metrics
+    "danger_rate": "Percentage of final third entries that led to a shot. Higher = more clinical.",
+    "central_pct": "Percentage of entries through central zone (vs wide). Central = striker-like role.",
+    "half_space_pct": "Percentage of entries through half-spaces. Associated with creative playmakers.",
+    "avg_separation": "Average distance (metres) from nearest defender at entry. Higher = better movement.",
+    "avg_entry_speed": "Average speed (m/s) entering final third. Higher = direct, penetrating runs.",
+    "carry_pct": "Percentage of entries via dribbling vs receiving pass. Low = off-ball movement style.",
+    "avg_passing_options": "Average teammates available for pass at entry. Higher = good run timing.",
+    # Defender metrics
+    "stop_danger_rate": "Percentage of engagements that completely stopped dangerous attacks.",
+    "reduce_danger_rate": "Percentage of engagements that reduced but didn't eliminate danger.",
+    "force_backward_rate": "Percentage of engagements forcing attacker to play backwards.",
+    "pressing_rate": "How often defender engages proactively. High = aggressive pressing style.",
+    "goal_side_rate": "Percentage of engagements with goal-side position maintained.",
+    "avg_engagement_distance": "Average distance from own goal when engaging. Higher = high line.",
+    # Goalkeeper metrics
+    "pass_success_rate": "Percentage of distributions reaching a teammate successfully.",
+    "avg_pass_distance": "Average distribution distance (metres). Higher = long distribution style.",
+    "long_pass_pct": "Percentage of distributions that are long passes.",
+    "short_pass_pct": "Percentage of distributions that are short passes.",
+    "high_pass_pct": "Percentage of distributions that are aerial/high balls.",
+    "quick_distribution_pct": "Percentage of distributions made quickly. Indicates tempo-setting.",
+}
+
 
 def get_github_token() -> str | None:
     """Load GitHub token from file or environment."""
@@ -443,14 +469,15 @@ def generate_player_report(
     # Get position configuration
     config = POSITION_METRICS.get(position_type, POSITION_METRICS["forward"])
 
-    # Build metrics string
+    # Build metrics string with definitions
     metrics_lines = []
     for metric in config["metrics"]:
         value = player_profile.get(metric)
         if value is not None:
             label = METRIC_LABELS.get(metric, metric)
+            definition = METRIC_DEFINITIONS.get(metric, "")
             formatted = _format_metric_value(value, metric)
-            metrics_lines.append(f"- {label}: {formatted}")
+            metrics_lines.append(f"- {label}: {formatted} ({definition})")
 
     count_field = config["count_field"]
     count = player_profile.get(count_field, 0)
