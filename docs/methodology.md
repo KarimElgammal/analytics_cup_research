@@ -160,35 +160,11 @@ StatsBomb provides **event data** (shots, passes, dribbles), while SkillCorner p
 
 ---
 
-## Part 2B: Loading A-League Data with Kloppy
+## Part 2B: Loading A-League Data
 
-### SkillCorner Open Data via Kloppy
+### Loading Dynamic Events via Polars
 
-Kloppy provides a standardised way to load SkillCorner tracking data:
-
-```python
-"""Load SkillCorner A-League data with kloppy."""
-from kloppy import skillcorner
-
-# Load tracking data for a match (frame-by-frame positions)
-dataset = skillcorner.load_open_data(
-    match_id=2017461,  # Melbourne Victory vs Auckland FC
-    include_event_data=True
-)
-
-# Access frames
-for frame in dataset:
-    # frame.ball_coordinates
-    # frame.players_data (dict of player_id -> PlayerData)
-    pass
-
-# Convert to DataFrame
-df = dataset.to_df()
-```
-
-### Why We Use Dynamic Events Instead
-
-For this research, I use the **dynamic_events.csv** files directly because they contain pre-computed game intelligence metrics:
+I load the **dynamic_events.csv** files directly from SkillCorner's GitHub repository using Polars. These files contain pre-computed game intelligence metrics:
 
 ```python
 """Load SkillCorner dynamic events (game intelligence)."""
@@ -548,21 +524,6 @@ events = pl.read_csv("path/to/your_dynamic_events.csv")
 # Ensure required columns exist:
 required = ["event_type", "player_id", "third_start", "third_end",
             "speed_avg", "separation_end", "lead_to_shot"]
-```
-
-#### Option 3: Use kloppy for Any SkillCorner Data
-
-```python
-from kloppy import skillcorner
-
-# Load tracking data with kloppy
-dataset = skillcorner.load(
-    raw_data="path/to/match_data.json",
-    metadata="path/to/match_metadata.json"
-)
-
-# Convert to DataFrame
-df = dataset.to_df()
 ```
 
 ### Running Similarity Analysis
