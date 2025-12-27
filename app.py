@@ -524,10 +524,23 @@ with st.expander("Archetype Profile", expanded=False):
         pct = item["weight"] * 100
         st.markdown(f"- `{item['feature']}`: {pct:.0f}%")
 
-# Create tabs for different views
-tab1, tab2, tab3 = st.tabs(["Rankings", "Radar Profile", "AI Insights"])
+# View selector (persists across reruns)
+view_options = ["Rankings", "Radar Profile", "AI Insights"]
+if "selected_view" not in st.session_state:
+    st.session_state.selected_view = "Rankings"
 
-with tab1:
+selected_view = st.radio(
+    "View",
+    view_options,
+    index=view_options.index(st.session_state.selected_view),
+    horizontal=True,
+    key="view_selector",
+)
+st.session_state.selected_view = selected_view
+
+st.markdown("---")
+
+if selected_view == "Rankings":
     st.subheader(f"Top {top_n} A-League {position}")
 
     available_cols = [c for c in display_cols if c in results.columns]
@@ -559,7 +572,7 @@ with tab1:
     )
     st.pyplot(fig_bar)
 
-with tab2:
+elif selected_view == "Radar Profile":
     st.subheader("Radar Profile Comparison")
 
     # Prepare data for radar chart - use percentile ranks against full dataset
@@ -599,7 +612,7 @@ with tab2:
     else:
         st.caption("Player values are percentile ranks (0-100) from SkillCorner tracking data. Target values computed from StatsBomb World Cup 2022 data.")
 
-with tab3:
+elif selected_view == "AI Insights":
     st.subheader("AI Scouting Insight")
 
     if has_valid_token():
