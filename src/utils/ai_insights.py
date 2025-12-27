@@ -7,6 +7,7 @@ import polars as pl
 # Available models by backend
 AVAILABLE_MODELS = {
     # GitHub Models (primary - better availability)
+    "grok-3-mini": "xai/grok-3-mini",
     "phi-4": "microsoft/Phi-4",
     "gpt-4o-mini": "openai/gpt-4o-mini",
     # HuggingFace Inference Providers (fast/medium only)
@@ -19,7 +20,7 @@ AVAILABLE_MODELS = {
 
 # Backend mapping
 HF_MODELS = {"llama-3.1-8b", "llama-3.2-3b", "qwen-2.5-7b", "smollm3-3b", "gemma-2-2b"}
-GITHUB_MODELS = {"phi-4", "gpt-4o-mini"}
+GITHUB_MODELS = {"grok-3-mini", "phi-4", "gpt-4o-mini"}
 
 # Defaults
 DEFAULT_HF_MODEL = "llama-3.1-8b"
@@ -27,6 +28,7 @@ DEFAULT_GITHUB_MODEL = "phi-4"
 
 # Model display names for UI
 MODEL_DISPLAY_NAMES = {
+    "grok-3-mini": "Grok 3 Mini (GitHub)",
     "phi-4": "Phi-4 (GitHub)",
     "gpt-4o-mini": "GPT-4o Mini (GitHub)",
     "llama-3.1-8b": "Llama 3.1 8B (HF)",
