@@ -2543,15 +2543,9 @@
 </tr>
 <tr>
 <td><strong>Feature weights</strong></td>
-<td>ML analysis</td>
-<td>Static (pre-computed)</td>
-<td>GradientBoosting run once, results hardcoded</td>
-</tr>
-<tr>
-<td><strong>AUC scores</strong></td>
-<td>ML analysis</td>
-<td>Static (pre-computed)</td>
-<td>Cross-validation run once, results hardcoded</td>
+<td>Correlation analysis</td>
+<td>Static</td>
+<td>Derived from A-League data, hardcoded</td>
 </tr>
 <tr>
 <td><strong>Reference distributions</strong></td>
@@ -3537,7 +3531,7 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 <li><strong>Run the pipeline</strong> - entries → profiles → similarity</li>
 <li><strong>Interpret results</strong> considering league context</li>
 </ol>
-<p>The ML-calibrated weights (separation: 23%, danger_rate: 18%, etc.) were derived from A-League data but should generalise reasonably to other leagues with similar playing styles.</p>
+<p>The feature weights (separation: 23%, danger_rate: 18%, etc.) were derived from A-League correlation analysis but should generalise reasonably to other leagues with similar playing styles.</p>
 <hr />
 <h2 id="part-9-adding-new-players-to-the-registry">Part 9: Adding New Players to the Registry<a class="headerlink" href="#part-9-adding-new-players-to-the-registry" title="Permanent link">&para;</a></h2>
 <p>To add a new player archetype from StatsBomb data:</p>
@@ -3588,7 +3582,6 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 <ol>
 <li><strong>Position context</strong>: forward, defender, or goalkeeper</li>
 <li><strong>Archetype description</strong>: from StatsBomb profile</li>
-<li><strong>ML model confidence</strong>: AUC score indicating ranking reliability</li>
 <li><strong>Top candidates</strong>: player names, ages, teams, and key metrics</li>
 <li><strong>Dataset averages</strong>: for comparison context</li>
 <li><strong>Position criteria</strong>: what makes a great player in this position</li>
@@ -3600,24 +3593,24 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 <tr>
 <th>Position</th>
 <th>Key Metrics</th>
-<th>ML AUC</th>
+<th>Events</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Forward</td>
 <td>danger_rate, central_pct, separation, entry_speed</td>
-<td>0.656</td>
+<td>245 entries</td>
 </tr>
 <tr>
 <td>Defender</td>
 <td>stop_danger_rate, pressing_rate, goal_side_rate</td>
-<td>0.845</td>
+<td>8,911 engagements</td>
 </tr>
 <tr>
 <td>Goalkeeper</td>
 <td>pass_success_rate, pass_distance, long_pass_pct</td>
-<td>0.993</td>
+<td>522 distributions</td>
 </tr>
 </tbody>
 </table>
@@ -3647,11 +3640,10 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 </span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>    <span class="s2">&quot;forward&quot;</span><span class="p">:</span> <span class="p">{</span>
 </span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>        <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;danger_rate&quot;</span><span class="p">,</span> <span class="s2">&quot;central_pct&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_separation&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
 </span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>        <span class="s2">&quot;count_field&quot;</span><span class="p">:</span> <span class="s2">&quot;total_entries&quot;</span><span class="p">,</span>
-</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>        <span class="s2">&quot;auc&quot;</span><span class="p">:</span> <span class="mf">0.656</span><span class="p">,</span>
-</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>        <span class="s2">&quot;criteria&quot;</span><span class="p">:</span> <span class="s2">&quot;Forwards are valued for creating danger...&quot;</span><span class="p">,</span>
-</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>    <span class="p">},</span>
-</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>    <span class="c1"># defender and goalkeeper configs...</span>
-</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="p">}</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>        <span class="s2">&quot;criteria&quot;</span><span class="p">:</span> <span class="s2">&quot;Forwards are valued for creating danger...&quot;</span><span class="p">,</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>    <span class="p">},</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>    <span class="c1"># defender and goalkeeper configs...</span>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="privacy-considerations">Privacy Considerations<a class="headerlink" href="#privacy-considerations" title="Permanent link">&para;</a></h3>
 <p>Only aggregated metrics and player names are sent to the AI. No raw tracking coordinates or identifiers beyond public player names are transmitted. All inference is performed on GitHub Models or HuggingFace testbed APIs - data is not used for model training.</p>

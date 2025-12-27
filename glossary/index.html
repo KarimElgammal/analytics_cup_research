@@ -1231,10 +1231,6 @@
 <td><strong>similarity_score</strong></td>
 <td>Weighted cosine similarity (0-100%) between a player's profile and the target archetype.</td>
 </tr>
-<tr>
-<td><strong>AUC</strong></td>
-<td>Area Under the ROC Curve - measures ML model reliability. Higher is better (0.5 = random, 1.0 = perfect).</td>
-</tr>
 </tbody>
 </table>
 <hr />
@@ -1243,16 +1239,19 @@
 <thead>
 <tr>
 <th>Source</th>
+<th>File</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>SkillCorner</strong></td>
-<td>Broadcast tracking data providing player positions, speeds, and game events from A-League matches.</td>
+<td><code>dynamic_events.csv</code></td>
+<td>Game intelligence metrics from A-League broadcast tracking (10 matches).</td>
 </tr>
 <tr>
 <td><strong>StatsBomb</strong></td>
+<td>Free data API</td>
 <td>Event data from World Cup 2022 used to compute archetype target profiles.</td>
 </tr>
 </tbody>

@@ -873,17 +873,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ml-model-context" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ML Model Context
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#streamlit-integration" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1347,17 +1336,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ml-model-context" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ML Model Context
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#streamlit-integration" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1416,7 +1394,7 @@
 </tr>
 </tbody>
 </table>
-<p>Reports are position-aware and enriched with ML model confidence scores and dataset statistics.</p>
+<p>Reports are position-aware and enriched with dataset statistics.</p>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <h3 id="option-1-github-token">Option 1: GitHub Token<a class="headerlink" href="#option-1-github-token" title="Permanent link">&para;</a></h3>
 <ol>
@@ -1488,7 +1466,6 @@
 <ol>
 <li>Position type and archetype name</li>
 <li>Dataset size (events and players)</li>
-<li>ML model AUC score (reliability indicator)</li>
 <li>Position-specific evaluation criteria</li>
 <li>Top 5 candidates with their metrics</li>
 <li>Dataset averages for comparison</li>
@@ -1525,35 +1502,6 @@
 </span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="n">position_type</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
 </span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">)</span>
 </span></code></pre></div>
-<h2 id="ml-model-context">ML Model Context<a class="headerlink" href="#ml-model-context" title="Permanent link">&para;</a></h2>
-<p>The AI receives the ML model's AUC score to calibrate confidence:</p>
-<table>
-<thead>
-<tr>
-<th>Position</th>
-<th>AUC</th>
-<th>Interpretation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Forward</td>
-<td>0.656</td>
-<td>Moderate reliability, more uncertainty</td>
-</tr>
-<tr>
-<td>Defender</td>
-<td>0.845</td>
-<td>Good reliability</td>
-</tr>
-<tr>
-<td>Goalkeeper</td>
-<td>0.993</td>
-<td>Excellent reliability</td>
-</tr>
-</tbody>
-</table>
-<p>Higher AUC means the underlying similarity rankings are more trustworthy, which the AI factors into its recommendations.</p>
 <h2 id="streamlit-integration">Streamlit Integration<a class="headerlink" href="#streamlit-integration" title="Permanent link">&para;</a></h2>
 <p>The interactive app includes AI insights in a dedicated tab:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># in app.py</span>
