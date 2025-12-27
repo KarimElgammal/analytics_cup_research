@@ -38,6 +38,7 @@ from src.utils.rate_limiter import (
     increment_call,
     get_usage_stats,
     get_backend_from_model,
+    is_localhost,
     MAX_CALLS_PER_SESSION,
 )
 
@@ -530,9 +531,9 @@ with tab3:
         if "last_archetype" not in st.session_state:
             st.session_state.last_archetype = None
 
-        # check limits
+        # check limits (bypass on localhost)
         daily_ok, daily_remaining = check_daily_limit()
-        session_ok = st.session_state.ai_calls < MAX_CALLS_PER_SESSION
+        session_ok = is_localhost() or st.session_state.ai_calls < MAX_CALLS_PER_SESSION
 
         # Model selector
         available_models = get_available_models()
@@ -583,12 +584,15 @@ with tab3:
 
         # Show usage stats
         stats = get_usage_stats()
-        st.caption(
-            f"Session: {st.session_state.ai_calls}/{MAX_CALLS_PER_SESSION} | "
-            f"Today: {stats['daily_calls']}/{stats['daily_limit']} | "
-            f"GitHub: ${stats['github_cost']:.2f}/$2 | "
-            f"HF: ${stats['huggingface_cost']:.2f}/$2"
-        )
+        if stats.get("localhost"):
+            st.caption("Running locally - no rate limits")
+        else:
+            st.caption(
+                f"Session: {st.session_state.ai_calls}/{MAX_CALLS_PER_SESSION} | "
+                f"Today: {stats['daily_calls']}/{stats['daily_limit']} | "
+                f"GitHub: ${stats['github_cost']:.2f}/$2 | "
+                f"HF: ${stats['huggingface_cost']:.2f}/$2"
+            )
     else:
         st.info("Add a token to enable AI-powered scouting insights.")
         st.markdown("""

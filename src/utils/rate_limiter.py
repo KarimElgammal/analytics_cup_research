@@ -1,10 +1,17 @@
 """Rate limiting for AI insights with per-backend budgets."""
 
 import json
+import os
 from pathlib import Path
 from datetime import date
 
 RATE_LIMIT_FILE = Path(__file__).parent.parent.parent / ".rate_limits.json"
+
+
+def is_localhost() -> bool:
+    """Check if running on localhost (no rate limits)."""
+    # HF Spaces sets SPACE_ID env var
+    return not os.environ.get("SPACE_ID")
 
 # Configurable limits
 MAX_CALLS_PER_SESSION = 12     # per visitor session (one per archetype)
@@ -44,6 +51,10 @@ def save_limits(data: dict) -> None:
 
 def check_daily_limit() -> tuple[bool, int]:
     """Check if daily limit reached. Returns (allowed, remaining)."""
+    # No limits on localhost
+    if is_localhost():
+        return True, 9999
+
     data = load_limits()
 
     # reset if new day
@@ -58,6 +69,10 @@ def check_daily_limit() -> tuple[bool, int]:
 
 def check_backend_budget(backend: str) -> tuple[bool, float]:
     """Check if backend budget exceeded. Returns (allowed, remaining)."""
+    # No limits on localhost
+    if is_localhost():
+        return True, 999.99
+
     data = load_limits()
     cost_key = f"{backend}_cost"
     current_cost = data.get(cost_key, 0.0)
@@ -93,6 +108,18 @@ def reset_monthly_costs() -> None:
 
 def get_usage_stats() -> dict:
     """Get current usage stats for display."""
+    # Show unlimited stats on localhost
+    if is_localhost():
+        return {
+            "daily_calls": 0,
+            "daily_limit": float("inf"),
+            "github_cost": 0.0,
+            "huggingface_cost": 0.0,
+            "budget_per_backend": float("inf"),
+            "last_reset": str(date.today()),
+            "localhost": True,
+        }
+
     data = load_limits()
     return {
         "daily_calls": data.get("daily_calls", 0),
@@ -101,6 +128,7 @@ def get_usage_stats() -> dict:
         "huggingface_cost": data.get("huggingface_cost", 0.0),
         "budget_per_backend": MAX_MONTHLY_COST_PER_BACKEND,
         "last_reset": data.get("last_reset", str(date.today())),
+        "localhost": False,
     }
 
 
