@@ -12,14 +12,11 @@ A player similarity study using broadcast tracking data to identify A-League pla
 
 ## Abstract
 
-This research demonstrates how SkillCorner tracking data can identify A-League players matching specific player archetypes. Using data from 10 A-League matches, I built position-specific profiles and computed similarity scores against archetypes derived from StatsBomb World Cup 2022 data.
+This research demonstrates how SkillCorner tracking data can identify A-League players matching specific player archetypes. Using data from 10 A-League matches, I built position-specific profiles and computed similarity scores against 12 archetypes derived from StatsBomb World Cup 2022 data.
 
-The system supports three position types:
-- **Forwards** (6 archetypes): Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri
-- **Defenders** (3 archetypes): Gvardiol, Romero, Hakimi
-- **Goalkeepers** (3 archetypes): Lloris, Livakovic, Bounou
+The system supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Romero, Hakimi), and goalkeepers (Lloris, Livakovic, Bounou). Each position uses different event data—forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events.
 
-Each position uses different event data: forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events. GradientBoosting classifiers calibrated the similarity weights (Forwards AUC 0.656, Defenders AUC 0.845, Goalkeepers AUC 0.993).
+GradientBoosting classifiers calibrated the similarity weights, achieving strong predictive performance: Forwards AUC 0.656, Defenders AUC 0.845, and Goalkeepers AUC 0.993. The weights balance ML-derived feature importance with archetype-specific characteristics.
 
 Top candidates include Z. Clough (Adelaide) matching Alvarez's movement-focused style, L. Rose matching Gvardiol's ball-playing CB profile, and M. Sutton (Western United) matching Lloris's sweeper-keeper distribution.
 
