@@ -170,5 +170,21 @@ def call_local_model(prompt: str) -> str:
 **Live Demo:** https://huggingface.co/spaces/KarimElgammal/analytics-cup-research
 
 ---
+# Everything in a Nutshell
+## Links
+  - Online streamlit demo: https://huggingface.co/spaces/KarimElgammal/analytics-cup-research
+  - Documentation: https://karimelgammal.github.io/analytics_cup_research/
+  - GitHub: https://github.com/KarimElgammal/analytics_cup_research
+  - Binder: https://mybinder.org/v2/gh/KarimElgammal/analytics_cup_research/HEAD?labpath=submission.ipynb
+
+## Highlights
+  - Cross-dataset integration as StatsBomb World Cup 2022 → SkillCorner A-League archetypes
+  - ML-calibrated weights with GradientBoosting classifiers for each position (Forwards AUC 0.656, Defenders 0.845, Goalkeepers 0.993)
+  - 12 archetypes across 3 positions: 6 forwards, 3 defenders, 3 goalkeepers
+  - AI-powered scouting insights via GitHub Models / HuggingFace APIs usable using the notebook or streamlit app
+
+## Research Focus:
+Demonstrates that SkillCorner broadcast tracking data can identify A-League players matching world-class archetypes derived from StatsBomb event data, enabling data-driven scouting across positions.
+---
 
 SkillCorner X PySport Analytics Cup 2026 - Research Track Submission
