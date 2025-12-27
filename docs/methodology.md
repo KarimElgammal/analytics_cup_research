@@ -720,4 +720,4 @@ POSITION_METRICS = {
 
 ### Privacy Considerations
 
-Only aggregated metrics and player names are sent to the AI. No raw tracking coordinates or identifiers beyond public player names are transmitted.
+Only aggregated metrics and player names are sent to the AI. No raw tracking coordinates or identifiers beyond public player names are transmitted. All inference is performed on GitHub Models or HuggingFace testbed APIs - data is not used for model training.
