@@ -186,6 +186,7 @@ def call_local_model(prompt: str) -> str:
 ## Research Focus:
 
 Demonstrates that SkillCorner broadcast tracking data can identify A-League players matching world-class archetypes derived from StatsBomb event data, enabling data-driven scouting across positions.
+
 ---
 
 SkillCorner X PySport Analytics Cup 2026 - Research Track Submission
