@@ -441,7 +441,7 @@ Write 3-4 paragraphs:
 
 FORMATTING: Player names are already bold. Keep it practical and specific. Use Australian English. Be concise."""
 
-    return _call_model(prompt, model, max_tokens=500)
+    return _call_model(prompt, model, max_tokens=1000)
 
 
 def generate_player_report(
@@ -504,7 +504,7 @@ PLAYER PROFILE:
 Write 2 paragraphs: strengths that match {archetype_name}, and areas of difference.
 Be specific and practical. Australian English. Feel free to be creative and share your honest opinions about the player's potential."""
 
-    return _call_model(prompt, model, max_tokens=500)
+    return _call_model(prompt, model, max_tokens=1000)
 
 
 def has_valid_token() -> bool:
