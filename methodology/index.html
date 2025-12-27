@@ -661,33 +661,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-2b-loading-a-league-data-with-kloppy" class="md-nav__link">
+  <a href="#part-2b-loading-a-league-data" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Part 2B: Loading A-League Data with Kloppy
+        Part 2B: Loading A-League Data
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Part 2B: Loading A-League Data with Kloppy">
+    <nav class="md-nav" aria-label="Part 2B: Loading A-League Data">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#skillcorner-open-data-via-kloppy" class="md-nav__link">
+  <a href="#loading-dynamic-events-via-polars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SkillCorner Open Data via Kloppy
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#why-we-use-dynamic-events-instead" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why We Use Dynamic Events Instead
+        Loading Dynamic Events via Polars
       
     </span>
   </a>
@@ -1061,17 +1050,6 @@
     <span class="md-ellipsis">
       
         Option 2: Use Local CSV Files
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-3-use-kloppy-for-any-skillcorner-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 3: Use kloppy for Any SkillCorner Data
       
     </span>
   </a>
@@ -1839,33 +1817,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#part-2b-loading-a-league-data-with-kloppy" class="md-nav__link">
+  <a href="#part-2b-loading-a-league-data" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Part 2B: Loading A-League Data with Kloppy
+        Part 2B: Loading A-League Data
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Part 2B: Loading A-League Data with Kloppy">
+    <nav class="md-nav" aria-label="Part 2B: Loading A-League Data">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#skillcorner-open-data-via-kloppy" class="md-nav__link">
+  <a href="#loading-dynamic-events-via-polars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SkillCorner Open Data via Kloppy
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#why-we-use-dynamic-events-instead" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why We Use Dynamic Events Instead
+        Loading Dynamic Events via Polars
       
     </span>
   </a>
@@ -2239,17 +2206,6 @@
     <span class="md-ellipsis">
       
         Option 2: Use Local CSV Files
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-3-use-kloppy-for-any-skillcorner-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 3: Use kloppy for Any SkillCorner Data
       
     </span>
   </a>
@@ -2715,91 +2671,71 @@
 </tbody>
 </table>
 <hr />
-<h2 id="part-2b-loading-a-league-data-with-kloppy">Part 2B: Loading A-League Data with Kloppy<a class="headerlink" href="#part-2b-loading-a-league-data-with-kloppy" title="Permanent link">&para;</a></h2>
-<h3 id="skillcorner-open-data-via-kloppy">SkillCorner Open Data via Kloppy<a class="headerlink" href="#skillcorner-open-data-via-kloppy" title="Permanent link">&para;</a></h3>
-<p>Kloppy provides a standardised way to load SkillCorner tracking data:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="sd">&quot;&quot;&quot;Load SkillCorner A-League data with kloppy.&quot;&quot;&quot;</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">kloppy</span><span class="w"> </span><span class="kn">import</span> <span class="n">skillcorner</span>
+<h2 id="part-2b-loading-a-league-data">Part 2B: Loading A-League Data<a class="headerlink" href="#part-2b-loading-a-league-data" title="Permanent link">&para;</a></h2>
+<h3 id="loading-dynamic-events-via-polars">Loading Dynamic Events via Polars<a class="headerlink" href="#loading-dynamic-events-via-polars" title="Permanent link">&para;</a></h3>
+<p>I load the <strong>dynamic_events.csv</strong> files directly from SkillCorner's GitHub repository using Polars. These files contain pre-computed game intelligence metrics:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="sd">&quot;&quot;&quot;Load SkillCorner dynamic events (game intelligence).&quot;&quot;&quot;</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Load tracking data for a match (frame-by-frame positions)</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">skillcorner</span><span class="o">.</span><span class="n">load_open_data</span><span class="p">(</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">match_id</span><span class="o">=</span><span class="mi">2017461</span><span class="p">,</span>  <span class="c1"># Melbourne Victory vs Auckland FC</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">include_event_data</span><span class="o">=</span><span class="kc">True</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">)</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># Access frames</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="c1"># frame.ball_coordinates</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="c1"># frame.players_data (dict of player_id -&gt; PlayerData)</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="k">pass</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="c1"># Convert to DataFrame</span>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">df</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span>
-</span></code></pre></div>
-<h3 id="why-we-use-dynamic-events-instead">Why We Use Dynamic Events Instead<a class="headerlink" href="#why-we-use-dynamic-events-instead" title="Permanent link">&para;</a></h3>
-<p>For this research, I use the <strong>dynamic_events.csv</strong> files directly because they contain pre-computed game intelligence metrics:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="sd">&quot;&quot;&quot;Load SkillCorner dynamic events (game intelligence).&quot;&quot;&quot;</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">GITHUB_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/SkillCorner/opendata/master/data&quot;</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">MATCH_IDS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2017461</span><span class="p">,</span> <span class="mi">2015213</span><span class="p">,</span> <span class="mi">2013725</span><span class="p">,</span> <span class="mi">2011166</span><span class="p">,</span> <span class="mi">2006229</span><span class="p">,</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>             <span class="mi">1996435</span><span class="p">,</span> <span class="mi">1953632</span><span class="p">,</span> <span class="mi">1925299</span><span class="p">,</span> <span class="mi">1899585</span><span class="p">,</span> <span class="mi">1886347</span><span class="p">]</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">load_events</span><span class="p">(</span><span class="n">match_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Load dynamic events for a single match.&quot;&quot;&quot;</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">GITHUB_BASE_URL</span><span class="si">}</span><span class="s2">/matches/</span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2">_dynamic_events.csv&quot;</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">infer_schema_length</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="k">def</span><span class="w"> </span><span class="nf">load_all_events</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Load all matches.&quot;&quot;&quot;</span>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    <span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">load_events</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;match_id&quot;</span><span class="p">))</span>
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>           <span class="k">for</span> <span class="n">mid</span> <span class="ow">in</span> <span class="n">MATCH_IDS</span><span class="p">]</span>
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;diagonal&quot;</span><span class="p">)</span>
-</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>
-</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="c1"># Available columns include:</span>
-</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="c1"># - speed_avg, distance_covered (physical)</span>
-</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="c1"># - separation_end, delta_to_last_defensive_line_end (spatial)</span>
-</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="c1"># - n_passing_options_ahead, n_teammates_ahead_end (tactical)</span>
-</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="c1"># - third_start, third_end, channel_end (zones)</span>
-</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="c1"># - lead_to_shot, lead_to_goal (outcomes)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">GITHUB_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/SkillCorner/opendata/master/data&quot;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">MATCH_IDS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2017461</span><span class="p">,</span> <span class="mi">2015213</span><span class="p">,</span> <span class="mi">2013725</span><span class="p">,</span> <span class="mi">2011166</span><span class="p">,</span> <span class="mi">2006229</span><span class="p">,</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>             <span class="mi">1996435</span><span class="p">,</span> <span class="mi">1953632</span><span class="p">,</span> <span class="mi">1925299</span><span class="p">,</span> <span class="mi">1899585</span><span class="p">,</span> <span class="mi">1886347</span><span class="p">]</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">load_events</span><span class="p">(</span><span class="n">match_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Load dynamic events for a single match.&quot;&quot;&quot;</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">GITHUB_BASE_URL</span><span class="si">}</span><span class="s2">/matches/</span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2">_dynamic_events.csv&quot;</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">infer_schema_length</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="k">def</span><span class="w"> </span><span class="nf">load_all_events</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Load all matches.&quot;&quot;&quot;</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">load_events</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;match_id&quot;</span><span class="p">))</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>           <span class="k">for</span> <span class="n">mid</span> <span class="ow">in</span> <span class="n">MATCH_IDS</span><span class="p">]</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;diagonal&quot;</span><span class="p">)</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="c1"># Available columns include:</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="c1"># - speed_avg, distance_covered (physical)</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="c1"># - separation_end, delta_to_last_defensive_line_end (spatial)</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="c1"># - n_passing_options_ahead, n_teammates_ahead_end (tactical)</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="c1"># - third_start, third_end, channel_end (zones)</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="c1"># - lead_to_shot, lead_to_goal (outcomes)</span>
 </span></code></pre></div>
 <h3 id="detecting-final-third-entries">Detecting Final Third Entries<a class="headerlink" href="#detecting-final-third-entries" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">detect_entries</span><span class="p">(</span><span class="n">events</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect final third entries.&quot;&quot;&quot;</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="k">return</span> <span class="n">events</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;event_type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;player_possession&quot;</span><span class="p">)</span> <span class="o">&amp;</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;third_start&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;attacking_third&quot;</span><span class="p">)</span> <span class="o">&amp;</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;third_end&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;attacking_third&quot;</span><span class="p">)</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">detect_entries</span><span class="p">(</span><span class="n">events</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect final third entries.&quot;&quot;&quot;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="k">return</span> <span class="n">events</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>        <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;event_type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;player_possession&quot;</span><span class="p">)</span> <span class="o">&amp;</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;third_start&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;attacking_third&quot;</span><span class="p">)</span> <span class="o">&amp;</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;third_end&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;attacking_third&quot;</span><span class="p">)</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="p">)</span>
 </span></code></pre></div>
 <hr />
 <h2 id="part-3-data-driven-weight-calibration">Part 3: Data-Driven Weight Calibration<a class="headerlink" href="#part-3-data-driven-weight-calibration" title="Permanent link">&para;</a></h2>
 <h3 id="skillcorner-a-league-statistics">SkillCorner A-League Statistics<a class="headerlink" href="#skillcorner-a-league-statistics" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="sd">&quot;&quot;&quot;Compute correlations to calibrate weights.&quot;&quot;&quot;</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># Load A-League data</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.data.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_all_events</span><span class="p">,</span> <span class="n">add_team_names</span>
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.entries</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_entries</span><span class="p">,</span> <span class="n">classify_entries</span>
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.profiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_player_profiles</span><span class="p">,</span> <span class="n">filter_profiles</span>
-</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
-</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="n">events</span> <span class="o">=</span> <span class="n">load_all_events</span><span class="p">()</span>
-</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="n">events</span> <span class="o">=</span> <span class="n">add_team_names</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
-</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">detect_entries</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
-</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">classify_entries</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
-</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">build_player_profiles</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
-</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">filter_profiles</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">min_entries</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>
-</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="c1"># Compute correlations with danger_rate</span>
-</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;avg_separation&#39;</span><span class="p">,</span> <span class="s1">&#39;central_pct&#39;</span><span class="p">,</span> <span class="s1">&#39;half_space_pct&#39;</span><span class="p">,</span>
-</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>            <span class="s1">&#39;avg_entry_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;avg_passing_options&#39;</span><span class="p">,</span> <span class="s1">&#39;carry_pct&#39;</span><span class="p">]</span>
-</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>
-</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="n">danger</span> <span class="o">=</span> <span class="n">profiles</span><span class="p">[</span><span class="s1">&#39;danger_rate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="n">features</span><span class="p">:</span>
-</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>    <span class="n">vals</span> <span class="o">=</span> <span class="n">profiles</span><span class="p">[</span><span class="n">feat</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>    <span class="n">corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">danger</span><span class="p">,</span> <span class="n">vals</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">feat</span><span class="si">}</span><span class="s1">: r=</span><span class="si">{</span><span class="n">corr</span><span class="si">:</span><span class="s1">+.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="sd">&quot;&quot;&quot;Compute correlations to calibrate weights.&quot;&quot;&quot;</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># Load A-League data</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.data.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_all_events</span><span class="p">,</span> <span class="n">add_team_names</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.entries</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_entries</span><span class="p">,</span> <span class="n">classify_entries</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.profiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_player_profiles</span><span class="p">,</span> <span class="n">filter_profiles</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">events</span> <span class="o">=</span> <span class="n">load_all_events</span><span class="p">()</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="n">events</span> <span class="o">=</span> <span class="n">add_team_names</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">detect_entries</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">classify_entries</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">build_player_profiles</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">filter_profiles</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">min_entries</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="c1"># Compute correlations with danger_rate</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;avg_separation&#39;</span><span class="p">,</span> <span class="s1">&#39;central_pct&#39;</span><span class="p">,</span> <span class="s1">&#39;half_space_pct&#39;</span><span class="p">,</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>            <span class="s1">&#39;avg_entry_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;avg_passing_options&#39;</span><span class="p">,</span> <span class="s1">&#39;carry_pct&#39;</span><span class="p">]</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="n">danger</span> <span class="o">=</span> <span class="n">profiles</span><span class="p">[</span><span class="s1">&#39;danger_rate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="n">features</span><span class="p">:</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>    <span class="n">vals</span> <span class="o">=</span> <span class="n">profiles</span><span class="p">[</span><span class="n">feat</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>    <span class="n">corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">danger</span><span class="p">,</span> <span class="n">vals</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">feat</span><span class="si">}</span><span class="s1">: r=</span><span class="si">{</span><span class="n">corr</span><span class="si">:</span><span class="s1">+.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="correlation-results-a-league-202425">Correlation Results (A-League 2024/25)<a class="headerlink" href="#correlation-results-a-league-202425" title="Permanent link">&para;</a></h3>
 <table>
@@ -2854,60 +2790,60 @@
 </tbody>
 </table>
 <h3 id="key-insight-carry_pct-is-useless">Key Insight: carry_pct is Useless<a class="headerlink" href="#key-insight-carry_pct-is-useless" title="Permanent link">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>carry_pct: mean=98.82%, std=4.60%
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>carry_pct: mean=98.82%, std=4.60%
 </span></code></pre></div>
 <p>Almost ALL final third entries in A-League are carries. This feature has virtually no discriminating power and should be weighted near-zero.</p>
 <hr />
 <h2 id="part-4-final-weight-configuration">Part 4: Final Weight Configuration<a class="headerlink" href="#part-4-final-weight-configuration" title="Permanent link">&para;</a></h2>
 <h3 id="weights-justified-by-data-archetype">Weights Justified by Data + Archetype<a class="headerlink" href="#weights-justified-by-data-archetype" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">FEATURE_WEIGHTS</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="c1"># DATA-DRIVEN: Strongest correlations with danger_rate</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="s2">&quot;avg_entry_speed&quot;</span><span class="p">:</span> <span class="mf">0.20</span><span class="p">,</span>          <span class="c1"># r=+0.340 strongest predictor</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="s2">&quot;central_pct&quot;</span><span class="p">:</span> <span class="mf">0.18</span><span class="p">,</span>              <span class="c1"># r=+0.295 central = dangerous</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="s2">&quot;avg_separation&quot;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>           <span class="c1"># r=+0.221 intelligent movement</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="s2">&quot;avg_defensive_line_dist&quot;</span><span class="p">:</span> <span class="mf">0.12</span><span class="p">,</span>  <span class="c1"># r=-0.259 closer to goal</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="c1"># ARCHETYPE-DRIVEN: From StatsBomb profile</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="s2">&quot;danger_rate&quot;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>              <span class="c1"># 20% conversion (clinical)</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    <span class="s2">&quot;quick_break_pct&quot;</span><span class="p">:</span> <span class="mf">0.10</span><span class="p">,</span>          <span class="c1"># r=+0.262 counter-attack</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
-</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="c1"># LOW/ZERO CORRELATION - reduced</span>
-</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="s2">&quot;half_space_pct&quot;</span><span class="p">:</span> <span class="mf">0.03</span><span class="p">,</span>           <span class="c1"># r=-0.012 useless</span>
-</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="s2">&quot;avg_passing_options&quot;</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">,</span>      <span class="c1"># r=-0.050 useless</span>
-</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>    <span class="s2">&quot;avg_teammates_ahead&quot;</span><span class="p">:</span> <span class="mf">0.03</span><span class="p">,</span>      <span class="c1"># r=-0.240 negative</span>
-</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
-</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>    <span class="c1"># NEAR-ZERO VARIANCE - effectively useless</span>
-</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>    <span class="s2">&quot;carry_pct&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>                <span class="c1"># 98.8% mean, no variance</span>
-</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>    <span class="s2">&quot;goal_rate&quot;</span><span class="p">:</span> <span class="mf">0.00</span><span class="p">,</span>                <span class="c1"># Too sparse</span>
-</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="p">}</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">FEATURE_WEIGHTS</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="c1"># DATA-DRIVEN: Strongest correlations with danger_rate</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="s2">&quot;avg_entry_speed&quot;</span><span class="p">:</span> <span class="mf">0.20</span><span class="p">,</span>          <span class="c1"># r=+0.340 strongest predictor</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="s2">&quot;central_pct&quot;</span><span class="p">:</span> <span class="mf">0.18</span><span class="p">,</span>              <span class="c1"># r=+0.295 central = dangerous</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="s2">&quot;avg_separation&quot;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>           <span class="c1"># r=+0.221 intelligent movement</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="s2">&quot;avg_defensive_line_dist&quot;</span><span class="p">:</span> <span class="mf">0.12</span><span class="p">,</span>  <span class="c1"># r=-0.259 closer to goal</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="c1"># ARCHETYPE-DRIVEN: From StatsBomb profile</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="s2">&quot;danger_rate&quot;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>              <span class="c1"># 20% conversion (clinical)</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="s2">&quot;quick_break_pct&quot;</span><span class="p">:</span> <span class="mf">0.10</span><span class="p">,</span>          <span class="c1"># r=+0.262 counter-attack</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="c1"># LOW/ZERO CORRELATION - reduced</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="s2">&quot;half_space_pct&quot;</span><span class="p">:</span> <span class="mf">0.03</span><span class="p">,</span>           <span class="c1"># r=-0.012 useless</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="s2">&quot;avg_passing_options&quot;</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">,</span>      <span class="c1"># r=-0.050 useless</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    <span class="s2">&quot;avg_teammates_ahead&quot;</span><span class="p">:</span> <span class="mf">0.03</span><span class="p">,</span>      <span class="c1"># r=-0.240 negative</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>    <span class="c1"># NEAR-ZERO VARIANCE - effectively useless</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>    <span class="s2">&quot;carry_pct&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>                <span class="c1"># 98.8% mean, no variance</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>    <span class="s2">&quot;goal_rate&quot;</span><span class="p">:</span> <span class="mf">0.00</span><span class="p">,</span>                <span class="c1"># Too sparse</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="p">}</span>
 </span></code></pre></div>
 <hr />
 <h2 id="part-5-similarity-computation">Part 5: Similarity Computation<a class="headerlink" href="#part-5-similarity-computation" title="Permanent link">&para;</a></h2>
 <h3 id="weighted-cosine-similarity">Weighted Cosine Similarity<a class="headerlink" href="#weighted-cosine-similarity" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">compute_similarity</span><span class="p">(</span><span class="n">player_profile</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">target_profile</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="sd">    Compute weighted cosine similarity between player and target.</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="sd">    1. Z-score normalize all features</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="sd">    2. Apply weights to both vectors</span>
-</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="sd">    3. Compute cosine similarity</span>
-</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="sd">    4. Scale to 0-100</span>
-</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="n">features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
-</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    <span class="c1"># Normalize</span>
-</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>    <span class="n">player_vec</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">player_profile</span><span class="p">,</span> <span class="n">features</span><span class="p">)</span>
-</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="n">target_vec</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">target_profile</span><span class="p">,</span> <span class="n">features</span><span class="p">)</span>
-</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>
-</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>    <span class="c1"># Weight</span>
-</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>    <span class="n">player_weighted</span> <span class="o">=</span> <span class="n">player_vec</span> <span class="o">*</span> <span class="n">weights</span>
-</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>    <span class="n">target_weighted</span> <span class="o">=</span> <span class="n">target_vec</span> <span class="o">*</span> <span class="n">weights</span>
-</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>
-</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>    <span class="c1"># Cosine similarity</span>
-</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>    <span class="n">similarity</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">player_weighted</span><span class="p">,</span> <span class="n">target_weighted</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">player_weighted</span><span class="p">)</span> <span class="o">*</span> <span class="n">norm</span><span class="p">(</span><span class="n">target_weighted</span><span class="p">))</span>
-</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>
-</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>    <span class="c1"># Scale to 0-100</span>
-</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>    <span class="k">return</span> <span class="p">(</span><span class="n">similarity</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">50</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">compute_similarity</span><span class="p">(</span><span class="n">player_profile</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">target_profile</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="sd">    Compute weighted cosine similarity between player and target.</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="sd">    1. Z-score normalize all features</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="sd">    2. Apply weights to both vectors</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="sd">    3. Compute cosine similarity</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="sd">    4. Scale to 0-100</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    <span class="n">features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="c1"># Normalize</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="n">player_vec</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">player_profile</span><span class="p">,</span> <span class="n">features</span><span class="p">)</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="n">target_vec</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">target_profile</span><span class="p">,</span> <span class="n">features</span><span class="p">)</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>    <span class="c1"># Weight</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>    <span class="n">player_weighted</span> <span class="o">=</span> <span class="n">player_vec</span> <span class="o">*</span> <span class="n">weights</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>    <span class="n">target_weighted</span> <span class="o">=</span> <span class="n">target_vec</span> <span class="o">*</span> <span class="n">weights</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>    <span class="c1"># Cosine similarity</span>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>    <span class="n">similarity</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">player_weighted</span><span class="p">,</span> <span class="n">target_weighted</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">player_weighted</span><span class="p">)</span> <span class="o">*</span> <span class="n">norm</span><span class="p">(</span><span class="n">target_weighted</span><span class="p">))</span>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>    <span class="c1"># Scale to 0-100</span>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>    <span class="k">return</span> <span class="p">(</span><span class="n">similarity</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">50</span>
 </span></code></pre></div>
 <h3 id="target-profile-definition">Target Profile Definition<a class="headerlink" href="#target-profile-definition" title="Permanent link">&para;</a></h3>
 <p>For features where higher is better (direction=1), target = 90th percentile.
@@ -2947,11 +2883,11 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 </tr>
 </tbody>
 </table>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradientBoostingClassifier</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">model</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">cv_scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradientBoostingClassifier</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">model</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">cv_scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="forward-feature-importances-auc-0656">Forward Feature Importances (AUC 0.656)<a class="headerlink" href="#forward-feature-importances-auc-0656" title="Permanent link">&para;</a></h3>
 <table>
@@ -3250,113 +3186,101 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 <h2 id="part-8-using-this-tool-with-other-skillcorner-data">Part 8: Using This Tool with Other SkillCorner Data<a class="headerlink" href="#part-8-using-this-tool-with-other-skillcorner-data" title="Permanent link">&para;</a></h2>
 <h3 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h3>
 <p>The tool is designed to work with <strong>any SkillCorner tracking data</strong>, not just A-League:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>┌─────────────────────────────────────────────────────────────────┐
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>│  YOUR DATA                                                       │
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>│  - SkillCorner dynamic_events.csv                               │
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>│  - Any league/competition supported                              │
-</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>└─────────────────────────────────────────────────────────────────┘
-</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>                              │
-</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>                              ▼
-</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>┌─────────────────────────────────────────────────────────────────┐
-</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>│  src/data/loader.py                                              │
-</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>│  - load_events(match_id) or load_all_events()                   │
-</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>│  - Returns Polars DataFrame with tracking metrics                │
-</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>└─────────────────────────────────────────────────────────────────┘
-</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>                              │
-</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>                              ▼
-</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>┌─────────────────────────────────────────────────────────────────┐
-</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>│  src/analysis/                                                   │
-</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>│  - entries.py: detect_entries(), classify_entries()            │
-</span><span id="__span-11-18"><a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>│  - profiles.py: build_player_profiles()                         │
-</span><span id="__span-11-19"><a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>└─────────────────────────────────────────────────────────────────┘
-</span><span id="__span-11-20"><a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>                              │
-</span><span id="__span-11-21"><a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>                              ▼
-</span><span id="__span-11-22"><a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>┌─────────────────────────────────────────────────────────────────┐
-</span><span id="__span-11-23"><a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>│  src/core/                                                       │
-</span><span id="__span-11-24"><a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>│  - archetype.py: Archetype.from_statsbomb(&quot;alvarez&quot;)            │
-</span><span id="__span-11-25"><a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>│  - similarity.py: SimilarityEngine(archetype).fit(profiles)    │
-</span><span id="__span-11-26"><a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>└─────────────────────────────────────────────────────────────────┘
-</span><span id="__span-11-27"><a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a>                              │
-</span><span id="__span-11-28"><a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>                              ▼
-</span><span id="__span-11-29"><a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>┌─────────────────────────────────────────────────────────────────┐
-</span><span id="__span-11-30"><a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a>│  RESULTS: Ranked players by similarity to archetype             │
-</span><span id="__span-11-31"><a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a>└─────────────────────────────────────────────────────────────────┘
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>┌─────────────────────────────────────────────────────────────────┐
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>│  YOUR DATA                                                       │
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>│  - SkillCorner dynamic_events.csv                               │
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>│  - Any league/competition supported                              │
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>└─────────────────────────────────────────────────────────────────┘
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>                              │
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>                              ▼
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>┌─────────────────────────────────────────────────────────────────┐
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>│  src/data/loader.py                                              │
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>│  - load_events(match_id) or load_all_events()                   │
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>│  - Returns Polars DataFrame with tracking metrics                │
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>└─────────────────────────────────────────────────────────────────┘
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>                              │
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>                              ▼
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>┌─────────────────────────────────────────────────────────────────┐
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>│  src/analysis/                                                   │
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>│  - entries.py: detect_entries(), classify_entries()            │
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>│  - profiles.py: build_player_profiles()                         │
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>└─────────────────────────────────────────────────────────────────┘
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>                              │
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>                              ▼
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>┌─────────────────────────────────────────────────────────────────┐
+</span><span id="__span-10-23"><a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>│  src/core/                                                       │
+</span><span id="__span-10-24"><a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>│  - archetype.py: Archetype.from_statsbomb(&quot;alvarez&quot;)            │
+</span><span id="__span-10-25"><a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>│  - similarity.py: SimilarityEngine(archetype).fit(profiles)    │
+</span><span id="__span-10-26"><a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>└─────────────────────────────────────────────────────────────────┘
+</span><span id="__span-10-27"><a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>                              │
+</span><span id="__span-10-28"><a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>                              ▼
+</span><span id="__span-10-29"><a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>┌─────────────────────────────────────────────────────────────────┐
+</span><span id="__span-10-30"><a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>│  RESULTS: Ranked players by similarity to archetype             │
+</span><span id="__span-10-31"><a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>└─────────────────────────────────────────────────────────────────┘
 </span></code></pre></div>
 <h3 id="loading-your-own-skillcorner-data">Loading Your Own SkillCorner Data<a class="headerlink" href="#loading-your-own-skillcorner-data" title="Permanent link">&para;</a></h3>
 <h4 id="option-1-use-skillcorner-open-data-other-matches">Option 1: Use SkillCorner Open Data (other matches)<a class="headerlink" href="#option-1-use-skillcorner-open-data-other-matches" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.data.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_events</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># Load any match from SkillCorner open data</span>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># See: github.com/SkillCorner/opendata for available match IDs</span>
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">events</span> <span class="o">=</span> <span class="n">load_events</span><span class="p">(</span><span class="n">match_id</span><span class="o">=</span><span class="mi">2017461</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.data.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_events</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1"># Load any match from SkillCorner open data</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># See: github.com/SkillCorner/opendata for available match IDs</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">events</span> <span class="o">=</span> <span class="n">load_events</span><span class="p">(</span><span class="n">match_id</span><span class="o">=</span><span class="mi">2017461</span><span class="p">)</span>
 </span></code></pre></div>
 <h4 id="option-2-use-local-csv-files">Option 2: Use Local CSV Files<a class="headerlink" href="#option-2-use-local-csv-files" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="c1"># Load your own SkillCorner dynamic_events.csv</span>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">events</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;path/to/your_dynamic_events.csv&quot;</span><span class="p">)</span>
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
-</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="c1"># Ensure required columns exist:</span>
-</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="n">required</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;event_type&quot;</span><span class="p">,</span> <span class="s2">&quot;player_id&quot;</span><span class="p">,</span> <span class="s2">&quot;third_start&quot;</span><span class="p">,</span> <span class="s2">&quot;third_end&quot;</span><span class="p">,</span>
-</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>            <span class="s2">&quot;speed_avg&quot;</span><span class="p">,</span> <span class="s2">&quot;separation_end&quot;</span><span class="p">,</span> <span class="s2">&quot;lead_to_shot&quot;</span><span class="p">]</span>
-</span></code></pre></div>
-<h4 id="option-3-use-kloppy-for-any-skillcorner-data">Option 3: Use kloppy for Any SkillCorner Data<a class="headerlink" href="#option-3-use-kloppy-for-any-skillcorner-data" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">kloppy</span><span class="w"> </span><span class="kn">import</span> <span class="n">skillcorner</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1"># Load tracking data with kloppy</span>
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">skillcorner</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="n">raw_data</span><span class="o">=</span><span class="s2">&quot;path/to/match_data.json&quot;</span><span class="p">,</span>
-</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>    <span class="n">metadata</span><span class="o">=</span><span class="s2">&quot;path/to/match_metadata.json&quot;</span>
-</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="p">)</span>
-</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
-</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1"># Convert to DataFrame</span>
-</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="n">df</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># Load your own SkillCorner dynamic_events.csv</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="n">events</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;path/to/your_dynamic_events.csv&quot;</span><span class="p">)</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="c1"># Ensure required columns exist:</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="n">required</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;event_type&quot;</span><span class="p">,</span> <span class="s2">&quot;player_id&quot;</span><span class="p">,</span> <span class="s2">&quot;third_start&quot;</span><span class="p">,</span> <span class="s2">&quot;third_end&quot;</span><span class="p">,</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>            <span class="s2">&quot;speed_avg&quot;</span><span class="p">,</span> <span class="s2">&quot;separation_end&quot;</span><span class="p">,</span> <span class="s2">&quot;lead_to_shot&quot;</span><span class="p">]</span>
 </span></code></pre></div>
 <h3 id="running-similarity-analysis">Running Similarity Analysis<a class="headerlink" href="#running-similarity-analysis" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.entries</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_entries</span><span class="p">,</span> <span class="n">classify_entries</span>
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.profiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_player_profiles</span><span class="p">,</span> <span class="n">filter_profiles</span>
-</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
-</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.similarity</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimilarityEngine</span>
-</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>
-</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="c1"># 1. Process your events</span>
-</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">detect_entries</span><span class="p">(</span><span class="n">your_events</span><span class="p">)</span>
-</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">classify_entries</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
-</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
-</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="c1"># 2. Build player profiles</span>
-</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">build_player_profiles</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
-</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">filter_profiles</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">min_entries</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>
-</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="c1"># 3. Load any archetype</span>
-</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;kane&quot;</span><span class="p">)</span>  <span class="c1"># or giroud, lewandowski, etc.</span>
-</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>
-</span><span id="__span-15-17"><a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="c1"># 4. Run similarity analysis</span>
-</span><span id="__span-15-18"><a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">SimilarityEngine</span><span class="p">(</span><span class="n">archetype</span><span class="p">)</span>
-</span><span id="__span-15-19"><a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="n">engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>
-</span><span id="__span-15-20"><a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="n">results</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</span><span id="__span-15-21"><a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a>
-</span><span id="__span-15-22"><a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.entries</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_entries</span><span class="p">,</span> <span class="n">classify_entries</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.analysis.profiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_player_profiles</span><span class="p">,</span> <span class="n">filter_profiles</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.similarity</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimilarityEngine</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="c1"># 1. Process your events</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">detect_entries</span><span class="p">(</span><span class="n">your_events</span><span class="p">)</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">classify_entries</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1"># 2. Build player profiles</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">build_player_profiles</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="n">profiles</span> <span class="o">=</span> <span class="n">filter_profiles</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">min_entries</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="c1"># 3. Load any archetype</span>
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="n">archetype</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;kane&quot;</span><span class="p">)</span>  <span class="c1"># or giroud, lewandowski, etc.</span>
+</span><span id="__span-13-16"><a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>
+</span><span id="__span-13-17"><a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="c1"># 4. Run similarity analysis</span>
+</span><span id="__span-13-18"><a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">SimilarityEngine</span><span class="p">(</span><span class="n">archetype</span><span class="p">)</span>
+</span><span id="__span-13-19"><a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="n">engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>
+</span><span id="__span-13-20"><a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="n">results</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="__span-13-21"><a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>
+</span><span id="__span-13-22"><a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="adding-custom-archetypes">Adding Custom Archetypes<a class="headerlink" href="#adding-custom-archetypes" title="Permanent link">&para;</a></h3>
 <p>You can create custom archetypes without StatsBomb data:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
-</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1"># Create a custom archetype</span>
-</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">pressing_forward</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span>
-</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;pressing_forward&quot;</span><span class="p">,</span>
-</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;High-energy forward who presses from the front&quot;</span>
-</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="p">)</span>
-</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>
-</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="c1"># Set target profile (0-100 scale)</span>
-</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;avg_entry_speed&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">85</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;danger_rate&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;avg_separation&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;central_pct&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;carry_pct&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;quick_break_pct&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-16-16"><a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>
-</span><span id="__span-16-17"><a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="c1"># Use with SimilarityEngine</span>
-</span><span id="__span-16-18"><a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">SimilarityEngine</span><span class="p">(</span><span class="n">pressing_forward</span><span class="p">)</span>
-</span><span id="__span-16-19"><a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="n">engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1"># Create a custom archetype</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">pressing_forward</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">custom</span><span class="p">(</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;pressing_forward&quot;</span><span class="p">,</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;High-energy forward who presses from the front&quot;</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="p">)</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1"># Set target profile (0-100 scale)</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;avg_entry_speed&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">85</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;danger_rate&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;avg_separation&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;central_pct&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;carry_pct&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="n">pressing_forward</span><span class="o">.</span><span class="n">set_feature</span><span class="p">(</span><span class="s2">&quot;quick_break_pct&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="c1"># Use with SimilarityEngine</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">SimilarityEngine</span><span class="p">(</span><span class="n">pressing_forward</span><span class="p">)</span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="n">engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">profiles</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="extending-to-new-leagues">Extending to New Leagues<a class="headerlink" href="#extending-to-new-leagues" title="Permanent link">&para;</a></h3>
 <p>To use with a new league's SkillCorner data:</p>
@@ -3371,41 +3295,41 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 <h2 id="part-9-adding-new-players-to-the-registry">Part 9: Adding New Players to the Registry<a class="headerlink" href="#part-9-adding-new-players-to-the-registry" title="Permanent link">&para;</a></h2>
 <p>To add a new player archetype from StatsBomb data:</p>
 <h3 id="step-1-find-the-player-in-statsbomb">Step 1: Find the Player in StatsBomb<a class="headerlink" href="#step-1-find-the-player-in-statsbomb" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">statsbombpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">sb</span>
-</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
-</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="c1"># Check available competitions</span>
-</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="n">comps</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">competitions</span><span class="p">()</span>
-</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">comps</span><span class="p">[[</span><span class="s1">&#39;competition_id&#39;</span><span class="p">,</span> <span class="s1">&#39;season_name&#39;</span><span class="p">,</span> <span class="s1">&#39;competition_name&#39;</span><span class="p">]])</span>
-</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
-</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># World Cup 2022 = competition_id: 43, season_id: 106</span>
-</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="n">matches</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">matches</span><span class="p">(</span><span class="n">competition_id</span><span class="o">=</span><span class="mi">43</span><span class="p">,</span> <span class="n">season_id</span><span class="o">=</span><span class="mi">106</span><span class="p">)</span>
-</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>
-</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="c1"># Get events and find player name</span>
-</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="n">events</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">events</span><span class="p">(</span><span class="n">match_id</span><span class="o">=</span><span class="n">matches</span><span class="p">[</span><span class="s1">&#39;match_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s1">&#39;player&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">statsbombpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">sb</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># Check available competitions</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">comps</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">competitions</span><span class="p">()</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">comps</span><span class="p">[[</span><span class="s1">&#39;competition_id&#39;</span><span class="p">,</span> <span class="s1">&#39;season_name&#39;</span><span class="p">,</span> <span class="s1">&#39;competition_name&#39;</span><span class="p">]])</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1"># World Cup 2022 = competition_id: 43, season_id: 106</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="n">matches</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">matches</span><span class="p">(</span><span class="n">competition_id</span><span class="o">=</span><span class="mi">43</span><span class="p">,</span> <span class="n">season_id</span><span class="o">=</span><span class="mi">106</span><span class="p">)</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="c1"># Get events and find player name</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="n">events</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">events</span><span class="p">(</span><span class="n">match_id</span><span class="o">=</span><span class="n">matches</span><span class="p">[</span><span class="s1">&#39;match_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="s1">&#39;player&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
 </span></code></pre></div>
 <h3 id="step-2-add-to-registry">Step 2: Add to Registry<a class="headerlink" href="#step-2-add-to-registry" title="Permanent link">&para;</a></h3>
 <p>Edit <code>src/statsbomb/registry.py</code>:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">PLAYER_REGISTRY</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>    <span class="c1"># ... existing players ...</span>
-</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
-</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>    <span class="s2">&quot;your_player&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>        <span class="s2">&quot;player_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Exact Name From StatsBomb&quot;</span><span class="p">,</span>  <span class="c1"># Must match exactly!</span>
-</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>        <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Display Name&quot;</span><span class="p">,</span>
-</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>        <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="s2">&quot;Forward&quot;</span><span class="p">,</span>  <span class="c1"># or &quot;Defender&quot;, &quot;Goalkeeper&quot;</span>
-</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>        <span class="s2">&quot;nationality&quot;</span><span class="p">:</span> <span class="s2">&quot;Country&quot;</span><span class="p">,</span>
-</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>        <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;Brief style description&quot;</span><span class="p">,</span>
-</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>        <span class="s2">&quot;competitions&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>            <span class="p">(</span><span class="mi">43</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;FIFA World Cup 2022&quot;</span><span class="p">),</span>  <span class="c1"># (competition_id, season_id, name)</span>
-</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>        <span class="p">],</span>
-</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>    <span class="p">},</span>
-</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="p">}</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">PLAYER_REGISTRY</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="c1"># ... existing players ...</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    <span class="s2">&quot;your_player&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>        <span class="s2">&quot;player_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Exact Name From StatsBomb&quot;</span><span class="p">,</span>  <span class="c1"># Must match exactly!</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>        <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Display Name&quot;</span><span class="p">,</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>        <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="s2">&quot;Forward&quot;</span><span class="p">,</span>  <span class="c1"># or &quot;Defender&quot;, &quot;Goalkeeper&quot;</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>        <span class="s2">&quot;nationality&quot;</span><span class="p">:</span> <span class="s2">&quot;Country&quot;</span><span class="p">,</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>        <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;Brief style description&quot;</span><span class="p">,</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>        <span class="s2">&quot;competitions&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>            <span class="p">(</span><span class="mi">43</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;FIFA World Cup 2022&quot;</span><span class="p">),</span>  <span class="c1"># (competition_id, season_id, name)</span>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>        <span class="p">],</span>
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>    <span class="p">},</span>
+</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="step-3-test">Step 3: Test<a class="headerlink" href="#step-3-test" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
-</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
-</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">arch</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;your_player&quot;</span><span class="p">)</span>
-</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">arch</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>  <span class="c1"># Should show computed stats</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="n">arch</span> <span class="o">=</span> <span class="n">Archetype</span><span class="o">.</span><span class="n">from_statsbomb</span><span class="p">(</span><span class="s2">&quot;your_player&quot;</span><span class="p">)</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">arch</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>  <span class="c1"># Should show computed stats</span>
 </span></code></pre></div>
 <hr />
 <h2 id="part-10-ai-powered-scouting-insights">Part 10: AI-Powered Scouting Insights<a class="headerlink" href="#part-10-ai-powered-scouting-insights" title="Permanent link">&para;</a></h2>
@@ -3450,16 +3374,16 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 </tbody>
 </table>
 <h3 id="example-usage">Example Usage<a class="headerlink" href="#example-usage" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.ai_insights</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_similarity_insight</span><span class="p">,</span> <span class="n">has_valid_token</span>
-</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
-</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="k">if</span> <span class="n">has_valid_token</span><span class="p">():</span>
-</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>    <span class="n">insight</span> <span class="o">=</span> <span class="n">generate_similarity_insight</span><span class="p">(</span>
-</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>        <span class="n">ranked_players</span><span class="p">,</span>
-</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>        <span class="n">archetype</span><span class="p">,</span>
-</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>        <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>        <span class="n">position_type</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
-</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>    <span class="p">)</span>
-</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">insight</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.ai_insights</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_similarity_insight</span><span class="p">,</span> <span class="n">has_valid_token</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="k">if</span> <span class="n">has_valid_token</span><span class="p">():</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>    <span class="n">insight</span> <span class="o">=</span> <span class="n">generate_similarity_insight</span><span class="p">(</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>        <span class="n">ranked_players</span><span class="p">,</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>        <span class="n">archetype</span><span class="p">,</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>        <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>        <span class="n">position_type</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>    <span class="p">)</span>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">insight</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="sample-output">Sample Output<a class="headerlink" href="#sample-output" title="Permanent link">&para;</a></h3>
 <p>For the Alvarez archetype:</p>
@@ -3470,16 +3394,16 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 </blockquote>
 <h3 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h3>
 <p>Available in <code>src/utils/ai_insights.py</code>:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># position-specific metric configs</span>
-</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="n">POSITION_METRICS</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>    <span class="s2">&quot;forward&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>        <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;danger_rate&quot;</span><span class="p">,</span> <span class="s2">&quot;central_pct&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_separation&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
-</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>        <span class="s2">&quot;count_field&quot;</span><span class="p">:</span> <span class="s2">&quot;total_entries&quot;</span><span class="p">,</span>
-</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>        <span class="s2">&quot;auc&quot;</span><span class="p">:</span> <span class="mf">0.656</span><span class="p">,</span>
-</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>        <span class="s2">&quot;criteria&quot;</span><span class="p">:</span> <span class="s2">&quot;Forwards are valued for creating danger...&quot;</span><span class="p">,</span>
-</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>    <span class="p">},</span>
-</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>    <span class="c1"># defender and goalkeeper configs...</span>
-</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="p">}</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># position-specific metric configs</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">POSITION_METRICS</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>    <span class="s2">&quot;forward&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>        <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;danger_rate&quot;</span><span class="p">,</span> <span class="s2">&quot;central_pct&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_separation&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>        <span class="s2">&quot;count_field&quot;</span><span class="p">:</span> <span class="s2">&quot;total_entries&quot;</span><span class="p">,</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>        <span class="s2">&quot;auc&quot;</span><span class="p">:</span> <span class="mf">0.656</span><span class="p">,</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>        <span class="s2">&quot;criteria&quot;</span><span class="p">:</span> <span class="s2">&quot;Forwards are valued for creating danger...&quot;</span><span class="p">,</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>    <span class="p">},</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>    <span class="c1"># defender and goalkeeper configs...</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="privacy-considerations">Privacy Considerations<a class="headerlink" href="#privacy-considerations" title="Permanent link">&para;</a></h3>
 <p>Only aggregated metrics and player names are sent to the AI. No raw tracking coordinates or identifiers beyond public player names are transmitted.</p>
