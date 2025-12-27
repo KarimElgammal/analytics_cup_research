@@ -13,7 +13,7 @@ AVAILABLE_MODELS = {
     # HuggingFace Inference Providers (fast/medium only)
     "llama-3.1-8b": "meta-llama/Llama-3.1-8B-Instruct",
     "llama-3.2-3b": "meta-llama/Llama-3.2-3B-Instruct",
-    "qwen-2.5-7b": "Qwen/Qwen2.5-7B-Instruct-1M",
+    "qwen-2.5-7b": "Qwen/Qwen2.5-7B-Instruct",
     "smollm3-3b": "HuggingFaceTB/SmolLM3-3B",
     "gemma-2-2b": "google/gemma-2-2b-it",
 }
