@@ -94,19 +94,19 @@ The interactive Streamlit app (`app.py`) allows comparison across all positions:
 
 ```
 analytics_cup_research/
-├── submission.ipynb              # Research notebook (main deliverable)
-├── app.py                        # Streamlit app
-├── run.sh                        # Self-contained app launcher
-├── requirements.txt              # Dependencies
-├── docs/                         # MkDocs documentation
-├── scripts/                      # Deployment scripts
+├── submission.ipynb      # Research notebook
+├── app.py                # Streamlit app
+├── run.sh                # App launcher
+├── requirements.txt
+├── docs/
+├── scripts/
 └── src/
-    ├── core/                     # Archetype, Similarity engine
-    ├── data/                     # Data loading
-    ├── analysis/                 # Entry, defender, goalkeeper profiles
-    ├── statsbomb/                # StatsBomb archetype factory
-    ├── utils/                    # AI insights, rate limiter
-    └── visualization/            # Plotting functions
+    ├── core/             # Archetype, SimilarityEngine
+    ├── data/             # Data loading
+    ├── analysis/         # Player profiles
+    ├── statsbomb/        # Archetype factory
+    ├── utils/            # AI insights
+    └── visualization/
 ```
 
 For detailed technical documentation, see [docs/methodology.md](docs/methodology.md) or visit the [full documentation](https://karimelgammal.github.io/analytics_cup_research/).
