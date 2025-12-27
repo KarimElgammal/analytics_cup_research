@@ -420,7 +420,8 @@ The archetypes were selected based on three key criteria:
 
 ### Selection Process
 
-We analysed World Cup 2022 data to find players with:
+I analysed World Cup 2022 data to find players with:
+
 - **Forwards**: 5+ shots (sufficient sample for conversion rates)
 - **Defenders**: 200+ passes, 10+ clearances/interceptions
 - **Goalkeepers**: 10+ saves across multiple matches
