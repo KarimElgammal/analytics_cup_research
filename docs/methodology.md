@@ -12,7 +12,7 @@ This document explains how I derive player archetypes from StatsBomb event data 
 
 ## Programmatic Archetype Generation
 
-Archetypes are computed programmatically from real StatsBomb event data.
+Archetypes are computed programmatically from StatsBomb event data.
 
 ```python
 from src.core.archetype import Archetype
@@ -28,6 +28,7 @@ Archetype.list_available()
 ```
 
 The `src/statsbomb/` package handles:
+
 - **loader.py**: Fetches events from StatsBomb free data API
 - **registry.py**: Maps player keys to StatsBomb names and competition IDs
 - **stats.py**: Calculates shooting, passing, dribbling statistics
@@ -37,7 +38,7 @@ The `src/statsbomb/` package handles:
 
 ## Alvarez Target Profile (Computed from StatsBomb)
 
-The archetype is **computed from real data**. Example output from World Cup 2022:
+The archetype is **computed from StatsBomb data**. Example output from World Cup 2022:
 
 | Metric | Actual Value | Interpretation |
 |--------|--------------|----------------|
