@@ -124,7 +124,7 @@ PLAYER_REGISTRY = {
         "style": "Complete forward, link-up play, clinical finishing",
         "competitions": [(43, 106, "FIFA World Cup 2022")],
     },
-    # ... plus lewandowski, rashford, en_nesyri, gvardiol, romero, lloris, livakovic
+    # ... plus lewandowski, rashford, en_nesyri, gvardiol, romero, hakimi, lloris, livakovic, bounou
 }
 ```
 
@@ -145,7 +145,7 @@ The key insight: Both Alvarez and Giroud have 0% dribble success. They create th
 
 ### The Challenge
 
-StatsBomb provides **event data** (shots, passes, dribbles), while SkillCorner provides **tracking data** (positions, speeds, separations). We must map concepts, not metrics directly.
+StatsBomb provides **event data** (shots, passes, dribbles), while SkillCorner provides **tracking data** (positions, speeds, separations). The approach maps concepts, not metrics directly.
 
 ### Mapping Table
 
@@ -387,7 +387,7 @@ StatsBomb **key passes** (event-level: pass leads to shot) ≠ SkillCorner **pas
 - **StatsBomb**: Measures EXECUTION - did this pass create a chance?
 - **SkillCorner**: Measures POTENTIAL - how many teammates ahead?
 
-Alvarez's key pass ability is about **decision-making and execution**, which tracking data can't directly capture. We compensate by weighting `danger_rate` higher (18%) - entries leading to shots is the closest proxy.
+Alvarez's key pass ability is about **decision-making and execution**, which tracking data can't directly capture. I compensate by weighting `danger_rate` higher (18%) - entries leading to shots is the closest proxy.
 
 ---
 
@@ -439,19 +439,21 @@ I analysed World Cup 2022 data to find players with:
 | **Rashford** | ENG | 11 | 3 | 27.3% | 60% | Pace, direct dribbling, wide threat |
 | **En-Nesyri** | MAR | 11 | 2 | 18.2% | 67% | Physical forward, aerial presence |
 
-#### Defenders (2 players)
+#### Defenders (3 players)
 
 | Player | Country | Passes | Pass% | Clearances | Interceptions | Style |
 |--------|---------|--------|-------|------------|---------------|-------|
 | **Gvardiol** | CRO | 510 | 91% | 43 | 14 | Ball-playing CB, progressive carrier |
 | **Romero** | ARG | 372 | 89% | 26 | 9 | Aggressive CB, strong tackler |
+| **Hakimi** | MAR | 285 | 87% | 12 | 7 | Attacking wing-back, pace and power |
 
-#### Goalkeepers (2 players)
+#### Goalkeepers (3 players)
 
 | Player | Country | Matches | Saves | Style |
 |--------|---------|---------|-------|-------|
 | **Lloris** | FRA | 6 | 94 | Experienced captain, commanding presence |
 | **Livakovic** | CRO | 7 | 103 | Penalty hero, high volume saves |
+| **Bounou** | MAR | 7 | 89 | Long distribution specialist, penalty hero |
 
 ### Why Not Messi/Mbappe?
 
