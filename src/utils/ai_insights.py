@@ -7,7 +7,7 @@ import polars as pl
 # Available models by backend
 AVAILABLE_MODELS = {
     # GitHub Models (primary - better availability)
-    "grok-3-mini": "xai/grok-3-mini",
+    "grok-3-mini": "azureml-xai/grok-3-mini",
     "phi-4": "microsoft/Phi-4",
     "gpt-4o-mini": "openai/gpt-4o-mini",
     # HuggingFace Inference Providers (fast/medium only)
