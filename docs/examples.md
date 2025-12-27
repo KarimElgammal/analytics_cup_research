@@ -15,17 +15,17 @@ This example shows results from analysing 10 A-League matches using 12 pre-built
 
 | Rank | Player | Age | Team | Similarity | Danger Rate | Entries |
 |------|--------|-----|------|------------|-------------|---------|
-| 1 | Z. Clough | 29 | Adelaide United | 88.7% | 50.0% | 4 |
-| 2 | Z. Machach | 25 | Melbourne Victory | 84.4% | 42.9% | 7 |
-| 3 | T. Payne | 21 | Wellington Phoenix | 83.9% | 25.0% | 4 |
-| 4 | G. May | 22 | Auckland FC | 80.7% | 55.6% | 9 |
-| 5 | T. Imai | 27 | Western United | 79.8% | 40.0% | 5 |
+| 1 | T. Imai | 28 | Western United | 96.5% | 40.0% | 5 |
+| 2 | N. Atkinson | 26 | Melbourne City | 93.5% | 16.7% | 6 |
+| 3 | K. Bos | 23 | Melbourne Victory | 91.6% | 16.7% | 6 |
+| 4 | Z. Clough | 30 | Adelaide United | 91.3% | 50.0% | 4 |
+| 5 | C. Elliott | 24 | Auckland FC | 90.8% | 33.3% | 3 |
 
 ### Similarity Rankings
 
 ![Similarity Rankings](assets/similarity_rankings.png)
 
-**Z. Clough** from Adelaide United emerges as the closest match with an 88.7% similarity score. His 50% danger rate means half his final third entries led to shooting opportunities, mirroring Alvarez's clinical finishing.
+**T. Imai** from Western United emerges as the closest match with a 96.5% similarity score. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's playing style of creating through intelligent movement rather than dribbling.
 
 ### Profile Comparison
 
@@ -141,7 +141,7 @@ archetypes = {
     "rashford": Archetype.from_statsbomb("rashford"),
 }
 
-player_name = "Z. Clough"
+player_name = "T. Imai"
 
 print(f"Archetype fit for {player_name}:")
 for name, archetype in archetypes.items():
@@ -183,11 +183,11 @@ if has_valid_token():
 
 ### Example AI Output (Forward)
 
-> **Z. Clough** from Adelaide United emerges as the closest match with 88.7% similarity. His 50% danger rate mirrors Alvarez's clinical finishing, though with fewer entries (4 vs typical 8+).
+> **T. Imai** from Western United emerges as the closest match with 96.5% similarity. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement rather than dribbling.
 >
-> The key difference between Clough and the archetype lies in movement patterns. While he shows strong separation (8.2m), his central percentage is lower than target.
+> The key similarity lies in movement patterns. Imai consistently finds space away from defenders, a hallmark of the Alvarez archetype. His 0% central percentage suggests he operates from wide areas but still generates shooting opportunities.
 >
-> For development potential, **T. Payne** at 22 offers interesting upside. His entry speed and willingness to attack centrally align with Alvarez's profile.
+> For development potential, **K. Bos** at 23 offers interesting upside. His similar separation values and emerging danger rate align with Alvarez's profile.
 
 ### Example AI Output (Defender)
 

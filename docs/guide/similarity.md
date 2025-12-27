@@ -16,7 +16,7 @@ rankings = engine.rank(top_n=10)
 ## Explaining Scores
 
 ```python
-explanation = engine.explain("Z. Clough")
+explanation = engine.explain("T. Imai")
 print(f"Score: {explanation['similarity_score']}%")
 ```
 

@@ -60,7 +60,7 @@ for row in rankings.to_dicts():
 
 ## A-League Results
 
-Using 10 A-League matches, the analysis identified **Z. Clough** (Adelaide United) as the closest match to the Alvarez archetype with an 87.9% similarity score. See [Examples](examples.md) for full results and figures.
+Using 10 A-League matches, the analysis identified **T. Imai** (Western United) as the closest match to the Alvarez archetype with a 96.5% similarity score. See [Examples](examples.md) for full results and figures.
 
 ## Project Origin
 

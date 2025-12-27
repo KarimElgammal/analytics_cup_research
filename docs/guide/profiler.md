@@ -26,6 +26,6 @@ profiler = PlayerProfiler.from_skillcorner(min_entries=3)
 summary = profiler.get_summary()
 print(f"Profiles: {summary['profiles_built']}")
 
-profile = profiler.get_player_profile("Z. Clough")
+profile = profiler.get_player_profile("T. Imai")
 print(f"Danger rate: {profile['danger_rate']}%")
 ```

@@ -697,11 +697,11 @@ if has_valid_token():
 
 For the Alvarez archetype:
 
-> **Z. Clough** emerges as the closest match with an 88.7% similarity. His 50% danger rate mirrors Alvarez's clinical finishing, though with fewer entries.
+> **T. Imai** emerges as the closest match with a 96.5% similarity. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement.
 >
-> The key difference lies in movement patterns. While Clough shows good separation (8.2m), his central percentage is lower than target, suggesting he drifts wide.
+> The key similarity lies in movement patterns. Imai consistently finds space away from defenders, a hallmark of the Alvarez archetype.
 >
-> For development potential, **T. Payne** at 22 offers interesting upside despite a lower current similarity.
+> For development potential, **K. Bos** at 23 offers interesting upside with similar separation values and emerging danger rate.
 
 ### Configuration
 

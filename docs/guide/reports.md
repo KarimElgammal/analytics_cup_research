@@ -108,11 +108,11 @@ No raw tracking data or player identifiers beyond names are sent.
 
 For a forward archetype like Alvarez:
 
-> **Z. Clough** from Adelaide United emerges as the closest match with an 88.7% similarity score. His 50% danger rate indicates clinical finishing similar to Alvarez, though with fewer total entries (4 vs typical 8+).
+> **T. Imai** from Western United emerges as the closest match with a 96.5% similarity score. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement rather than dribbling.
 >
-> The key difference between Clough and Alvarez lies in movement patterns. While Clough shows strong separation metrics (8.2m), his central percentage is lower than the archetype target, suggesting he drifts wide more often.
+> The key similarity lies in movement patterns. Imai consistently finds space away from defenders, a hallmark of the Alvarez archetype. His 0% central percentage suggests he operates from wide areas but still generates shooting opportunities.
 >
-> For further observation, **T. Payne** at 22 years old offers the best development potential despite a lower current similarity score. His high entry speed and willingness to attack centrally mirror Alvarez's profile.
+> For development potential, **K. Bos** at 23 years old offers interesting upside with similar separation values and emerging danger rate that align with Alvarez's profile.
 
 ## Customisation
 
@@ -137,9 +137,9 @@ insight = generate_similarity_insight(
 from src.utils.ai_insights import generate_player_report
 
 report = generate_player_report(
-    player_name="Z. Clough",
+    player_name="T. Imai",
     player_profile=player_dict,
-    similarity_score=88.7,
+    similarity_score=96.5,
     archetype=archetype,
     position_type="forward",
 )
