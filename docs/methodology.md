@@ -67,7 +67,7 @@ Fixed values for tracking-specific metrics (no StatsBomb equivalent):
 
 ---
 
-## Part 1: StatsBomb Integration (Current Implementation)
+## Part 1: StatsBomb Integration
 
 ### Using the StatsBomb Package
 
