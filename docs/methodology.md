@@ -401,6 +401,7 @@ Alvarez's key pass ability is about **decision-making and execution**, which tra
 | 4. Compute similarity | Combined | Weighted cosine similarity |
 
 This hybrid approach combines:
+
 - **Domain knowledge** (Alvarez archetype from StatsBomb)
 - **ML validation** (GradientBoosting feature importance)
 - **Correlation analysis** (A-League data patterns)
@@ -414,7 +415,7 @@ This hybrid approach combines:
 The archetypes were selected based on three key criteria:
 
 1. **Data Availability**: Players must have sufficient events in StatsBomb free data (World Cup 2022) for reliable statistics
-2. **Realistic Comparisons**: Avoiding generational talents (Messi, Mbappe) whose profiles are unrealistic targets for league-level scouting
+2. **Realistic Comparisons**: Avoiding exceptional generational talents (Messi, Mbappe) and focusing on high-calibre players whose profiles are more attainable for league-level scouting
 3. **Style Diversity**: Covering different playing styles to demonstrate the tool's versatility
 
 ### Selection Process
