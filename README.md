@@ -12,13 +12,25 @@ A player similarity study using broadcast tracking data to identify A-League pla
 
 ## Abstract
 
-This research purpose is to assess if SkillCorner tracking data can identify A-League players matching world-class archetypes. Thus, this research explores player similarity analysis using broadcast tracking data from 10 A-League matches, comparing players against 12 archetypes derived from StatsBomb World Cup 2022 data.
+### Introduction
 
-The workflow supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Romero, Hakimi), and goalkeepers (Lloris, Livakovic, Bounou). Each position uses different event data—forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events. GradientBoosting classifiers calibrated the similarity weights, balancing ML-derived feature importance with archetype-specific characteristics.
+This research assesses whether SkillCorner tracking data can identify A-League players matching world-class archetypes. Using broadcast tracking data from 10 A-League matches, I compare players against 12 archetypes derived from StatsBomb World Cup 2022 data across forwards, defenders, and goalkeepers.
 
-The models achieved strong predictive performance: Forwards AUC 0.656, Defenders AUC 0.845, and Goalkeepers AUC 0.993. Top candidates include Z. Clough (Adelaide) matching Alvarez's movement-focused style with 87.9% similarity, L. Rose matching Gvardiol's ball-playing CB profile, and M. Sutton (Western United) matching Lloris's sweeper-keeper distribution.
+### Methods
 
-SkillCorner tracking data can effectively identify players matching specific archetypes across positions. The approach combines domain knowledge from StatsBomb event data with ML-calibrated weights from SkillCorner tracking data, demonstrating practical applications for data-driven scouting.
+The workflow supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Romero, Hakimi), and goalkeepers (Lloris, Livakovic, Bounou). Each position uses different event data—forwards use final third entries (245 events), defenders use on-ball engagements (8,911 events), and goalkeepers use distribution events (522 events). GradientBoosting classifiers calibrate similarity weights, balancing ML-derived feature importance with archetype-specific characteristics. Similarity is computed using weighted cosine similarity on z-score normalised features.
+
+### Results
+
+The models achieved strong predictive performance: Forwards AUC 0.656, Defenders AUC 0.845, and Goalkeepers AUC 0.993. For the Alvarez archetype, top candidates are T. Imai (Western United) at 96.5% similarity with exceptional separation (5.64m), N. Atkinson (Melbourne City) at 93.5%, and K. Bos (Melbourne Victory) at 91.6%. These players exhibit Alvarez's key trait: creating danger through intelligent movement rather than dribbling.
+
+![Similarity Rankings](assets/similarity_rankings.png)
+
+![Radar Comparison](assets/radar_comparison.png)
+
+### Conclusion
+
+SkillCorner tracking data can effectively identify players matching specific archetypes across positions. The approach combines domain knowledge from StatsBomb event data with ML-calibrated weights, demonstrating practical applications for data-driven scouting in the A-League.
 
 ---
 
