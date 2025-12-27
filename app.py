@@ -289,7 +289,7 @@ GOALKEEPER_ARCHETYPES = {
 }
 
 
-@st.cache_data(ttl=86400, show_spinner="Loading A-League data...")
+@st.cache_data(ttl=7776000, show_spinner="Loading A-League data...")
 def load_forward_data():
     """Load and prepare forward profiles from final third entries."""
     events = load_all_events()
@@ -301,7 +301,7 @@ def load_forward_data():
     return profiles, len(entries), events["match_id"].n_unique()
 
 
-@st.cache_data(ttl=86400, show_spinner="Loading A-League defensive data...")
+@st.cache_data(ttl=7776000, show_spinner="Loading A-League defensive data...")
 def load_defender_data():
     """Load and prepare defender profiles from defensive engagements."""
     events = load_all_events()
@@ -312,7 +312,7 @@ def load_defender_data():
     return profiles, len(actions), events["match_id"].n_unique()
 
 
-@st.cache_data(ttl=86400, show_spinner="Loading A-League goalkeeper data...")
+@st.cache_data(ttl=7776000, show_spinner="Loading A-League goalkeeper data...")
 def load_goalkeeper_data():
     """Load and prepare goalkeeper profiles from distribution events."""
     events = load_all_events()
@@ -323,7 +323,7 @@ def load_goalkeeper_data():
     return profiles, len(actions), events["match_id"].n_unique()
 
 
-@st.cache_data(ttl=86400, show_spinner="Loading archetype...")
+@st.cache_data(ttl=7776000, show_spinner="Loading archetype...")
 def load_forward_archetype(player_key: str):
     """Load forward archetype from StatsBomb data."""
     with warnings.catch_warnings():
