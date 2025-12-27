@@ -713,10 +713,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#option-1-github-token-recommended" class="md-nav__link">
+  <a href="#option-1-github-token" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Option 1: GitHub Token (Recommended)
+        Option 1: GitHub Token
       
     </span>
   </a>
@@ -1187,10 +1187,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#option-1-github-token-recommended" class="md-nav__link">
+  <a href="#option-1-github-token" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Option 1: GitHub Token (Recommended)
+        Option 1: GitHub Token
       
     </span>
   </a>
@@ -1418,7 +1418,7 @@
 </table>
 <p>Reports are position-aware and enriched with ML model confidence scores and dataset statistics.</p>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
-<h3 id="option-1-github-token-recommended">Option 1: GitHub Token (Recommended)<a class="headerlink" href="#option-1-github-token-recommended" title="Permanent link">&para;</a></h3>
+<h3 id="option-1-github-token">Option 1: GitHub Token<a class="headerlink" href="#option-1-github-token" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Go to <a href="https://github.com/settings/tokens">github.com/settings/tokens</a></li>
 <li>Generate a new token with default permissions</li>
@@ -1435,9 +1435,9 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HF_TOKEN</span><span class="o">=</span>your_token_here
 </span></code></pre></div>
 <h3 id="huggingface-spaces-deployment">HuggingFace Spaces Deployment<a class="headerlink" href="#huggingface-spaces-deployment" title="Permanent link">&para;</a></h3>
-<p>Both backends work on HF Spaces - add secrets in Space Settings:</p>
+<p>Both backends work on HF Spaces by adding secrets in Space Settings:</p>
 <ul>
-<li><code>GITHUB_TOKEN</code> - GitHub token (recommended)</li>
+<li><code>GITHUB_TOKEN</code> - GitHub token</li>
 <li><code>HF_TOKEN</code> - HuggingFace token</li>
 </ul>
 <p>Token files are gitignored, so users never see your credentials.</p>
