@@ -28,7 +28,7 @@ DEFAULT_GITHUB_MODEL = "phi-4"
 
 # Model display names for UI
 MODEL_DISPLAY_NAMES = {
-    "grok-3-mini": "Grok 3 Mini (GitHub)",
+    "grok-3-mini": "Grok 3 Mini (GitHub) - expensive",
     "phi-4": "Phi-4 (GitHub)",
     "gpt-4o-mini": "GPT-4o Mini (GitHub)",
     "llama-3.1-8b": "Llama 3.1 8B (HF)",
@@ -150,6 +150,10 @@ def _call_github_model(prompt: str, model_key: str, max_tokens: int = 300) -> st
 
     model_id = AVAILABLE_MODELS.get(model_key, AVAILABLE_MODELS[DEFAULT_GITHUB_MODEL])
 
+    # Grok is a reasoning model - needs more tokens for thinking + response
+    if "grok" in model_key:
+        max_tokens = max(max_tokens, 2000)
+
     try:
         from azure.ai.inference import ChatCompletionsClient
         from azure.ai.inference.models import SystemMessage, UserMessage
@@ -196,7 +200,7 @@ def _call_github_model(prompt: str, model_key: str, max_tokens: int = 300) -> st
                     "temperature": 1.0,
                     "top_p": 1.0,
                 },
-                timeout=30,
+                timeout=60,  # Grok reasoning models need more time
             )
             response.raise_for_status()
             content = response.json()["choices"][0]["message"]["content"]
