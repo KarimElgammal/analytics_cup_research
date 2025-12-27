@@ -31,10 +31,11 @@ from src.analysis.defenders import detect_defensive_actions, build_defender_prof
 from src.analysis.goalkeepers import detect_gk_actions, build_goalkeeper_profiles, filter_goalkeeper_profiles
 from src.core.archetype import Archetype
 from src.core.similarity import SimilarityEngine
+from src.core.archetype_factory import ArchetypeFactory
 from src.visualization.radar import (
     plot_radar_comparison,
     plot_similarity_ranking,
-    normalize_for_radar,
+    normalize_for_radar_percentile,
 )
 from src.utils.ai_insights import (
     generate_similarity_insight,
@@ -42,7 +43,6 @@ from src.utils.ai_insights import (
     get_available_backend,
     get_available_models,
     get_default_model,
-    POSITION_METRICS,
 )
 from src.utils.rate_limiter import (
     check_daily_limit,
@@ -88,17 +88,44 @@ FORWARD_ARCHETYPES = [
     ("En-Nesyri (MAR) - Physical forward", "en_nesyri"),
 ]
 
-# Defender weights - ML-calibrated (GradientBoosting, AUC 0.845)
-# Trained on 8,911 engagements to predict stop_possession_danger
+# Cached archetype loading from StatsBomb
+@st.cache_resource(show_spinner="Loading archetypes from StatsBomb...")
+def get_archetype_factory():
+    """Get cached archetype factory."""
+    return ArchetypeFactory(verbose=False)
+
+@st.cache_resource(show_spinner="Building defender archetype from World Cup data...")
+def load_defender_archetype(player_key: str):
+    """Load defender archetype from StatsBomb, with fallback."""
+    try:
+        factory = get_archetype_factory()
+        return factory.build_defender(player_key)
+    except Exception as e:
+        st.warning(f"Could not load {player_key} from StatsBomb: {e}")
+        return None
+
+@st.cache_resource(show_spinner="Building goalkeeper archetype from World Cup data...")
+def load_goalkeeper_archetype(player_key: str):
+    """Load goalkeeper archetype from StatsBomb, with fallback."""
+    try:
+        factory = get_archetype_factory()
+        return factory.build_goalkeeper(player_key)
+    except Exception as e:
+        st.warning(f"Could not load {player_key} from StatsBomb: {e}")
+        return None
+
+# Defender weights - derived from one-time ML analysis (GradientBoosting, AUC 0.845)
+# Weights are STATIC - extracted from feature importances, not computed live
+# Used as fallback when StatsBomb API fails
 DEFENDER_WEIGHTS = {
-    "stop_danger_rate": 0.30,           # ML: outcome variable (key metric)
-    "avg_engagement_distance": 0.17,    # ML: 11.4% importance
-    "reduce_danger_rate": 0.15,         # ML: outcome variable
-    "beaten_by_possession_rate": 0.15,  # ML: outcome variable
-    "beaten_by_movement_rate": 0.08,    # ML: outcome variable
-    "force_backward_rate": 0.08,        # ML: outcome variable
-    "pressing_rate": 0.04,              # ML: 2.7% (engagement_type)
-    "goal_side_rate": 0.03,             # ML: 1.9% importance
+    "stop_danger_rate": 0.30,
+    "avg_engagement_distance": 0.17,
+    "reduce_danger_rate": 0.15,
+    "beaten_by_possession_rate": 0.15,
+    "beaten_by_movement_rate": 0.08,
+    "force_backward_rate": 0.08,
+    "pressing_rate": 0.04,
+    "goal_side_rate": 0.03,
 }
 
 DEFENDER_DIRECTIONS = {
@@ -115,17 +142,17 @@ DEFENDER_DIRECTIONS = {
     "attacking_third_pct": -1,
 }
 
-# Goalkeeper weights - ML-informed (GradientBoosting, AUC 0.993)
-# Trained on 497 distributions to predict pass success
-# ML found pass_distance dominates (98.6%), but we balance for style comparison
+# Goalkeeper weights - derived from one-time ML analysis (GradientBoosting, AUC 0.993)
+# Weights are STATIC - balanced for style comparison (ML found pass_distance dominates at 98.6%)
+# Used as fallback when StatsBomb API fails
 GOALKEEPER_WEIGHTS = {
-    "pass_success_rate": 0.20,          # ML: target variable
-    "avg_pass_distance": 0.20,          # ML: 98.6% importance (capped for balance)
-    "long_pass_pct": 0.15,              # Style differentiator
-    "short_pass_pct": 0.15,             # Style differentiator
-    "quick_distribution_pct": 0.10,     # ML: minimal but style-relevant
-    "to_middle_third_pct": 0.10,        # Progression indicator
-    "avg_passing_options": 0.10,        # ML: 0.5% importance
+    "pass_success_rate": 0.20,
+    "avg_pass_distance": 0.20,
+    "long_pass_pct": 0.15,
+    "short_pass_pct": 0.15,
+    "quick_distribution_pct": 0.10,
+    "to_middle_third_pct": 0.10,
+    "avg_passing_options": 0.10,
 }
 
 GOALKEEPER_DIRECTIONS = {
@@ -142,11 +169,49 @@ GOALKEEPER_DIRECTIONS = {
 }
 
 
+def format_target_table(profile: dict, feature_names: dict[str, str]) -> str:
+    """Format target profile as markdown table."""
+    lines = ["Target profile (percentile targets 0-100):", "| Feature | Target | Source |", "|---------|--------|--------|"]
+    for key, value in profile.items():
+        display_name = feature_names.get(key, key.replace("_", " ").title())
+        lines.append(f"| {display_name} | {value:.0f} | Style-based estimate |")
+    return "\n".join(lines)
+
+
+DEFENDER_FEATURE_NAMES = {
+    "stop_danger_rate": "Stop Danger %",
+    "reduce_danger_rate": "Reduce Danger %",
+    "force_backward_rate": "Force Back %",
+    "beaten_by_possession_rate": "Beaten (Ball) %",
+    "beaten_by_movement_rate": "Beaten (Move) %",
+    "pressing_rate": "Pressing %",
+    "goal_side_rate": "Goal Side %",
+    "avg_engagement_distance": "Engagement Dist",
+    "defensive_third_pct": "Defensive 3rd %",
+    "middle_third_pct": "Middle 3rd %",
+    "attacking_third_pct": "Attacking 3rd %",
+}
+
+
+GK_FEATURE_NAMES = {
+    "pass_success_rate": "Pass Success %",
+    "short_pass_pct": "Short Pass %",
+    "long_pass_pct": "Long Pass %",
+    "avg_pass_distance": "Pass Distance",
+    "quick_distribution_pct": "Quick Dist %",
+    "high_pass_pct": "High Pass %",
+    "to_middle_third_pct": "To Middle 3rd %",
+    "to_attacking_third_pct": "To Attack 3rd %",
+    "avg_passing_options": "Passing Options",
+}
+
+
 def create_defender_archetype(name: str, description: str, profile: dict) -> Archetype:
     """Create a defender archetype."""
+    full_desc = description + "\n\n" + format_target_table(profile, DEFENDER_FEATURE_NAMES)
     return Archetype(
         name=name,
-        description=description,
+        description=full_desc,
         target_profile=profile,
         weights=DEFENDER_WEIGHTS,
         directions=DEFENDER_DIRECTIONS,
@@ -155,9 +220,10 @@ def create_defender_archetype(name: str, description: str, profile: dict) -> Arc
 
 def create_goalkeeper_archetype(name: str, description: str, profile: dict, weights: dict, directions: dict) -> Archetype:
     """Create a goalkeeper archetype."""
+    full_desc = description + "\n\n" + format_target_table(profile, GK_FEATURE_NAMES)
     return Archetype(
         name=name,
-        description=description,
+        description=full_desc,
         target_profile=profile,
         weights=weights,
         directions=directions,
@@ -384,7 +450,10 @@ elif position == "Defenders":
         index=0,
     )
     selected_key = next(key for label, key in defender_options if label == selected_label)
-    archetype = DEFENDER_ARCHETYPES[selected_key]
+    # Try to load from StatsBomb, fall back to hardcoded
+    archetype = load_defender_archetype(selected_key)
+    if archetype is None:
+        archetype = DEFENDER_ARCHETYPES[selected_key]
 
     display_cols = [
         "rank", "player_name", "age", "team_name", "similarity_score",
@@ -392,7 +461,7 @@ elif position == "Defenders":
     ]
     col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Engagements", "Stop Danger %", "Pressing %"]
     radar_features = ["stop_danger_rate", "reduce_danger_rate", "pressing_rate", "goal_side_rate", "avg_engagement_distance"]
-    caption = "Defender archetypes based on known playing styles. Profiles from on-ball engagement events."
+    caption = "Defender archetypes computed from StatsBomb World Cup 2022 event data."
 
 else:  # Goalkeepers
     profiles, n_events, n_matches = load_goalkeeper_data()
@@ -411,7 +480,10 @@ else:  # Goalkeepers
         index=0,
     )
     selected_key = next(key for label, key in gk_options if label == selected_label)
-    archetype = GOALKEEPER_ARCHETYPES[selected_key]
+    # Try to load from StatsBomb, fall back to hardcoded
+    archetype = load_goalkeeper_archetype(selected_key)
+    if archetype is None:
+        archetype = GOALKEEPER_ARCHETYPES[selected_key]
 
     display_cols = [
         "rank", "player_name", "age", "team_name", "similarity_score",
@@ -419,7 +491,7 @@ else:  # Goalkeepers
     ]
     col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Distributions", "Pass Success %", "Long Pass %"]
     radar_features = ["pass_success_rate", "avg_pass_distance", "long_pass_pct", "quick_distribution_pct"]
-    caption = "Goalkeeper archetypes based on distribution style. Profiles from possession events."
+    caption = "Goalkeeper archetypes computed from StatsBomb World Cup 2022 event data."
 
 top_n = st.sidebar.slider("Number of results", min_value=5, max_value=min(20, len(profiles)), value=min(10, len(profiles)))
 
@@ -429,17 +501,10 @@ st.sidebar.markdown(f"**Events:** {n_events:,} {event_type}")
 st.sidebar.markdown(f"**Matches:** {n_matches}")
 st.sidebar.markdown(f"**Players:** {len(profiles)} qualified")
 
-# Show ML model performance
-ml_auc = POSITION_METRICS[position_type]["auc"]
+# Methodology note
 st.sidebar.markdown("---")
-st.sidebar.markdown("### ML Model Performance")
-st.sidebar.markdown(f"**AUC Score:** {ml_auc:.3f}")
-if ml_auc >= 0.9:
-    st.sidebar.success("Excellent model reliability")
-elif ml_auc >= 0.8:
-    st.sidebar.info("Good model reliability")
-else:
-    st.sidebar.warning("Moderate model reliability")
+st.sidebar.markdown("### Methodology")
+st.sidebar.markdown("Weighted cosine similarity on z-score normalised features.")
 
 # Run similarity engine
 engine = SimilarityEngine(archetype)
@@ -497,9 +562,9 @@ with tab1:
 with tab2:
     st.subheader("Radar Profile Comparison")
 
-    # Prepare data for radar chart
+    # Prepare data for radar chart - use percentile ranks against full dataset
     top_3 = results.head(3)
-    normalized = normalize_for_radar(top_3, radar_features)
+    normalized = normalize_for_radar_percentile(top_3, profiles, radar_features)
 
     # Build player dicts for radar
     players_for_radar = []
@@ -529,7 +594,10 @@ with tab2:
     )
     st.pyplot(fig_radar)
 
-    st.caption("Dashed line shows the target archetype profile. Values normalised to 0-100 scale within the dataset.")
+    if position_type == "forward":
+        st.caption("Player values are percentile ranks (0-100) from SkillCorner tracking data. *Target value is guessed (no StatsBomb equivalent).")
+    else:
+        st.caption("Player values are percentile ranks (0-100) from SkillCorner tracking data. Target values computed from StatsBomb World Cup 2022 data.")
 
 with tab3:
     st.subheader("AI Scouting Insight")

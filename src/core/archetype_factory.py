@@ -4,16 +4,20 @@ from __future__ import annotations
 
 from src.core.archetype import Archetype
 from src.statsbomb.loader import StatsBombLoader
-from src.statsbomb.stats import calculate_player_stats
-from src.statsbomb.mapper import map_to_skillcorner_target, get_archetype_description
+from src.statsbomb.stats import calculate_player_stats, calculate_defender_stats, calculate_goalkeeper_stats
+from src.statsbomb.mapper import (
+    map_to_skillcorner_target, get_archetype_description, compute_archetype_weights,
+    map_defender_to_skillcorner, get_defender_description, compute_defender_weights,
+    map_goalkeeper_to_skillcorner, get_goalkeeper_description, compute_goalkeeper_weights,
+)
 from src.statsbomb.registry import get_player_info, get_player_competitions, get_available_players
 
 
-# ML-calibrated weights from existing danger model analysis
-# Cross-validated AUC: 0.656 on 245 A-League entries
-# These weights determine feature importance in similarity scoring
+# Static weights from one-time GradientBoosting analysis on A-League data
+# These are NOT computed live - they were extracted once and hardcoded
+# Original training: AUC 0.656 on 245 final third entries
 DEFAULT_WEIGHTS = {
-    "avg_separation": 0.23,           # Highest ML importance - finding space
+    "avg_separation": 0.23,           # Highest importance - finding space
     "danger_rate": 0.18,              # Clinical finishing
     "avg_entry_speed": 0.17,          # Dynamic entries
     "avg_defensive_line_dist": 0.15,  # Penetration depth
@@ -22,7 +26,7 @@ DEFAULT_WEIGHTS = {
     "avg_teammates_ahead": 0.05,      # Link-up context
     "half_space_pct": 0.02,           # Half-space usage
     "avg_passing_options": 0.02,      # Passing options
-    "carry_pct": 0.00,                # ML confirmed low importance
+    "carry_pct": 0.00,                # Low variance in data
     "avg_distance": 0.01,             # Work rate
     "goal_rate": 0.00,                # Too sparse in data
 }
@@ -41,6 +45,29 @@ DEFAULT_DIRECTIONS = {
     "carry_pct": 1,
     "avg_distance": 1,
     "goal_rate": 1,
+}
+
+# Defender feature directions
+DEFENDER_DIRECTIONS = {
+    "stop_danger_rate": 1,
+    "reduce_danger_rate": 1,
+    "pressing_rate": 1,
+    "goal_side_rate": 1,
+    "avg_engagement_distance": -1,  # Closer engagement is better
+    "beaten_by_possession_rate": -1,  # Lower is better
+    "beaten_by_movement_rate": -1,  # Lower is better
+    "force_backward_rate": 1,
+}
+
+# Goalkeeper feature directions
+GOALKEEPER_DIRECTIONS = {
+    "pass_success_rate": 1,
+    "avg_pass_distance": 1,  # Context-dependent, but generally higher = more range
+    "long_pass_pct": 1,  # Style-dependent
+    "short_pass_pct": 1,  # Style-dependent
+    "high_pass_pct": 1,  # Style-dependent
+    "quick_distribution_pct": 1,
+    "to_attacking_third_pct": 1,
 }
 
 
@@ -80,7 +107,7 @@ class ArchetypeFactory:
 
         Args:
             player_key: Key from PLAYER_REGISTRY (e.g., "alvarez", "messi")
-            weights: Optional custom weights (defaults to ML-calibrated)
+            weights: Optional custom weights (defaults to static pre-computed)
             directions: Optional custom directions (defaults to standard)
 
         Returns:
@@ -132,8 +159,11 @@ class ArchetypeFactory:
         # Generate description
         description = get_archetype_description(stats, target)
 
-        # Use provided weights/directions or defaults
-        final_weights = weights if weights is not None else DEFAULT_WEIGHTS.copy()
+        # Compute weights from player stats (data-driven)
+        if weights is not None:
+            final_weights = weights
+        else:
+            final_weights = compute_archetype_weights(stats)
         final_directions = directions if directions is not None else DEFAULT_DIRECTIONS.copy()
 
         # Build the archetype
@@ -149,6 +179,120 @@ class ArchetypeFactory:
         if weights is None and directions is None:
             self._cache[player_key] = archetype
 
+        return archetype
+
+    def build_defender(self, player_key: str) -> Archetype:
+        """Build a defender archetype from StatsBomb data.
+
+        Args:
+            player_key: Key from PLAYER_REGISTRY (e.g., "gvardiol", "romero")
+
+        Returns:
+            Archetype with data-driven target profile
+        """
+        cache_key = f"defender_{player_key}"
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+
+        info = get_player_info(player_key)
+        competitions = get_player_competitions(player_key)
+
+        if not competitions:
+            raise ValueError(f"No competitions for defender '{player_key}'")
+
+        if self.verbose:
+            print(f"Loading events for {info['display_name']}...")
+
+        events = self.loader.get_player_events(
+            player_name=info["player_name"],
+            competitions=competitions,
+            verbose=self.verbose,
+        )
+
+        if len(events) == 0:
+            raise ValueError(f"No events found for '{info['player_name']}'")
+
+        if self.verbose:
+            print(f"Found {len(events)} events, calculating defender stats...")
+
+        # Calculate defender-specific statistics
+        stats = calculate_defender_stats(events)
+
+        # Map to SkillCorner target profile
+        target = map_defender_to_skillcorner(stats)
+
+        # Generate description
+        description = get_defender_description(stats, target)
+
+        # Compute data-driven weights
+        weights = compute_defender_weights(stats)
+
+        archetype = Archetype(
+            name=player_key,
+            description=f"{info['display_name']}\n{description}",
+            target_profile=target,
+            weights=weights,
+            directions=DEFENDER_DIRECTIONS.copy(),
+        )
+
+        self._cache[cache_key] = archetype
+        return archetype
+
+    def build_goalkeeper(self, player_key: str) -> Archetype:
+        """Build a goalkeeper archetype from StatsBomb data.
+
+        Args:
+            player_key: Key from PLAYER_REGISTRY (e.g., "lloris", "livakovic")
+
+        Returns:
+            Archetype with data-driven target profile
+        """
+        cache_key = f"goalkeeper_{player_key}"
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+
+        info = get_player_info(player_key)
+        competitions = get_player_competitions(player_key)
+
+        if not competitions:
+            raise ValueError(f"No competitions for goalkeeper '{player_key}'")
+
+        if self.verbose:
+            print(f"Loading events for {info['display_name']}...")
+
+        events = self.loader.get_player_events(
+            player_name=info["player_name"],
+            competitions=competitions,
+            verbose=self.verbose,
+        )
+
+        if len(events) == 0:
+            raise ValueError(f"No events found for '{info['player_name']}'")
+
+        if self.verbose:
+            print(f"Found {len(events)} events, calculating goalkeeper stats...")
+
+        # Calculate goalkeeper-specific statistics
+        stats = calculate_goalkeeper_stats(events)
+
+        # Map to SkillCorner target profile
+        target = map_goalkeeper_to_skillcorner(stats)
+
+        # Generate description
+        description = get_goalkeeper_description(stats, target)
+
+        # Compute data-driven weights
+        weights = compute_goalkeeper_weights(stats)
+
+        archetype = Archetype(
+            name=player_key,
+            description=f"{info['display_name']}\n{description}",
+            target_profile=target,
+            weights=weights,
+            directions=GOALKEEPER_DIRECTIONS.copy(),
+        )
+
+        self._cache[cache_key] = archetype
         return archetype
 
     def list_available(self) -> list[str]:

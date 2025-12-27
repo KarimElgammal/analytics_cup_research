@@ -10,16 +10,17 @@ import polars as pl
 from typing import Sequence
 
 # Features to display on radar chart (readable labels)
+# * = target value is guessed (no StatsBomb tracking equivalent)
 RADAR_FEATURES = {
     # Forward features
     "avg_separation": "Separation",
-    "central_pct": "Central %",
-    "half_space_pct": "Half-Space %",
+    "central_pct": "Central %*",
+    "half_space_pct": "Half-Space %*",
     "danger_rate": "Danger Rate",
-    "avg_entry_speed": "Speed",
+    "avg_entry_speed": "Speed*",
     "avg_passing_options": "Passing Options",
     "carry_pct": "Carry %",
-    "avg_defensive_line_dist": "Depth",
+    "avg_defensive_line_dist": "Depth*",
     # Defender features
     "stop_danger_rate": "Stop Danger %",
     "reduce_danger_rate": "Reduce Danger %",
@@ -66,6 +67,63 @@ def normalize_for_radar(profiles: pl.DataFrame, features: list[str]) -> pl.DataF
                 ((pl.col(feature) - min_val) / (max_val - min_val) * 100)
                 .alias(f"{feature}_norm")
             )
+
+    return normalized
+
+
+def normalize_for_radar_percentile(
+    profiles: pl.DataFrame,
+    all_profiles: pl.DataFrame,
+    features: list[str]
+) -> pl.DataFrame:
+    """
+    Normalize features to percentile ranks against full dataset.
+
+    This provides more meaningful values than min-max within a small subset.
+    A player at the 60th percentile shows as 60, making it directly comparable
+    to target profile values which also represent percentiles.
+
+    Parameters:
+    -----------
+    profiles : pl.DataFrame
+        Players to normalize (e.g., top 3)
+    all_profiles : pl.DataFrame
+        Full dataset to compute percentiles against
+    features : list[str]
+        Features to normalize
+
+    Returns:
+    --------
+    pl.DataFrame with {feature}_norm columns containing percentile ranks (0-100)
+    """
+    normalized = profiles.clone()
+
+    for feature in features:
+        if feature not in profiles.columns or feature not in all_profiles.columns:
+            continue
+
+        # Get all values from full dataset (exclude nulls)
+        all_values = all_profiles[feature].drop_nulls().to_list()
+
+        if not all_values:
+            normalized = normalized.with_columns(
+                pl.lit(50.0).alias(f"{feature}_norm")
+            )
+            continue
+
+        # Calculate percentile rank for each player in profiles
+        percentile_ranks = []
+        for val in profiles[feature].to_list():
+            if val is None:
+                percentile_ranks.append(50.0)
+            else:
+                # Percentile rank: % of values <= this value
+                rank = sum(1 for v in all_values if v <= val) / len(all_values) * 100
+                percentile_ranks.append(rank)
+
+        normalized = normalized.with_columns(
+            pl.Series(f"{feature}_norm", percentile_ranks)
+        )
 
     return normalized
 

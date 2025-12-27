@@ -47,19 +47,16 @@ POSITION_METRICS = {
     "forward": {
         "metrics": ["danger_rate", "central_pct", "avg_separation", "avg_entry_speed", "carry_pct"],
         "count_field": "total_entries",
-        "auc": 0.656,
         "criteria": "Forwards are valued for creating danger through intelligent movement, finding space between defenders, and clinical finishing. Key traits: high danger rate (shots per entry), good separation from markers, and effective use of central zones.",
     },
     "defender": {
         "metrics": ["stop_danger_rate", "reduce_danger_rate", "pressing_rate", "goal_side_rate", "avg_engagement_distance"],
         "count_field": "total_engagements",
-        "auc": 0.845,
         "criteria": "Defenders are valued for stopping dangerous attacks, maintaining goal-side positioning, and intelligent pressing. Key traits: high stop/reduce danger rates, consistent goal-side positioning, and appropriate engagement distance.",
     },
     "goalkeeper": {
         "metrics": ["pass_success_rate", "avg_pass_distance", "long_pass_pct", "quick_distribution_pct"],
         "count_field": "total_distributions",
-        "auc": 0.993,
         "criteria": "Goalkeepers are valued for distribution quality and decision-making under pressure. Key traits: high pass success rate, appropriate pass distance for team style, and quick distribution to initiate attacks.",
     },
 }
@@ -420,7 +417,7 @@ def generate_similarity_insight(
 ANALYSIS CONTEXT:
 - Position: {position_type.title()}
 - Dataset: {total_events} {count_field.replace('total_', '')} from {total_players} players across 10 A-League matches
-- ML Model AUC: {config['auc']:.3f} (higher = more reliable ranking)
+- Similarity method: Weighted cosine similarity on z-score normalised features
 
 {archetype_name.upper()} ARCHETYPE:
 {archetype_description}

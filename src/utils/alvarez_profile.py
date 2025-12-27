@@ -44,27 +44,26 @@ PROFILE_FEATURES = [
 ]
 
 # Feature weights for similarity scoring
-# Calibrated using ML (GradientBoosting) feature importance on A-League data
-# Combined with StatsBomb Alvarez archetype traits
-# CV AUC: 0.656 on 245 entries
+# Based on correlation analysis with danger_rate on A-League data
+# Combined with domain knowledge from StatsBomb Alvarez traits
 FEATURE_WEIGHTS = {
-    # ML-DERIVED: GradientBoosting feature importances (highest predictors of danger)
-    "avg_separation": 0.23,           # ML: 16.2% importance - HIGHEST! Finds space
-    "avg_entry_speed": 0.17,          # ML: 11.8% importance - dynamic entries
-    "avg_defensive_line_dist": 0.15,  # ML: 10.3% importance - penetration depth
-    "central_pct": 0.12,              # ML: 8.5% importance - central = dangerous
+    # HIGH CORRELATION with danger_rate
+    "avg_separation": 0.23,           # r=+0.22 - finding space between defenders
+    "avg_entry_speed": 0.17,          # r=+0.34 - dynamic entries
+    "avg_defensive_line_dist": 0.15,  # r=-0.26 - penetration depth (closer to goal)
+    "central_pct": 0.12,              # r=+0.30 - central positioning
 
-    # ARCHETYPE-DRIVEN: From StatsBomb Alvarez profile (20% conversion)
-    "danger_rate": 0.18,              # Clinical finishing - core Alvarez trait
+    # ARCHETYPE-DRIVEN: From StatsBomb Alvarez profile
+    "danger_rate": 0.18,              # Clinical finishing - core trait
 
-    # MODERATE IMPORTANCE
-    "quick_break_pct": 0.05,          # ML: 3.7% importance - counter-attacks
-    "avg_teammates_ahead": 0.05,      # ML: 3.8% importance - link-up context
+    # MODERATE CORRELATION
+    "quick_break_pct": 0.05,          # r=+0.26 - counter-attacks
+    "avg_teammates_ahead": 0.05,      # Link-up context
 
-    # ML CONFIRMED LOW/ZERO IMPORTANCE
-    "half_space_pct": 0.02,           # Correlation near zero
-    "avg_passing_options": 0.02,      # ML: 1.2% - key passes don't predict danger in tracking!
-    "carry_pct": 0.00,                # ML: 0.0%! Confirms useless (no variance)
+    # LOW/NO CORRELATION - reduced weights
+    "half_space_pct": 0.02,           # r=-0.01 - no predictive value
+    "avg_passing_options": 0.02,      # r=-0.05 - no predictive value
+    "carry_pct": 0.00,                # 98% mean - no variance to discriminate
     "avg_distance": 0.01,             # Workrate
     "goal_rate": 0.00,                # Too sparse
 }

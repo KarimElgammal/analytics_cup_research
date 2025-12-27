@@ -8,6 +8,223 @@ import polars as pl
 
 
 @dataclass
+class DefenderStats:
+    """Computed statistics for defenders from StatsBomb events.
+
+    Attributes:
+        player_name: Name of the player
+        matches: Number of matches with events
+        minutes: Estimated minutes played
+
+        tackles: Total tackle attempts
+        tackles_won: Successful tackles
+        interceptions: Ball interceptions
+        clearances: Ball clearances
+        blocks: Shot/pass blocks
+
+        pressures: Total pressure events
+        pressure_success: Successful pressures (regained possession)
+
+        duels: Total duels
+        duels_won: Duels won
+        aerial_duels: Total aerial duels
+        aerial_duels_won: Aerial duels won
+
+        fouls_committed: Fouls committed
+        fouls_won: Fouls won (drawn)
+
+        carries: Ball carries
+        progressive_carries: Carries that advanced play significantly
+    """
+
+    player_name: str
+    matches: int
+    minutes: float
+
+    # Defensive actions
+    tackles: int
+    tackles_won: int
+    interceptions: int
+    clearances: int
+    blocks: int
+
+    # Pressing
+    pressures: int
+    pressure_success: int
+
+    # Duels
+    duels: int
+    duels_won: int
+    aerial_duels: int
+    aerial_duels_won: int
+
+    # Fouls
+    fouls_committed: int
+    fouls_won: int
+
+    # Ball progression
+    carries: int
+    progressive_carries: int
+
+    @property
+    def tackle_success_rate(self) -> float:
+        """Percentage of successful tackles."""
+        return (self.tackles_won / self.tackles * 100) if self.tackles > 0 else 0.0
+
+    @property
+    def duel_success_rate(self) -> float:
+        """Percentage of duels won."""
+        return (self.duels_won / self.duels * 100) if self.duels > 0 else 0.0
+
+    @property
+    def aerial_success_rate(self) -> float:
+        """Percentage of aerial duels won."""
+        return (self.aerial_duels_won / self.aerial_duels * 100) if self.aerial_duels > 0 else 0.0
+
+    @property
+    def pressure_success_rate(self) -> float:
+        """Percentage of successful pressures."""
+        return (self.pressure_success / self.pressures * 100) if self.pressures > 0 else 0.0
+
+    @property
+    def progressive_carry_pct(self) -> float:
+        """Percentage of carries that were progressive."""
+        return (self.progressive_carries / self.carries * 100) if self.carries > 0 else 0.0
+
+    @property
+    def pressures_per_90(self) -> float:
+        """Pressures per 90 minutes."""
+        return (self.pressures / self.minutes) * 90 if self.minutes > 0 else 0.0
+
+    @property
+    def tackles_per_90(self) -> float:
+        """Tackles per 90 minutes."""
+        return (self.tackles / self.minutes) * 90 if self.minutes > 0 else 0.0
+
+    @property
+    def interceptions_per_90(self) -> float:
+        """Interceptions per 90 minutes."""
+        return (self.interceptions / self.minutes) * 90 if self.minutes > 0 else 0.0
+
+    def to_dict(self) -> dict:
+        """Convert to dictionary for display/export."""
+        return {
+            "player_name": self.player_name,
+            "matches": self.matches,
+            "minutes": self.minutes,
+            "tackles": self.tackles,
+            "tackles_won": self.tackles_won,
+            "tackle_success_rate": round(self.tackle_success_rate, 1),
+            "interceptions": self.interceptions,
+            "clearances": self.clearances,
+            "blocks": self.blocks,
+            "pressures": self.pressures,
+            "pressure_success_rate": round(self.pressure_success_rate, 1),
+            "duels": self.duels,
+            "duels_won": self.duels_won,
+            "duel_success_rate": round(self.duel_success_rate, 1),
+            "aerial_duels": self.aerial_duels,
+            "aerial_success_rate": round(self.aerial_success_rate, 1),
+            "fouls_committed": self.fouls_committed,
+            "fouls_won": self.fouls_won,
+            "carries": self.carries,
+            "progressive_carry_pct": round(self.progressive_carry_pct, 1),
+        }
+
+
+@dataclass
+class GoalkeeperStats:
+    """Computed statistics for goalkeepers from StatsBomb events.
+
+    Attributes:
+        player_name: Name of the player
+        matches: Number of matches with events
+        minutes: Estimated minutes played
+
+        saves: Total saves
+        goals_conceded: Goals conceded
+
+        passes: Total passes/distributions
+        passes_completed: Successful passes
+        long_passes: Long passes (>32m)
+        short_passes: Short passes (<20m)
+        high_passes: High/lofted passes
+
+        avg_pass_distance: Average pass distance in meters
+    """
+
+    player_name: str
+    matches: int
+    minutes: float
+
+    # Shot stopping
+    saves: int
+    goals_conceded: int
+
+    # Distribution
+    passes: int
+    passes_completed: int
+    long_passes: int
+    short_passes: int
+    high_passes: int
+
+    # Pass metrics
+    total_pass_distance: float  # Sum of all pass distances
+
+    @property
+    def save_percentage(self) -> float:
+        """Percentage of shots saved."""
+        total = self.saves + self.goals_conceded
+        return (self.saves / total * 100) if total > 0 else 0.0
+
+    @property
+    def pass_success_rate(self) -> float:
+        """Percentage of successful passes."""
+        return (self.passes_completed / self.passes * 100) if self.passes > 0 else 0.0
+
+    @property
+    def long_pass_pct(self) -> float:
+        """Percentage of passes that were long."""
+        return (self.long_passes / self.passes * 100) if self.passes > 0 else 0.0
+
+    @property
+    def short_pass_pct(self) -> float:
+        """Percentage of passes that were short."""
+        return (self.short_passes / self.passes * 100) if self.passes > 0 else 0.0
+
+    @property
+    def high_pass_pct(self) -> float:
+        """Percentage of passes that were high/lofted."""
+        return (self.high_passes / self.passes * 100) if self.passes > 0 else 0.0
+
+    @property
+    def avg_pass_distance(self) -> float:
+        """Average pass distance in meters."""
+        return (self.total_pass_distance / self.passes) if self.passes > 0 else 0.0
+
+    def to_dict(self) -> dict:
+        """Convert to dictionary for display/export."""
+        return {
+            "player_name": self.player_name,
+            "matches": self.matches,
+            "minutes": self.minutes,
+            "saves": self.saves,
+            "goals_conceded": self.goals_conceded,
+            "save_percentage": round(self.save_percentage, 1),
+            "passes": self.passes,
+            "passes_completed": self.passes_completed,
+            "pass_success_rate": round(self.pass_success_rate, 1),
+            "long_passes": self.long_passes,
+            "long_pass_pct": round(self.long_pass_pct, 1),
+            "short_passes": self.short_passes,
+            "short_pass_pct": round(self.short_pass_pct, 1),
+            "high_passes": self.high_passes,
+            "high_pass_pct": round(self.high_pass_pct, 1),
+            "avg_pass_distance": round(self.avg_pass_distance, 1),
+        }
+
+
+@dataclass
 class PlayerStats:
     """Computed statistics from StatsBomb events.
 
@@ -243,4 +460,253 @@ def calculate_player_stats(events: pl.DataFrame) -> PlayerStats:
         dribbles_completed=dribbles_completed,
         dribble_success=dribble_success,
         box_touches=box_touches,
+    )
+
+
+def calculate_defender_stats(events: pl.DataFrame) -> DefenderStats:
+    """Calculate defender statistics from StatsBomb events.
+
+    Args:
+        events: DataFrame of StatsBomb events for one defender
+
+    Returns:
+        DefenderStats dataclass with computed statistics
+    """
+    if len(events) == 0:
+        return DefenderStats(
+            player_name="Unknown", matches=0, minutes=0,
+            tackles=0, tackles_won=0, interceptions=0, clearances=0, blocks=0,
+            pressures=0, pressure_success=0, duels=0, duels_won=0,
+            aerial_duels=0, aerial_duels_won=0, fouls_committed=0, fouls_won=0,
+            carries=0, progressive_carries=0,
+        )
+
+    # Get player name
+    player_name = ""
+    if "player" in events.columns:
+        first_player = events["player"].drop_nulls().first()
+        player_name = first_player if first_player else "Unknown"
+
+    # Count matches
+    matches = 0
+    if "match_id" in events.columns:
+        matches = events.select(pl.col("match_id").n_unique()).item()
+
+    # Estimate minutes
+    minutes = 1.0
+    if "minute" in events.columns:
+        unique_minutes = events.select(pl.col("minute").n_unique()).item()
+        minutes = max(unique_minutes or 1, 1)
+
+    # === TACKLES ===
+    tackles = 0
+    tackles_won = 0
+    if "type" in events.columns:
+        tackles_df = events.filter(pl.col("type") == "Duel")
+        if "duel_type" in events.columns:
+            tackles_df = tackles_df.filter(pl.col("duel_type") == "Tackle")
+        tackles = len(tackles_df)
+        if "duel_outcome" in events.columns and tackles > 0:
+            tackles_won = len(tackles_df.filter(
+                pl.col("duel_outcome").is_in(["Won", "Success", "Success In Play"])
+            ))
+
+    # === INTERCEPTIONS ===
+    interceptions = 0
+    if "type" in events.columns:
+        interceptions = len(events.filter(pl.col("type") == "Interception"))
+
+    # === CLEARANCES ===
+    clearances = 0
+    if "type" in events.columns:
+        clearances = len(events.filter(pl.col("type") == "Clearance"))
+
+    # === BLOCKS ===
+    blocks = 0
+    if "type" in events.columns:
+        blocks = len(events.filter(pl.col("type") == "Block"))
+
+    # === PRESSURES ===
+    pressures = 0
+    pressure_success = 0
+    if "type" in events.columns:
+        pressure_df = events.filter(pl.col("type") == "Pressure")
+        pressures = len(pressure_df)
+        if "counterpress" in events.columns and pressures > 0:
+            pressure_success = len(pressure_df.filter(pl.col("counterpress") == True))
+
+    # === DUELS (all types) ===
+    duels = 0
+    duels_won = 0
+    if "type" in events.columns:
+        duels_df = events.filter(pl.col("type") == "Duel")
+        duels = len(duels_df)
+        if "duel_outcome" in events.columns and duels > 0:
+            duels_won = len(duels_df.filter(
+                pl.col("duel_outcome").is_in(["Won", "Success", "Success In Play"])
+            ))
+
+    # === AERIAL DUELS ===
+    aerial_duels = 0
+    aerial_duels_won = 0
+    if "type" in events.columns and "duel_type" in events.columns:
+        aerial_df = events.filter(
+            (pl.col("type") == "Duel") & (pl.col("duel_type") == "Aerial Lost")
+            | (pl.col("type") == "Duel") & (pl.col("duel_type").str.contains("Aerial"))
+        )
+        aerial_duels = len(aerial_df)
+        if "duel_outcome" in events.columns and aerial_duels > 0:
+            aerial_duels_won = len(aerial_df.filter(
+                pl.col("duel_outcome").is_in(["Won", "Success"])
+            ))
+
+    # === FOULS ===
+    fouls_committed = 0
+    fouls_won = 0
+    if "type" in events.columns:
+        fouls_committed = len(events.filter(pl.col("type") == "Foul Committed"))
+        fouls_won = len(events.filter(pl.col("type") == "Foul Won"))
+
+    # === CARRIES ===
+    carries = 0
+    progressive_carries = 0
+    if "type" in events.columns:
+        carry_df = events.filter(pl.col("type") == "Carry")
+        carries = len(carry_df)
+        # Progressive carry: moved ball forward significantly (use end_location if available)
+        if "carry_end_location" in events.columns and carries > 0:
+            # Simplified: count carries that end in attacking half (x > 60)
+            try:
+                progressive_carries = len(carry_df.filter(
+                    pl.col("carry_end_location").list.get(0) > 60
+                ))
+            except Exception:
+                progressive_carries = 0
+
+    return DefenderStats(
+        player_name=player_name,
+        matches=matches,
+        minutes=minutes,
+        tackles=tackles,
+        tackles_won=tackles_won,
+        interceptions=interceptions,
+        clearances=clearances,
+        blocks=blocks,
+        pressures=pressures,
+        pressure_success=pressure_success,
+        duels=duels,
+        duels_won=duels_won,
+        aerial_duels=aerial_duels,
+        aerial_duels_won=aerial_duels_won,
+        fouls_committed=fouls_committed,
+        fouls_won=fouls_won,
+        carries=carries,
+        progressive_carries=progressive_carries,
+    )
+
+
+def calculate_goalkeeper_stats(events: pl.DataFrame) -> GoalkeeperStats:
+    """Calculate goalkeeper statistics from StatsBomb events.
+
+    Args:
+        events: DataFrame of StatsBomb events for one goalkeeper
+
+    Returns:
+        GoalkeeperStats dataclass with computed statistics
+    """
+    import math
+
+    if len(events) == 0:
+        return GoalkeeperStats(
+            player_name="Unknown", matches=0, minutes=0,
+            saves=0, goals_conceded=0, passes=0, passes_completed=0,
+            long_passes=0, short_passes=0, high_passes=0, total_pass_distance=0,
+        )
+
+    # Get player name
+    player_name = ""
+    if "player" in events.columns:
+        first_player = events["player"].drop_nulls().first()
+        player_name = first_player if first_player else "Unknown"
+
+    # Count matches
+    matches = 0
+    if "match_id" in events.columns:
+        matches = events.select(pl.col("match_id").n_unique()).item()
+
+    # Estimate minutes
+    minutes = 1.0
+    if "minute" in events.columns:
+        unique_minutes = events.select(pl.col("minute").n_unique()).item()
+        minutes = max(unique_minutes or 1, 1)
+
+    # === SAVES ===
+    saves = 0
+    goals_conceded = 0
+    if "type" in events.columns:
+        gk_events = events.filter(pl.col("type") == "Goal Keeper")
+        if "goalkeeper_type" in events.columns:
+            saves = len(gk_events.filter(
+                pl.col("goalkeeper_type").is_in(["Save", "Collected", "Punch", "Keeper Sweeper"])
+            ))
+        # Goals conceded - check for shot events against (trickier, estimate from Goal Keeper events)
+        # Approximate: count "Goal Conceded" type events or infer from match context
+        if "goalkeeper_outcome" in events.columns:
+            goals_conceded = len(gk_events.filter(
+                pl.col("goalkeeper_outcome") == "Goal Conceded"
+            ))
+
+    # === DISTRIBUTION (PASSES) ===
+    passes = 0
+    passes_completed = 0
+    long_passes = 0
+    short_passes = 0
+    high_passes = 0
+    total_pass_distance = 0.0
+
+    if "type" in events.columns:
+        passes_df = events.filter(pl.col("type") == "Pass")
+        passes = len(passes_df)
+
+        if passes > 0:
+            # Successful passes
+            if "pass_outcome" in events.columns:
+                passes_completed = len(passes_df.filter(pl.col("pass_outcome").is_null()))
+            else:
+                passes_completed = passes
+
+            # High passes (pass_height)
+            if "pass_height" in events.columns:
+                high_passes = len(passes_df.filter(
+                    pl.col("pass_height").is_in(["High Pass", "Lofted Pass"])
+                ))
+
+            # Calculate pass distances and categorize
+            if "location" in events.columns and "pass_end_location" in events.columns:
+                try:
+                    for row in passes_df.to_dicts():
+                        loc = row.get("location")
+                        end_loc = row.get("pass_end_location")
+                        if loc and end_loc and len(loc) >= 2 and len(end_loc) >= 2:
+                            dist = math.sqrt((end_loc[0] - loc[0])**2 + (end_loc[1] - loc[1])**2)
+                            total_pass_distance += dist
+                            if dist > 32:  # Long pass > 32m
+                                long_passes += 1
+                            elif dist < 20:  # Short pass < 20m
+                                short_passes += 1
+                except Exception:
+                    pass
+
+    return GoalkeeperStats(
+        player_name=player_name,
+        matches=matches,
+        minutes=minutes,
+        saves=saves,
+        goals_conceded=goals_conceded,
+        passes=passes,
+        passes_completed=passes_completed,
+        long_passes=long_passes,
+        short_passes=short_passes,
+        high_passes=high_passes,
+        total_pass_distance=total_pass_distance,
     )

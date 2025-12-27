@@ -10,6 +10,78 @@ This document explains how I derive player archetypes from StatsBomb event data 
 
 ---
 
+## Data Pipeline Transparency
+
+### What's Computed vs Static
+
+| Component | Source | Type | Notes |
+|-----------|--------|------|-------|
+| **Forward archetypes** | StatsBomb API | Computed at runtime | Stats from World Cup 2022 events |
+| **Defender archetypes** | StatsBomb API | Computed at runtime | Stats from World Cup 2022 events |
+| **Goalkeeper archetypes** | StatsBomb API | Computed at runtime | Stats from World Cup 2022 events |
+| **A-League player profiles** | SkillCorner GitHub | Computed at runtime | Loaded from dynamic_events.csv |
+| **Feature weights** | ML analysis | Static (pre-computed) | GradientBoosting run once, results hardcoded |
+| **AUC scores** | ML analysis | Static (pre-computed) | Cross-validation run once, results hardcoded |
+| **Reference distributions** | Manual estimates | Static | Percentile thresholds for mapping |
+
+### Archetype Computation Details
+
+All 12 archetypes are now computed from StatsBomb World Cup 2022 data:
+
+| Position | Players | StatsBomb Stats Used | Mapping to SkillCorner |
+|----------|---------|---------------------|------------------------|
+| **Forwards** | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri | shots, goals, dribbles, passes, box touches | danger_rate, avg_separation, carry_pct |
+| **Defenders** | Gvardiol, Romero, Hakimi | tackles, duels, aerials, pressures, interceptions | stop_danger_rate, pressing_rate, goal_side_rate |
+| **Goalkeepers** | Lloris, Livakovic, Bounou | saves, passes, pass distances, pass heights | pass_success_rate, long_pass_pct, avg_pass_distance |
+
+### Similarity Method
+
+The tool uses **weighted cosine similarity** on z-score normalised features:
+
+1. Compute correlations between features and outcomes (danger_rate, etc.)
+2. Set weights based on correlation strength
+3. Compare player profiles to archetype targets using cosine similarity
+
+### Forward Target Features
+
+| Feature | Source | Type |
+|---------|--------|------|
+| `danger_rate` | Conversion rate from StatsBomb | Computed |
+| `avg_separation` | Box touches per 90 from StatsBomb | Computed |
+| `carry_pct` | Dribble success from StatsBomb | Computed |
+| `avg_passing_options` | Pass accuracy from StatsBomb | Computed |
+| `central_pct` | No StatsBomb equivalent | Fixed estimate (70) |
+| `avg_entry_speed` | No StatsBomb equivalent | Fixed estimate (65) |
+| `half_space_pct` | No StatsBomb equivalent | Fixed estimate (55) |
+| `avg_defensive_line_dist` | No StatsBomb equivalent | Fixed estimate (50) |
+
+### Defender Target Features
+
+| Feature | Source | Type |
+|---------|--------|------|
+| `stop_danger_rate` | Duel success rate from StatsBomb | Computed |
+| `reduce_danger_rate` | Tackle success rate from StatsBomb | Computed |
+| `pressing_rate` | Pressures per 90 from StatsBomb | Computed |
+| `goal_side_rate` | Aerial success rate from StatsBomb | Computed |
+| `beaten_by_possession_rate` | Inverse of duel success | Computed |
+| `beaten_by_movement_rate` | Inverse of aerial success | Computed |
+| `avg_engagement_distance` | Derived from pressing activity | Derived |
+| `force_backward_rate` | Derived from tackle success | Derived |
+
+### Goalkeeper Target Features
+
+| Feature | Source | Type |
+|---------|--------|------|
+| `pass_success_rate` | Pass accuracy from StatsBomb | Computed |
+| `avg_pass_distance` | Calculated from pass locations | Computed |
+| `long_pass_pct` | Passes > 32m from StatsBomb | Computed |
+| `short_pass_pct` | Passes < 20m from StatsBomb | Computed |
+| `high_pass_pct` | High/lofted passes from StatsBomb | Computed |
+| `quick_distribution_pct` | Derived from short pass tendency | Derived |
+| `to_attacking_third_pct` | Derived from long pass tendency | Derived |
+
+---
+
 ## Programmatic Archetype Generation
 
 Archetypes are computed programmatically from StatsBomb event data.
@@ -331,54 +403,16 @@ For features where lower is better (direction=-1), target = 10th percentile.
 
 ---
 
-## Part 6: ML Models for Weight Calibration
+## Part 6: Weight Selection
 
-### GradientBoosting Models by Position
+Weights were chosen based on:
 
-I trained GradientBoosting classifiers for each position type to empirically determine feature importance:
-
-| Position | Target Variable | AUC | Events |
-|----------|-----------------|-----|--------|
-| **Forwards** | lead_to_shot | 0.656 ± 0.027 | 245 entries |
-| **Defenders** | stop_possession_danger | 0.845 ± 0.016 | 8,911 engagements |
-| **Goalkeepers** | pass_success | 0.993 ± 0.011 | 497 distributions |
-
-```python
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.model_selection import cross_val_score
-
-model = GradientBoostingClassifier(n_estimators=100, max_depth=4)
-cv_scores = cross_val_score(model, X, y, cv=5, scoring='roc_auc')
-```
-
-### Forward Feature Importances (AUC 0.656)
-
-| Feature | ML Importance | Final Weight |
-|---------|---------------|--------------|
-| `separation_end` | **16.2%** | **23%** |
-| `speed_avg` | 11.8% | 17% |
-| `delta_to_last_defensive_line` | 10.3% | 15% |
-| `entry_zone_num` | 8.5% | 12% |
-| `n_passing_options_ahead` | 1.2% | 2% |
-
-### Defender Feature Importances (AUC 0.845)
-
-| Feature | ML Importance | Final Weight |
-|---------|---------------|--------------|
-| `x_start` (position) | 52.9% | (location) |
-| `speed_avg` | 17.4% | (engagement speed) |
-| `interplayer_distance_start` | 11.4% | **17%** |
-| `engagement_type_num` | 2.7% | 4% |
-| `goal_side_start` | 1.9% | 3% |
-
-### Goalkeeper Feature Importances (AUC 0.993)
-
-| Feature | ML Importance | Notes |
-|---------|---------------|-------|
-| `pass_distance` | **98.6%** | Shorter = more success |
-| Other features | <2% | Style differentiators |
-
-The goalkeeper model achieves near-perfect AUC because pass distance strongly predicts success. For archetype comparison, we balance this with style differentiators (long/short pass preference).
+| Method | Used For |
+|--------|----------|
+| Correlation with `danger_rate` | Forward feature weights |
+| Correlation with `stop_possession` | Defender feature weights |
+| Correlation with `pass_success` | Goalkeeper feature weights |
+| Domain knowledge | Feature directions (+1/-1) |
 
 ### Key Insight: Why Key Passes Don't Predict Danger
 
@@ -387,7 +421,7 @@ StatsBomb **key passes** (event-level: pass leads to shot) ≠ SkillCorner **pas
 - **StatsBomb**: Measures EXECUTION - did this pass create a chance?
 - **SkillCorner**: Measures POTENTIAL - how many teammates ahead?
 
-Alvarez's key pass ability is about **decision-making and execution**, which tracking data can't directly capture. I compensate by weighting `danger_rate` higher (18%) - entries leading to shots is the closest proxy.
+Alvarez's key pass ability is about **decision-making and execution**, which tracking data can't directly capture. The `danger_rate` feature (entries leading to shots) is the closest proxy.
 
 ---
 
@@ -395,16 +429,16 @@ Alvarez's key pass ability is about **decision-making and execution**, which tra
 
 | Step | Data Source | Method |
 |------|-------------|--------|
-| 1. Define archetype | StatsBomb (WC/Copa) | Extract Alvarez event metrics |
-| 2. Map to tracking | Conceptual | StatsBomb events → SkillCorner tracking |
-| 3. Calibrate weights | ML (GradientBoosting) | Feature importance on A-League data |
+| 1. Define archetype | StatsBomb (WC 2022) | Extract player event metrics |
+| 2. Map to tracking | Conceptual | StatsBomb events → SkillCorner features |
+| 3. Choose weights | Correlation analysis | Feature importance from A-League data |
 | 4. Compute similarity | Combined | Weighted cosine similarity |
 
-This hybrid approach combines:
+This approach combines:
 
-- **Domain knowledge** (Alvarez archetype from StatsBomb)
-- **ML validation** (GradientBoosting feature importance)
-- **Correlation analysis** (A-League data patterns)
+- **Domain knowledge** (player archetypes from StatsBomb World Cup 2022)
+- **Correlation analysis** (A-League data patterns inform weight choices)
+- **Simple similarity** (weighted cosine similarity, appropriate for small dataset)
 
 ---
 
@@ -441,19 +475,23 @@ I analysed World Cup 2022 data to find players with:
 
 #### Defenders (3 players)
 
-| Player | Country | Passes | Pass% | Clearances | Interceptions | Style |
-|--------|---------|--------|-------|------------|---------------|-------|
-| **Gvardiol** | CRO | 510 | 91% | 43 | 14 | Ball-playing CB, progressive carrier |
-| **Romero** | ARG | 372 | 89% | 26 | 9 | Aggressive CB, strong tackler |
-| **Hakimi** | MAR | 285 | 87% | 12 | 7 | Attacking wing-back, pace and power |
+Computed from StatsBomb World Cup 2022 events:
+
+| Player | Country | Matches | Tackles | Duels | Pressures | Style |
+|--------|---------|---------|---------|-------|-----------|-------|
+| **Gvardiol** | CRO | 7 | 15 (67%) | 23 (44%) | 77 (57/90) | Ball-playing CB |
+| **Romero** | ARG | 7 | 12 (58%) | 28 (50%) | 65 (48/90) | Aggressive CB |
+| **Hakimi** | MAR | 7 | 8 (50%) | 19 (42%) | 52 (39/90) | Attacking wing-back |
 
 #### Goalkeepers (3 players)
 
-| Player | Country | Matches | Saves | Style |
-|--------|---------|---------|-------|-------|
-| **Lloris** | FRA | 6 | 94 | Experienced captain, commanding presence |
-| **Livakovic** | CRO | 7 | 103 | Penalty hero, high volume saves |
-| **Bounou** | MAR | 7 | 89 | Long distribution specialist, penalty hero |
+Computed from StatsBomb World Cup 2022 events:
+
+| Player | Country | Matches | Passes | Pass Success | Avg Distance | Long % |
+|--------|---------|---------|--------|--------------|--------------|--------|
+| **Lloris** | FRA | 6 | 185 | 78% | 28m | 35% |
+| **Livakovic** | CRO | 7 | 195 | 72% | 35m | 45% |
+| **Bounou** | MAR | 6 | 210 | 74% | 39m | 50% |
 
 ### Why Not Messi/Mbappe?
 
