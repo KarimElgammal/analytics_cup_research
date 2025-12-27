@@ -2472,7 +2472,7 @@
 <p>This document explains how I derive player archetypes from StatsBomb event data and map them to SkillCorner tracking metrics for player similarity analysis.</p>
 <hr />
 <h2 id="programmatic-archetype-generation">Programmatic Archetype Generation<a class="headerlink" href="#programmatic-archetype-generation" title="Permanent link">&para;</a></h2>
-<p>Archetypes are computed programmatically from real StatsBomb event data.</p>
+<p>Archetypes are computed programmatically from StatsBomb event data.</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.core.archetype</span><span class="w"> </span><span class="kn">import</span> <span class="n">Archetype</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Load archetype from StatsBomb data</span>
@@ -2484,14 +2484,16 @@
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># [&#39;alvarez&#39;, &#39;giroud&#39;, &#39;kane&#39;, &#39;lewandowski&#39;, &#39;rashford&#39;, &#39;en_nesyri&#39;,</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;romero&#39;, &#39;hakimi&#39;, &#39;lloris&#39;, &#39;livakovic&#39;, &#39;bounou&#39;]</span>
 </span></code></pre></div>
-<p>The <code>src/statsbomb/</code> package handles:
-- <strong>loader.py</strong>: Fetches events from StatsBomb free data API
-- <strong>registry.py</strong>: Maps player keys to StatsBomb names and competition IDs
-- <strong>stats.py</strong>: Calculates shooting, passing, dribbling statistics
-- <strong>mapper.py</strong>: Converts StatsBomb metrics to SkillCorner target profiles</p>
+<p>The <code>src/statsbomb/</code> package handles:</p>
+<ul>
+<li><strong>loader.py</strong>: Fetches events from StatsBomb free data API</li>
+<li><strong>registry.py</strong>: Maps player keys to StatsBomb names and competition IDs</li>
+<li><strong>stats.py</strong>: Calculates shooting, passing, dribbling statistics</li>
+<li><strong>mapper.py</strong>: Converts StatsBomb metrics to SkillCorner target profiles</li>
+</ul>
 <hr />
 <h2 id="alvarez-target-profile-computed-from-statsbomb">Alvarez Target Profile (Computed from StatsBomb)<a class="headerlink" href="#alvarez-target-profile-computed-from-statsbomb" title="Permanent link">&para;</a></h2>
-<p>The archetype is <strong>computed from real data</strong>. Example output from World Cup 2022:</p>
+<p>The archetype is <strong>computed from StatsBomb data</strong>. Example output from World Cup 2022:</p>
 <table>
 <thead>
 <tr>
