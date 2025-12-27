@@ -165,4 +165,10 @@ def call_local_model(prompt: str) -> str:
 
 ---
 
+## URL to Web App
+
+**Live Demo:** https://huggingface.co/spaces/KarimElgammal/analytics-cup-research
+
+---
+
 SkillCorner X PySport Analytics Cup 2026 - Research Track Submission
