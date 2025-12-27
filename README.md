@@ -12,13 +12,13 @@ A player similarity study using broadcast tracking data to identify A-League pla
 
 ## Abstract
 
-**Introduction:** Can SkillCorner tracking data identify A-League players matching world-class archetypes? This research explores player similarity analysis using broadcast tracking data from 10 A-League matches, comparing players against 12 archetypes derived from StatsBomb World Cup 2022 data.
+This research purpose is to assess if SkillCorner tracking data can identify A-League players matching world-class archetypes. Thus, this research explores player similarity analysis using broadcast tracking data from 10 A-League matches, comparing players against 12 archetypes derived from StatsBomb World Cup 2022 data.
 
-**Methods:** The system supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Romero, Hakimi), and goalkeepers (Lloris, Livakovic, Bounou). Each position uses different event data—forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events. GradientBoosting classifiers calibrated the similarity weights, balancing ML-derived feature importance with archetype-specific characteristics.
+The workflow supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Romero, Hakimi), and goalkeepers (Lloris, Livakovic, Bounou). Each position uses different event data—forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events. GradientBoosting classifiers calibrated the similarity weights, balancing ML-derived feature importance with archetype-specific characteristics.
 
-**Results:** The models achieved strong predictive performance: Forwards AUC 0.656, Defenders AUC 0.845, and Goalkeepers AUC 0.993. Top candidates include Z. Clough (Adelaide) matching Alvarez's movement-focused style with 87.9% similarity, L. Rose matching Gvardiol's ball-playing CB profile, and M. Sutton (Western United) matching Lloris's sweeper-keeper distribution.
+The models achieved strong predictive performance: Forwards AUC 0.656, Defenders AUC 0.845, and Goalkeepers AUC 0.993. Top candidates include Z. Clough (Adelaide) matching Alvarez's movement-focused style with 87.9% similarity, L. Rose matching Gvardiol's ball-playing CB profile, and M. Sutton (Western United) matching Lloris's sweeper-keeper distribution.
 
-**Conclusion:** SkillCorner tracking data can effectively identify players matching specific archetypes across positions. The approach combines domain knowledge from StatsBomb event data with ML-calibrated weights from SkillCorner tracking data, demonstrating practical applications for data-driven scouting.
+SkillCorner tracking data can effectively identify players matching specific archetypes across positions. The approach combines domain knowledge from StatsBomb event data with ML-calibrated weights from SkillCorner tracking data, demonstrating practical applications for data-driven scouting.
 
 ---
 
@@ -126,9 +126,24 @@ echo "your_github_token" > github_token.txt
 # Option 2: HuggingFace
 echo "your_hf_token" > hf_token.txt
 ```
-Ofcourse you can edit the code to refer to your own local models.
 
-**Available Models:**
+### Using Local Models (Ollama)
+
+Edit `src/utils/ai_insights.py` to add a local backend:
+
+```python
+# Add to generate_similarity_insight():
+import requests
+
+def call_local_model(prompt: str) -> str:
+    response = requests.post(
+        "http://localhost:11434/api/generate",
+        json={"model": "llama3.2", "prompt": prompt, "stream": False}
+    )
+    return response.json()["response"]
+```
+
+**Available Cloud Models:**
 | Backend | Models |
 |---------|--------|
 | GitHub | Phi-4, GPT-4o Mini |
