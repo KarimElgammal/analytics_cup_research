@@ -50,6 +50,7 @@ st.set_page_config(
 # Sidebar links
 st.sidebar.markdown("### Links")
 st.sidebar.markdown("[Documentation](https://karimelgammal.github.io/analytics_cup_research/) | [GitHub](https://github.com/KarimElgammal/analytics_cup_research)")
+st.sidebar.markdown("[Glossary](https://karimelgammal.github.io/analytics_cup_research/glossary/) - Metric definitions")
 st.sidebar.markdown("---")
 
 st.title("\u26BD Finding Alvarez (and Others) in the A-League")

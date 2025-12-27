@@ -9,11 +9,11 @@ A player similarity study for identifying A-League players who match world-class
 
 ## Features
 
-- **12 Pre-built Archetypes**: Computed from real StatsBomb World Cup 2022 data
+- **12 Pre-built Archetypes**: Computed from StatsBomb World Cup 2022 data
 - **ML-Calibrated Weights**: GradientBoosting models for each position type
 - **Profile Building**: Automatically extract player profiles from SkillCorner tracking data
 - **Similarity Scoring**: Rank players by weighted cosine similarity
-- **AI Scouting Insights**: Position-aware LLM recommendations via GitHub Models API
+- **AI Scouting Insights**: Statistics-aware LLM analysis via GitHub Models or HuggingFace
 - **Interactive App**: Streamlit-based comparison tool with radar charts and AI analysis
 
 ## Available Archetypes

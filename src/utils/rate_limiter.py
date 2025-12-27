@@ -7,7 +7,7 @@ from datetime import date
 RATE_LIMIT_FILE = Path(__file__).parent.parent.parent / ".rate_limits.json"
 
 # Configurable limits
-MAX_CALLS_PER_SESSION = 5      # per visitor session
+MAX_CALLS_PER_SESSION = 12     # per visitor session (one per archetype)
 MAX_CALLS_PER_DAY = 100        # across all visitors (total)
 MAX_MONTHLY_COST_PER_BACKEND = 2.00  # $2 per backend (github, huggingface)
 
