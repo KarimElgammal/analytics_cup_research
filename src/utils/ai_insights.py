@@ -142,7 +142,7 @@ def get_available_backend() -> str | None:
     return None
 
 
-def _call_github_model(prompt: str, model_key: str, max_tokens: int = 300) -> str:
+def _call_github_model(prompt: str, model_key: str, max_tokens: int = 500) -> str:
     """Call GitHub Models API."""
     token = get_github_token()
     if not token:
@@ -214,7 +214,7 @@ def _call_github_model(prompt: str, model_key: str, max_tokens: int = 300) -> st
         return f"AI unavailable: {str(e)}"
 
 
-def _call_hf_model(prompt: str, model_id: str, max_tokens: int = 300) -> str:
+def _call_hf_model(prompt: str, model_id: str, max_tokens: int = 500) -> str:
     """Call HuggingFace Inference API."""
     token = get_hf_token()
     if not token:
@@ -266,7 +266,7 @@ def _call_hf_model(prompt: str, model_id: str, max_tokens: int = 300) -> str:
         return f"AI unavailable: {str(e)}"
 
 
-def _call_model(prompt: str, model_key: str | None = None, max_tokens: int = 300) -> str:
+def _call_model(prompt: str, model_key: str | None = None, max_tokens: int = 500) -> str:
     """Route to appropriate backend based on model."""
     if model_key is None:
         model_key = get_default_model()
@@ -470,7 +470,7 @@ PLAYER PROFILE:
 Write 2 paragraphs: strengths that match {archetype_name}, and areas of difference.
 Be specific and practical. Australian English."""
 
-    return _call_model(prompt, model, max_tokens=300)
+    return _call_model(prompt, model, max_tokens=500)
 
 
 def has_valid_token() -> bool:
