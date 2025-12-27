@@ -12,13 +12,13 @@ A player similarity study using broadcast tracking data to identify A-League pla
 
 ## Abstract
 
-This research demonstrates how SkillCorner tracking data can identify A-League players matching specific player archetypes. Using data from 10 A-League matches, I built position-specific profiles and computed similarity scores against 12 archetypes derived from StatsBomb World Cup 2022 data.
+**Introduction:** Can SkillCorner tracking data identify A-League players matching world-class archetypes? This research explores player similarity analysis using broadcast tracking data from 10 A-League matches, comparing players against 12 archetypes derived from StatsBomb World Cup 2022 data.
 
-The system supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Romero, Hakimi), and goalkeepers (Lloris, Livakovic, Bounou). Each position uses different event data. For example, forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events.
+**Methods:** The system supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Romero, Hakimi), and goalkeepers (Lloris, Livakovic, Bounou). Each position uses different event data—forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events. GradientBoosting classifiers calibrated the similarity weights, balancing ML-derived feature importance with archetype-specific characteristics.
 
-GradientBoosting classifiers calibrated the similarity weights, achieving strong predictive performance: Forwards AUC 0.656, Defenders AUC 0.845, and Goalkeepers AUC 0.993. The weights balance ML-derived feature importance with archetype-specific characteristics.
+**Results:** The models achieved strong predictive performance: Forwards AUC 0.656, Defenders AUC 0.845, and Goalkeepers AUC 0.993. Top candidates include Z. Clough (Adelaide) matching Alvarez's movement-focused style with 87.9% similarity, L. Rose matching Gvardiol's ball-playing CB profile, and M. Sutton (Western United) matching Lloris's sweeper-keeper distribution.
 
-Top candidates include Z. Clough (Adelaide) matching Alvarez's movement-focused style, L. Rose matching Gvardiol's ball-playing CB profile, and M. Sutton (Western United) matching Lloris's sweeper-keeper distribution.
+**Conclusion:** SkillCorner tracking data can effectively identify players matching specific archetypes across positions. The approach combines domain knowledge from StatsBomb event data with ML-calibrated weights from SkillCorner tracking data, demonstrating practical applications for data-driven scouting.
 
 ---
 
@@ -113,30 +113,20 @@ For detailed technical documentation, see [docs/methodology.md](docs/methodology
 
 ---
 
-## AI Insights (Optional)
+## AI Insights (if you need your own inferencing)
 
-The app includes AI-powered scouting insights. To enable:
+The app includes AI-powered scouting insights. To enable at your own cost:
 
 ### Local Development
 
 ```bash
-# Option 1: GitHub Models (recommended)
+# Option 1: GitHub Models
 echo "your_github_token" > github_token.txt
 
 # Option 2: HuggingFace
 echo "your_hf_token" > hf_token.txt
 ```
-
-### HuggingFace Spaces Deployment
-
-1. Create a new Space at [huggingface.co/new-space](https://huggingface.co/new-space)
-2. Select Streamlit SDK
-3. Push this repo to the Space
-4. Add secrets in Space Settings:
-   - `GITHUB_TOKEN` - GitHub token (recommended, better models)
-   - Or `HF_TOKEN` - HuggingFace token
-
-Both work on HF Spaces via environment variables. Token files are gitignored - users never see your tokens.
+Ofcourse you can edit the code to refer to your own local models.
 
 **Available Models:**
 | Backend | Models |
