@@ -146,8 +146,10 @@ def call_local_model(prompt: str) -> str:
 **Available Cloud Models:**
 | Backend | Models |
 |---------|--------|
-| GitHub | Grok 3 Mini, Phi-4, GPT-4o Mini |
+| GitHub | Grok 3 Mini (expensive, reasoning model), Phi-4, GPT-4o Mini |
 | HuggingFace | Llama 3.1 8B, Llama 3.2 3B, Qwen 2.5 7B, SmolLM3 3B, Gemma 2 2B |
+
+**Note:** Rate limits apply on the hosted demo. Running locally has no limits.
 
 ---
 

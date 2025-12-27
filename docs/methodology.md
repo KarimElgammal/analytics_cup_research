@@ -653,7 +653,9 @@ print(arch.description)  # Should show computed stats
 
 ### Overview
 
-The tool includes optional AI-generated scouting recommendations using GitHub Models (Phi-4, GPT-4o-mini) or HuggingFace Inference API (Llama 3.1/3.2, Qwen 2.5, SmolLM3, Gemma 2). These insights contextualise the similarity rankings with human-readable analysis.
+The tool includes optional AI-generated scouting recommendations using GitHub Models (Grok 3 Mini, Phi-4, GPT-4o Mini) or HuggingFace Inference API (Llama 3.1/3.2, Qwen 2.5, SmolLM3, Gemma 2). These insights contextualise the similarity rankings with human-readable analysis.
+
+**Note:** Grok 3 Mini is a reasoning model that uses more tokens (and thus more cost) than standard models. Running locally has no rate limits.
 
 ### How It Works
 
