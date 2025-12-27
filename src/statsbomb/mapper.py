@@ -330,12 +330,12 @@ def map_defender_to_skillcorner(stats) -> dict[str, float]:
         "beaten_by_movement_rate": max(10.0, 100 - _value_to_percentile(
             stats.aerial_success_rate, DEFENDER_DISTRIBUTIONS["aerial_success_rate"]
         )),
-        # Engagement distance - guess based on pressing activity
-        "avg_engagement_distance": 50 - (stats.pressures_per_90 / 30 * 20),  # More pressing = closer engagement
+        # Engagement distance - guess based on pressing activity (clamped to 5-95)
+        "avg_engagement_distance": max(5.0, min(95.0, 50 - (stats.pressures_per_90 / 30 * 20))),
         # Force backward from tackle success
-        "force_backward_rate": _value_to_percentile(
+        "force_backward_rate": min(95.0, _value_to_percentile(
             stats.tackle_success_rate, DEFENDER_DISTRIBUTIONS["tackle_success_rate"]
-        ) * 0.8,
+        ) * 0.8),
     }
 
 

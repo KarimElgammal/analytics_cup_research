@@ -46,6 +46,7 @@ class SimilarityEngine:
         for feature in self._get_available_features():
             if feature in self.archetype.target_profile and self.profiles is not None:
                 pct = self.archetype.target_profile[feature] / 100.0
+                pct = max(0.01, min(0.99, pct))  # Clamp to valid quantile range
                 actual_target = self.profiles[feature].quantile(pct)
                 target_std[feature] = self._standardize_value(feature, actual_target)
             else:
