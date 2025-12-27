@@ -468,7 +468,7 @@ PLAYER PROFILE:
 {chr(10).join(metrics_lines)}
 
 Write 2 paragraphs: strengths that match {archetype_name}, and areas of difference.
-Be specific and practical. Australian English."""
+Be specific and practical. Australian English. Feel free to be creative and share your honest opinions about the player's potential."""
 
     return _call_model(prompt, model, max_tokens=500)
 
