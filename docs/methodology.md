@@ -653,7 +653,7 @@ print(arch.description)  # Should show computed stats
 
 ### Overview
 
-The tool includes optional AI-generated scouting recommendations using GitHub Models API (Phi-4 or GPT-4o-mini). These insights contextualise the similarity rankings with human-readable analysis.
+The tool includes optional AI-generated scouting recommendations using GitHub Models (Phi-4, GPT-4o-mini) or HuggingFace Inference API (Llama 3.1/3.2, Qwen 2.5, SmolLM3, Gemma 2). These insights contextualise the similarity rankings with human-readable analysis.
 
 ### How It Works
 
