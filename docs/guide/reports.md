@@ -15,7 +15,7 @@ Reports are position-aware and enriched with ML model confidence scores and data
 
 ## Setup
 
-### Option 1: GitHub Token (Recommended)
+### Option 1: GitHub Token
 
 1. Go to [github.com/settings/tokens](https://github.com/settings/tokens)
 2. Generate a new token with default permissions
@@ -37,9 +37,9 @@ export HF_TOKEN=your_token_here
 
 ### HuggingFace Spaces Deployment
 
-Both backends work on HF Spaces - add secrets in Space Settings:
+Both backends work on HF Spaces by adding secrets in Space Settings:
 
-- `GITHUB_TOKEN` - GitHub token (recommended)
+- `GITHUB_TOKEN` - GitHub token
 - `HF_TOKEN` - HuggingFace token
 
 Token files are gitignored, so users never see your credentials.
