@@ -14,7 +14,7 @@ A player similarity study using broadcast tracking data to identify A-League pla
 
 This research demonstrates how SkillCorner tracking data can identify A-League players matching specific player archetypes. Using data from 10 A-League matches, I built position-specific profiles and computed similarity scores against 12 archetypes derived from StatsBomb World Cup 2022 data.
 
-The system supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Romero, Hakimi), and goalkeepers (Lloris, Livakovic, Bounou). Each position uses different event data—forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events.
+The system supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Romero, Hakimi), and goalkeepers (Lloris, Livakovic, Bounou). Each position uses different event data. For example, forwards use final third entries, defenders use on-ball engagements, and goalkeepers use distribution events.
 
 GradientBoosting classifiers calibrated the similarity weights, achieving strong predictive performance: Forwards AUC 0.656, Defenders AUC 0.845, and Goalkeepers AUC 0.993. The weights balance ML-derived feature importance with archetype-specific characteristics.
 
@@ -99,11 +99,13 @@ analytics_cup_research/
 ├── run.sh                        # Self-contained app launcher
 ├── requirements.txt              # Dependencies
 ├── docs/                         # MkDocs documentation
+├── scripts/                      # Deployment scripts
 └── src/
     ├── core/                     # Archetype, Similarity engine
     ├── data/                     # Data loading
     ├── analysis/                 # Entry, defender, goalkeeper profiles
     ├── statsbomb/                # StatsBomb archetype factory
+    ├── utils/                    # AI insights, rate limiter
     └── visualization/            # Plotting functions
 ```
 
