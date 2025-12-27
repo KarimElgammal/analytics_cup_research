@@ -165,12 +165,16 @@ def _call_github_model(prompt: str, model_key: str, max_tokens: int = 300) -> st
                 SystemMessage(SYSTEM_PROMPT),
                 UserMessage(prompt),
             ],
-            temperature=0.7,
+            temperature=1.0,
+            top_p=1.0,
             max_tokens=max_tokens,
             model=model_id,
         )
 
-        return response.choices[0].message.content or "Empty response"
+        content = response.choices[0].message.content
+        if not content:
+            return f"Empty response from {model_id}"
+        return content
 
     except ImportError:
         import requests
@@ -189,11 +193,16 @@ def _call_github_model(prompt: str, model_key: str, max_tokens: int = 300) -> st
                         {"role": "user", "content": prompt},
                     ],
                     "max_tokens": max_tokens,
+                    "temperature": 1.0,
+                    "top_p": 1.0,
                 },
                 timeout=30,
             )
             response.raise_for_status()
-            return response.json()["choices"][0]["message"]["content"]
+            content = response.json()["choices"][0]["message"]["content"]
+            if not content:
+                return f"Empty response from {model_id}"
+            return content
         except Exception as e:
             return f"AI unavailable: {str(e)}"
 
