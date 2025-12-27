@@ -184,6 +184,7 @@ def call_local_model(prompt: str) -> str:
   - AI-powered scouting insights via GitHub Models / HuggingFace APIs
 
 ## Research Focus:
+
 Demonstrates that SkillCorner broadcast tracking data can identify A-League players matching world-class archetypes derived from StatsBomb event data, enabling data-driven scouting across positions.
 ---
 
