@@ -61,9 +61,11 @@ class Archetype:
             ValueError: If no events found for the player
 
         Example:
-            >>> archetype = Archetype.from_statsbomb("alvarez")
-            >>> print(archetype.description)
-            # Shows actual World Cup 2022 stats
+            ```python
+            archetype = Archetype.from_statsbomb("alvarez")
+            print(archetype.description)
+            ```
+            Shows actual World Cup 2022 stats
         """
         from src.core.archetype_factory import ArchetypeFactory
         factory = ArchetypeFactory(verbose=verbose)
@@ -77,8 +79,10 @@ class Archetype:
             List of player keys that can be used with from_statsbomb()
 
         Example:
-            >>> Archetype.list_available()
-            ['alvarez', 'messi', 'mbappe']
+            ```python
+            Archetype.list_available()
+            # ['alvarez', 'giroud', 'kane', ...]
+            ```
         """
         from src.core.archetype_factory import ArchetypeFactory
         return ArchetypeFactory().list_available()
@@ -125,7 +129,9 @@ class Archetype:
             description: Human-readable description
 
         Example:
-            >>> pressing = Archetype.custom("pressing_forward", "High-energy forward")
-            >>> pressing.set_feature("avg_entry_speed", target=85, weight=0.25, direction=1)
+            ```python
+            pressing = Archetype.custom("pressing_forward", "High-energy forward")
+            pressing.set_feature("avg_entry_speed", target=85, weight=0.25, direction=1)
+            ```
         """
         return cls(name=name, description=description)
