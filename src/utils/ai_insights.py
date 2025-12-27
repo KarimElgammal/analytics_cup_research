@@ -168,6 +168,13 @@ def get_available_backend() -> str | None:
     return None
 
 
+def get_model_backend(model_key: str) -> str:
+    """Return which backend a specific model uses."""
+    if model_key in HF_MODELS:
+        return "huggingface"
+    return "github"
+
+
 def _call_github_model(prompt: str, model_key: str, max_tokens: int = 500) -> str:
     """Call GitHub Models API."""
     token = get_github_token()
