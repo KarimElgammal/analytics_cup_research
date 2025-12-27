@@ -10,6 +10,18 @@ Run: streamlit run archetype_compare.py
 import warnings
 import streamlit as st
 import polars as pl
+from packaging import version
+
+# Streamlit version compatibility for width parameter
+# use_container_width deprecated in 1.41+, removed after 2025-12-31
+_ST_VERSION = version.parse(st.__version__)
+_USE_NEW_WIDTH = _ST_VERSION >= version.parse("1.41.0")
+
+def get_dataframe_width_kwargs():
+    """Return appropriate width kwargs for st.dataframe based on Streamlit version."""
+    if _USE_NEW_WIDTH:
+        return {"width": "stretch"}
+    return {"use_container_width": True}
 
 from src.data.loader import load_all_events, add_team_names
 from src.data.player_ages import add_ages_to_profiles
@@ -470,7 +482,7 @@ with tab1:
             cmap="Greens",
         ),
         hide_index=True,
-        use_container_width=True,
+        **get_dataframe_width_kwargs(),
     )
 
     # Bar chart visualization
