@@ -30,7 +30,6 @@ class ForwardMapper(BaseMapper):
         - conversion_rate → danger_rate (clinical finishing = dangerous entries)
         - box_touches_per_90 → avg_separation (finds space in box = good separation)
         - pass_accuracy → avg_passing_options (link-up play)
-        - dribble_success → carry_pct (dribbling ability)
         """
         return {
             # Mapped from StatsBomb data
@@ -42,13 +41,6 @@ class ForwardMapper(BaseMapper):
             ),
             "avg_passing_options": self.value_to_percentile(
                 stats.pass_accuracy, self.DISTRIBUTIONS["pass_accuracy"]
-            ),
-            # Floor at 30 - limited data shouldn't produce 0 targets
-            "carry_pct": max(
-                30.0,
-                self.value_to_percentile(
-                    stats.dribble_success, self.DISTRIBUTIONS["dribble_success"]
-                ),
             ),
             # Fixed values for tracking-specific metrics (no StatsBomb equivalent)
             "central_pct": 70.0,
@@ -65,10 +57,10 @@ class ForwardMapper(BaseMapper):
         """Compute feature weights from player statistics.
 
         Weights are adjusted based on the player's actual play style:
-        - High dribble success → higher carry_pct weight
         - High conversion rate → higher danger_rate weight
         - High box touches → higher avg_separation weight
         - High key passes → higher avg_passing_options weight
+        - High dribble success → higher avg_entry_speed weight
         """
         # Get percentile scores for adjustment
         dribble_score = (
@@ -99,12 +91,10 @@ class ForwardMapper(BaseMapper):
         # Start with base weights
         weights = FORWARD_WEIGHTS.copy()
 
-        # Dribblers: boost carry_pct and speed
+        # Dribblers: boost entry speed
         if dribble_score > 0.5:
             boost = (dribble_score - 0.5) * 0.4
-            weights["carry_pct"] += boost
             weights["avg_entry_speed"] += boost * 0.5
-            weights["avg_separation"] -= boost * 0.5
 
         # Clinical finishers: boost danger_rate
         if conversion_score > 0.6:

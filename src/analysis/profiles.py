@@ -131,7 +131,6 @@ def prepare_features_for_similarity(profiles: pl.DataFrame) -> pl.DataFrame:
         "avg_entry_speed",
         "avg_passing_options",
         "avg_teammates_ahead",
-        "carry_pct",
         "avg_defensive_line_dist",
         "quick_break_pct",
         "avg_distance",

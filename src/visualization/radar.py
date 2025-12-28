@@ -19,8 +19,8 @@ RADAR_FEATURES = {
     "danger_rate": "Danger Rate",
     "avg_entry_speed": "Speed*",
     "avg_passing_options": "Passing Options",
-    "carry_pct": "Carry %",
     "avg_defensive_line_dist": "Depth*",
+    "quick_break_pct": "Quick Break %",
     # Defender features
     "stop_danger_rate": "Stop Danger %",
     "reduce_danger_rate": "Reduce Danger %",

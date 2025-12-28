@@ -99,7 +99,6 @@ class ArchetypeConfig:
 FORWARD_FEATURE_NAMES: dict[str, str] = {
     "danger_rate": "Danger Rate",
     "avg_separation": "Separation",
-    "carry_pct": "Carry %",
     "central_pct": "Central %",
     "avg_entry_speed": "Speed",
     "avg_passing_options": "Passing Options",

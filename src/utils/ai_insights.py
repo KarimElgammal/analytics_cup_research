@@ -85,7 +85,8 @@ FORWARD_METRICS = (
     MetricInfo("central_pct", "Central %", "Percentage through central zone. Central = striker-like role.", "percentage"),
     MetricInfo("avg_separation", "Separation", "Distance from nearest defender (m). Higher = better movement.", "distance"),
     MetricInfo("avg_entry_speed", "Entry Speed", "Speed entering final third (m/s). Higher = direct runs.", "speed"),
-    MetricInfo("carry_pct", "Carry %", "Entries via dribbling. Low = off-ball movement style.", "percentage"),
+    MetricInfo("avg_defensive_line_dist", "Depth", "Distance from defensive line (m). Lower = closer to goal, poacher-style.", "distance"),
+    MetricInfo("quick_break_pct", "Quick Break %", "Entries during counter-attacks. High = transition threat, Low = build-up specialist.", "percentage"),
 )
 
 DEFENDER_METRICS = (

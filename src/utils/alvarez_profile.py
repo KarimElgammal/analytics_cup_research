@@ -28,9 +28,6 @@ PROFILE_FEATURES = [
     "central_pct",           # % of entries through central zone
     "half_space_pct",        # % of entries through half-spaces
 
-    # Entry method (%)
-    "carry_pct",             # % of entries via dribble/carry
-
     # Tactical context
     "avg_passing_options",   # Mean passing options ahead at entry end
     "avg_teammates_ahead",   # Mean teammates ahead at entry end
@@ -63,7 +60,6 @@ FEATURE_WEIGHTS = {
     # LOW/NO CORRELATION - reduced weights
     "half_space_pct": 0.02,           # r=-0.01 - no predictive value
     "avg_passing_options": 0.02,      # r=-0.05 - no predictive value
-    "carry_pct": 0.00,                # 98% mean - no variance to discriminate
     "avg_distance": 0.01,             # Workrate
     "goal_rate": 0.00,                # Too sparse
 }
@@ -77,7 +73,6 @@ FEATURE_DIRECTION = {
     "avg_defensive_line_dist": -1,    # Closer to goal = better (negative values)
     "central_pct": 1,
     "half_space_pct": 1,
-    "carry_pct": 1,
     "avg_passing_options": 1,
     "avg_teammates_ahead": 1,
     "danger_rate": 1,
@@ -105,11 +100,10 @@ SkillCorner target profile mapping:
 - avg_separation: 85/100 (finds space between lines)
 - central_pct: 75/100 (operates centrally, not wide)
 - avg_entry_speed: 70/100 (dynamic but not pace-reliant)
-- carry_pct: 40/100 (LOW - penalises dribblers)
 
 The key insight: Alvarez creates danger through intelligent positioning and timing
 rather than beating defenders with the ball. Similar players show high danger rates
-and separation values without relying on dribbling.
+and separation values with good movement off the ball.
 """
 
 
@@ -126,9 +120,6 @@ ALVAREZ_TARGET_PROFILE = {
     "avg_entry_speed": 70,     # Dynamic but not pace-reliant
     "half_space_pct": 60,      # Works half-spaces as well as central
     "avg_passing_options": 65, # Good link-up (StatsBomb: 2 key passes, 78.9% pass accuracy)
-
-    # LOW VALUE - explicitly NOT an Alvarez trait
-    "carry_pct": 40,           # NOT a dribbler (StatsBomb: 50% dribble success)
 }
 
 # Derivation methodology for Alvarez target values:
@@ -158,11 +149,6 @@ ALVAREZ_TARGET_PROFILE = {
 # 6. avg_passing_options (65/100):
 #    StatsBomb: 2 key passes, 78.9% pass accuracy. Good link-up player who creates
 #    for others as well as finishing.
-#
-# 7. carry_pct (40/100):
-#    CRITICAL: StatsBomb shows only 50% dribble success. Alvarez is NOT a dribbler.
-#    He creates through movement off the ball, not carrying through defenders.
-#    Low target value penalises players who rely on dribbling.
 
 
 def get_alvarez_target() -> dict:

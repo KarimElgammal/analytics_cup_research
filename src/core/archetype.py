@@ -103,17 +103,17 @@ class Archetype:
         )
         archetype.target_profile = {
             "avg_separation": 85, "danger_rate": 90, "central_pct": 75,
-            "avg_entry_speed": 70, "half_space_pct": 60, "avg_passing_options": 65, "carry_pct": 40,
+            "avg_entry_speed": 70, "half_space_pct": 60, "avg_passing_options": 65,
         }
         archetype.weights = {
             "avg_separation": 0.23, "avg_entry_speed": 0.17, "avg_defensive_line_dist": 0.15,
             "central_pct": 0.12, "danger_rate": 0.18, "quick_break_pct": 0.05,
             "avg_teammates_ahead": 0.05, "half_space_pct": 0.02, "avg_passing_options": 0.02,
-            "carry_pct": 0.00, "avg_distance": 0.01, "goal_rate": 0.00,
+            "avg_distance": 0.01, "goal_rate": 0.00,
         }
         archetype.directions = {
             "avg_entry_speed": 1, "avg_distance": 1, "total_entries": 0, "avg_separation": 1,
-            "avg_defensive_line_dist": -1, "central_pct": 1, "half_space_pct": 1, "carry_pct": 1,
+            "avg_defensive_line_dist": -1, "central_pct": 1, "half_space_pct": 1,
             "avg_passing_options": 1, "avg_teammates_ahead": 1, "danger_rate": 1, "goal_rate": 1, "quick_break_pct": 1,
         }
         return archetype

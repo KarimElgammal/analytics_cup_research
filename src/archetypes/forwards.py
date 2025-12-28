@@ -12,19 +12,17 @@ from src.archetypes.base import Position
 FORWARD_COMPUTED = frozenset({
     "danger_rate",
     "avg_separation",
-    "carry_pct",
     "avg_passing_options",
 })
 
 # Weights from one-time GradientBoosting feature importance analysis
 FORWARD_WEIGHTS: dict[str, float] = {
-    "avg_separation": 0.20,
-    "danger_rate": 0.18,
-    "avg_entry_speed": 0.15,
-    "avg_defensive_line_dist": 0.12,
-    "central_pct": 0.10,
-    "carry_pct": 0.08,
-    "avg_passing_options": 0.08,
+    "avg_separation": 0.22,
+    "danger_rate": 0.20,
+    "avg_entry_speed": 0.16,
+    "avg_defensive_line_dist": 0.13,
+    "central_pct": 0.11,
+    "avg_passing_options": 0.09,
     "quick_break_pct": 0.04,
     "avg_teammates_ahead": 0.03,
     "half_space_pct": 0.02,
@@ -33,7 +31,6 @@ FORWARD_WEIGHTS: dict[str, float] = {
 FORWARD_DIRECTIONS: dict[str, int] = {
     "danger_rate": 1,
     "avg_separation": 1,
-    "carry_pct": 1,
     "central_pct": 1,
     "avg_entry_speed": 1,
     "avg_passing_options": 1,

@@ -15,6 +15,7 @@ Key metrics and terms used in the player similarity analysis.
 | **avg_entry_speed** | Average speed (m/s) when crossing into the final third. Higher speeds indicate direct, penetrating runs. |
 | **avg_passing_options** | Average number of teammates available for a pass when entering. Higher values suggest good timing of runs. |
 | **avg_defensive_line_dist** | Average distance from the defensive line when entering. Indicates positioning depth. |
+| **quick_break_pct** | Percentage of entries during quick break (counter-attack) phases. High values indicate transition threat. |
 
 ---
 
