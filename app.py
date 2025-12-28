@@ -450,10 +450,8 @@ elif position == "Defenders":
         index=0,
     )
     selected_key = next(key for label, key in defender_options if label == selected_label)
-    # Try to load from StatsBomb, fall back to hardcoded
-    archetype = load_defender_archetype(selected_key)
-    if archetype is None:
-        archetype = DEFENDER_ARCHETYPES[selected_key]
+    # Use curated hardcoded archetypes (StatsBomb computed profiles don't differentiate well)
+    archetype = DEFENDER_ARCHETYPES[selected_key]
 
     display_cols = [
         "rank", "player_name", "age", "team_name", "similarity_score",
@@ -461,7 +459,7 @@ elif position == "Defenders":
     ]
     col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Engagements", "Stop Danger %", "Pressing %"]
     radar_features = ["stop_danger_rate", "reduce_danger_rate", "pressing_rate", "goal_side_rate", "avg_engagement_distance"]
-    caption = "Defender archetypes computed from StatsBomb World Cup 2022 event data."
+    caption = "Defender archetypes based on World Cup 2022 defensive styles."
 
 else:  # Goalkeepers
     profiles, n_events, n_matches = load_goalkeeper_data()
@@ -480,10 +478,8 @@ else:  # Goalkeepers
         index=0,
     )
     selected_key = next(key for label, key in gk_options if label == selected_label)
-    # Try to load from StatsBomb, fall back to hardcoded
-    archetype = load_goalkeeper_archetype(selected_key)
-    if archetype is None:
-        archetype = GOALKEEPER_ARCHETYPES[selected_key]
+    # Use curated hardcoded archetypes (differentiated distribution styles)
+    archetype = GOALKEEPER_ARCHETYPES[selected_key]
 
     display_cols = [
         "rank", "player_name", "age", "team_name", "similarity_score",
@@ -491,7 +487,7 @@ else:  # Goalkeepers
     ]
     col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Distributions", "Pass Success %", "Long Pass %"]
     radar_features = ["pass_success_rate", "avg_pass_distance", "long_pass_pct", "quick_distribution_pct"]
-    caption = "Goalkeeper archetypes computed from StatsBomb World Cup 2022 event data."
+    caption = "Goalkeeper archetypes based on World Cup 2022 distribution styles."
 
 top_n = st.sidebar.slider("Number of results", min_value=5, max_value=min(20, len(profiles)), value=min(10, len(profiles)))
 
