@@ -567,6 +567,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#sample-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample Sizes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-event-data-tracking-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping Event Data → Tracking Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#similarity-method" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1762,6 +1784,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#sample-sizes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample Sizes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-event-data-tracking-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping Event Data → Tracking Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#similarity-method" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2525,21 +2569,21 @@
 </tr>
 <tr>
 <td><strong>Defender archetypes</strong></td>
-<td>StatsBomb API</td>
-<td>Computed at runtime</td>
-<td>Stats from World Cup 2022 events</td>
+<td>StatsBomb open data</td>
+<td>Computed locally</td>
+<td>Gvardiol, Van Dijk, Hakimi from WC22/Euro24</td>
 </tr>
 <tr>
 <td><strong>Goalkeeper archetypes</strong></td>
-<td>StatsBomb API</td>
-<td>Computed at runtime</td>
-<td>Stats from World Cup 2022 events</td>
+<td>StatsBomb open data</td>
+<td>Computed locally</td>
+<td>Neuer, Lloris, Bounou from WC22/Euro24</td>
 </tr>
 <tr>
 <td><strong>A-League player profiles</strong></td>
-<td>SkillCorner GitHub</td>
+<td>SkillCorner Dynamic Events</td>
 <td>Computed at runtime</td>
-<td>Loaded from dynamic_events.csv</td>
+<td>From <code>dynamic_events.csv</code> (A-League 2024/25)</td>
 </tr>
 <tr>
 <td><strong>Feature weights</strong></td>
@@ -2556,37 +2600,126 @@
 </tbody>
 </table>
 <h3 id="archetype-computation-details">Archetype Computation Details<a class="headerlink" href="#archetype-computation-details" title="Permanent link">&para;</a></h3>
-<p>All 12 archetypes are now computed from StatsBomb World Cup 2022 data:</p>
 <table>
 <thead>
 <tr>
 <th>Position</th>
 <th>Players</th>
-<th>StatsBomb Stats Used</th>
-<th>Mapping to SkillCorner</th>
+<th>Source</th>
+<th>Data</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Forwards</strong></td>
 <td>Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri</td>
-<td>shots, goals, dribbles, passes, box touches</td>
-<td>danger_rate, avg_separation, carry_pct</td>
+<td>StatsBomb API</td>
+<td>World Cup 2022 events (shots, goals, dribbles)</td>
 </tr>
 <tr>
 <td><strong>Defenders</strong></td>
-<td>Gvardiol, Romero, Hakimi</td>
-<td>tackles, duels, aerials, pressures, interceptions</td>
-<td>stop_danger_rate, pressing_rate, goal_side_rate</td>
+<td>Gvardiol, Van Dijk, Hakimi</td>
+<td><a href="https://github.com/statsbomb/open-data">StatsBomb open data</a></td>
+<td>WC22 + Euro24 events (duels, pressures, blocks)</td>
 </tr>
 <tr>
 <td><strong>Goalkeepers</strong></td>
-<td>Lloris, Livakovic, Bounou</td>
-<td>saves, passes, pass distances, pass heights</td>
-<td>pass_success_rate, long_pass_pct, avg_pass_distance</td>
+<td>Neuer, Lloris, Bounou</td>
+<td><a href="https://github.com/statsbomb/open-data">StatsBomb open data</a></td>
+<td>WC22 + Euro24 passes</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Script</strong>: <code>scripts/compute_archetype_profiles.py</code> computes defender/goalkeeper metrics from StatsBomb open data.</p>
+<h3 id="sample-sizes">Sample Sizes<a class="headerlink" href="#sample-sizes" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Competition</th>
+<th>Matches</th>
+<th>Events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gvardiol</td>
+<td>WC22</td>
+<td>3</td>
+<td>48 defensive</td>
+</tr>
+<tr>
+<td>Van Dijk</td>
+<td>Euro24</td>
+<td>3</td>
+<td>42 defensive</td>
+</tr>
+<tr>
+<td>Hakimi</td>
+<td>WC22</td>
+<td>6</td>
+<td>148 defensive</td>
+</tr>
+<tr>
+<td>Neuer</td>
+<td>Euro24</td>
+<td>2</td>
+<td>59 passes</td>
+</tr>
+<tr>
+<td>Lloris</td>
+<td>WC22</td>
+<td>2</td>
+<td>69 passes</td>
+</tr>
+<tr>
+<td>Bounou</td>
+<td>WC22</td>
+<td>5</td>
+<td>83 passes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mapping-event-data-tracking-data">Mapping Event Data → Tracking Data<a class="headerlink" href="#mapping-event-data-tracking-data" title="Permanent link">&para;</a></h3>
+<p><strong>Event Data</strong> (StatsBomb - World Cup 2022, Euro 2024):
+- Discrete on-ball actions: duels, pressures, passes, shots
+- What happened and when</p>
+<p><strong>Tracking Data</strong> (SkillCorner - A-League 2024/25):
+- Positional data from optical tracking at 25Hz
+- Dynamic Events derived from tracking: entries, engagements, distributions</p>
+<p>The mapping assumes behavioural consistency across data types:</p>
+<table>
+<thead>
+<tr>
+<th>Event Data (StatsBomb)</th>
+<th>→</th>
+<th>Tracking Data (SkillCorner)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>High duel success rate</td>
+<td>→</td>
+<td>High <code>stop_danger_rate</code></td>
+</tr>
+<tr>
+<td>High pressure count</td>
+<td>→</td>
+<td>High <code>pressing_rate</code></td>
+</tr>
+<tr>
+<td>High clearance/block rate</td>
+<td>→</td>
+<td>High <code>goal_side_rate</code></td>
+</tr>
+<tr>
+<td>Long pass distance</td>
+<td>→</td>
+<td>High <code>avg_pass_distance</code></td>
+</tr>
+</tbody>
+</table>
+<p>This is an approximation. A player with 67% duel success in event data should match players in tracking data who also stop ~67% of dangerous situations.</p>
 <h3 id="similarity-method">Similarity Method<a class="headerlink" href="#similarity-method" title="Permanent link">&para;</a></h3>
 <p>The tool uses <strong>weighted cosine similarity</strong> on z-score normalised features:</p>
 <ol>
@@ -2647,101 +2780,103 @@
 </tbody>
 </table>
 <h3 id="defender-target-features">Defender Target Features<a class="headerlink" href="#defender-target-features" title="Permanent link">&para;</a></h3>
+<p>Computed using <code>scripts/compute_archetype_profiles.py</code> from StatsBomb open data events.</p>
 <table>
 <thead>
 <tr>
 <th>Feature</th>
+<th>Calculation</th>
 <th>Source</th>
-<th>Type</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>stop_danger_rate</code></td>
-<td>Duel success rate from StatsBomb</td>
-<td>Computed</td>
+<td><code>won_duels / total_duels * 100</code> where duel_outcome in ["Won", "Success In Play", "Success Out"]</td>
+<td>StatsBomb</td>
 </tr>
 <tr>
 <td><code>reduce_danger_rate</code></td>
-<td>Tackle success rate from StatsBomb</td>
-<td>Computed</td>
+<td><code>(interceptions + ball_recoveries) / (total_defensive + ball_recoveries) * 100</code></td>
+<td>StatsBomb</td>
 </tr>
 <tr>
 <td><code>pressing_rate</code></td>
-<td>Pressures per 90 from StatsBomb</td>
-<td>Computed</td>
+<td><code>pressures / total_defensive_events * 100</code></td>
+<td>StatsBomb</td>
 </tr>
 <tr>
 <td><code>goal_side_rate</code></td>
-<td>Aerial success rate from StatsBomb</td>
-<td>Computed</td>
-</tr>
-<tr>
-<td><code>beaten_by_possession_rate</code></td>
-<td>Inverse of duel success</td>
-<td>Computed</td>
+<td><code>(clearances + blocks) / total_defensive * 100 * 2.5</code> (scaled)</td>
+<td>StatsBomb</td>
 </tr>
 <tr>
 <td><code>beaten_by_movement_rate</code></td>
-<td>Inverse of aerial success</td>
-<td>Computed</td>
+<td><code>100 - stop_danger_rate</code></td>
+<td>StatsBomb</td>
 </tr>
 <tr>
 <td><code>avg_engagement_distance</code></td>
-<td>Derived from pressing activity</td>
-<td>Derived</td>
+<td><code>avg(location[0]) / 120 * 100</code> for Pressure/Duel/Interception events</td>
+<td>StatsBomb</td>
 </tr>
 <tr>
 <td><code>force_backward_rate</code></td>
-<td>Derived from tackle success</td>
-<td>Derived</td>
+<td>Based on tackle patterns</td>
+<td>Estimated</td>
+</tr>
+<tr>
+<td><code>beaten_by_possession_rate</code></td>
+<td>Based on duel loss patterns</td>
+<td>Estimated</td>
+</tr>
+<tr>
+<td><code>middle_third_pct</code></td>
+<td>Zone distribution</td>
+<td>Estimated</td>
 </tr>
 </tbody>
 </table>
 <h3 id="goalkeeper-target-features">Goalkeeper Target Features<a class="headerlink" href="#goalkeeper-target-features" title="Permanent link">&para;</a></h3>
+<p>Computed from StatsBomb Pass events for goalkeeper players.</p>
 <table>
 <thead>
 <tr>
 <th>Feature</th>
+<th>Calculation</th>
 <th>Source</th>
-<th>Type</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>pass_success_rate</code></td>
-<td>Pass accuracy from StatsBomb</td>
-<td>Computed</td>
+<td><code>successful_passes / total_passes * 100</code> (null outcome = success)</td>
+<td>StatsBomb</td>
 </tr>
 <tr>
 <td><code>avg_pass_distance</code></td>
-<td>Calculated from pass locations</td>
-<td>Computed</td>
+<td><code>avg(pass_length) / 60 * 100</code> (normalised to 0-100)</td>
+<td>StatsBomb</td>
 </tr>
 <tr>
 <td><code>long_pass_pct</code></td>
-<td>Passes &gt; 32m from StatsBomb</td>
-<td>Computed</td>
+<td><code>passes_over_35m / total_passes * 100</code></td>
+<td>StatsBomb</td>
 </tr>
 <tr>
 <td><code>short_pass_pct</code></td>
-<td>Passes &lt; 20m from StatsBomb</td>
-<td>Computed</td>
+<td>Inverse of long pass tendency</td>
+<td>Estimated</td>
 </tr>
 <tr>
 <td><code>high_pass_pct</code></td>
-<td>High/lofted passes from StatsBomb</td>
-<td>Computed</td>
+<td>Lofted/aerial passes</td>
+<td>Estimated</td>
 </tr>
 <tr>
 <td><code>quick_distribution_pct</code></td>
-<td>Derived from short pass tendency</td>
-<td>Derived</td>
-</tr>
-<tr>
-<td><code>to_attacking_third_pct</code></td>
-<td>Derived from long pass tendency</td>
-<td>Derived</td>
+<td>Speed of restarts</td>
+<td>Estimated</td>
 </tr>
 </tbody>
 </table>
@@ -2757,7 +2892,7 @@
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Available players (12 archetypes across 3 positions)</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">Archetype</span><span class="o">.</span><span class="n">list_available</span><span class="p">()</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># [&#39;alvarez&#39;, &#39;giroud&#39;, &#39;kane&#39;, &#39;lewandowski&#39;, &#39;rashford&#39;, &#39;en_nesyri&#39;,</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;romero&#39;, &#39;hakimi&#39;, &#39;lloris&#39;, &#39;livakovic&#39;, &#39;bounou&#39;]</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;vandijk&#39;, &#39;hakimi&#39;, &#39;neuer&#39;, &#39;lloris&#39;, &#39;bounou&#39;]</span>
 </span></code></pre></div>
 <p>The <code>src/statsbomb/</code> package handles:</p>
 <ul>
