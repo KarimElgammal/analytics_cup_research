@@ -31,7 +31,7 @@ This example shows results from analysing 10 A-League matches using 12 pre-built
 
 ![Radar Comparison](assets/radar_comparison.png)
 
-The radar chart compares the top 3 candidates against the Alvarez target profile (dashed orange line). The target emphasises high separation, danger rate, and central positioning while setting a low carry percentage, reflecting that Alvarez creates through movement rather than dribbling.
+The radar chart compares the top 3 candidates against the Alvarez target profile (dashed orange line). The target emphasises high separation, danger rate, central positioning, and quick break efficiency, reflecting that Alvarez creates through intelligent movement and positioning.
 
 ---
 
