@@ -12,7 +12,7 @@ from src.core import Archetype
 # List all available archetypes
 print(Archetype.list_available())
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
-#  'gvardiol', 'romero', 'hakimi', 'lloris', 'livakovic', 'bounou']
+#  'gvardiol', 'vandijk', 'hakimi', 'neuer', 'lloris', 'bounou']
 
 # Load a specific archetype
 archetype = Archetype.from_statsbomb("alvarez")
@@ -24,8 +24,8 @@ print(archetype.description)  # Shows actual World Cup 2022 stats
 | Position | Archetypes | A-League Events |
 |----------|------------|-----------------|
 | **Forwards** | alvarez, giroud, kane, lewandowski, rashford, en_nesyri | 245 entries |
-| **Defenders** | gvardiol, romero, hakimi | 8,911 engagements |
-| **Goalkeepers** | lloris, livakovic, bounou | 522 distributions |
+| **Defenders** | gvardiol, vandijk, hakimi | 8,911 engagements |
+| **Goalkeepers** | neuer, lloris, bounou | 522 distributions |
 
 ### Examples
 

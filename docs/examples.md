@@ -15,17 +15,17 @@ This example shows results from analysing 10 A-League matches using 12 pre-built
 
 | Rank | Player | Age | Team | Similarity | Danger Rate | Entries |
 |------|--------|-----|------|------------|-------------|---------|
-| 1 | T. Imai | 28 | Western United | 96.5% | 40.0% | 5 |
-| 2 | N. Atkinson | 26 | Melbourne City | 93.5% | 16.7% | 6 |
-| 3 | K. Bos | 23 | Melbourne Victory | 91.6% | 16.7% | 6 |
-| 4 | Z. Clough | 30 | Adelaide United | 91.3% | 50.0% | 4 |
-| 5 | C. Elliott | 24 | Auckland FC | 90.8% | 33.3% | 3 |
+| 1 | T. Imai | 28 | Western United | 95.7% | 40.0% | 5 |
+| 2 | T. Payne | 22 | Wellington Phoenix | 93.4% | 25.0% | 4 |
+| 3 | K. Bos | 23 | Melbourne Victory | 92.3% | 16.7% | 6 |
+| 4 | Z. Clough | 30 | Adelaide United | 90.0% | 50.0% | 4 |
+| 5 | N. Atkinson | 26 | Melbourne City | 88.4% | 16.7% | 6 |
 
 ### Similarity Rankings
 
 ![Similarity Rankings](assets/similarity_rankings.png)
 
-**T. Imai** from Western United emerges as the closest match with a 96.5% similarity score. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's playing style of creating through intelligent movement rather than dribbling.
+**T. Imai** from Western United emerges as the closest match with a 95.7% similarity score. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's playing style of creating through intelligent movement rather than dribbling.
 
 ### Profile Comparison
 
@@ -44,7 +44,7 @@ from src.core.similarity import SimilarityEngine
 # See all 12 available archetypes
 print(Archetype.list_available())
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
-#  'gvardiol', 'romero', 'hakimi', 'lloris', 'livakovic', 'bounou']
+#  'gvardiol', 'vandijk', 'hakimi', 'neuer', 'lloris', 'bounou']
 
 # Load any archetype from StatsBomb World Cup 2022 data
 archetype = Archetype.from_statsbomb("alvarez")
@@ -155,14 +155,18 @@ for name, archetype in archetypes.items():
 
 ## Code: AI Scouting Insights
 
-Generate position-aware AI recommendations:
+Generate position-aware AI recommendations with enhanced analysis:
 
 ```python
-from src.utils.ai_insights import generate_similarity_insight, has_valid_token
+from src.utils.ai_insights import (
+    generate_similarity_insight,
+    has_valid_token,
+    PlayerAnalyzer,
+)
 
 # check token exists
 if has_valid_token():
-    # forward analysis
+    # forward analysis with enhanced insights
     insight = generate_similarity_insight(
         forward_rankings,
         Archetype.from_statsbomb("alvarez"),
@@ -171,32 +175,47 @@ if has_valid_token():
     )
     print(insight)
 
-    # defender analysis
-    insight = generate_similarity_insight(
-        defender_rankings,
-        defender_archetype,
-        top_n=5,
-        position_type="defender",
-    )
-    print(insight)
+# Use PlayerAnalyzer directly for custom analysis
+analyzer = PlayerAnalyzer("forward")
+gaps = analyzer.compute_development_gaps(player_metrics, archetype_data)
+similar = analyzer.find_similar_players("T. Imai", profiles, metric_keys)
+confidence = analyzer.get_confidence_level(sample_size=7)
+```
+
+### Enhanced Player Summary Format
+
+The AI receives detailed context for each player:
+
+```
+- **T. Imai** (Western United): Age 28, Similarity 95.7%, 5 samples [Medium confidence]
+  Metrics: Danger Rate: 40.0% (P100), Central %: 20.0% (P25), Separation: 5.6m (P100)
+  Development areas: Danger Rate (increase by 55), Central % (increase by 50)
+  Similar profiles: T. Payne, K. Bos, C. Elliott
+  Age group: 25+ (15 players in group)
 ```
 
 ### Example AI Output (Forward)
 
-> **T. Imai** from Western United emerges as the closest match with 96.5% similarity. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement rather than dribbling.
+> **T. Imai** from Western United emerges as the closest match with 95.7% similarity [Medium confidence]. His exceptional separation (5.64m, P100) and 40% danger rate mirror Alvarez's key traits of creating through intelligent movement rather than dribbling.
 >
-> The key similarity lies in movement patterns. Imai consistently finds space away from defenders, a hallmark of the Alvarez archetype. His 0% central percentage suggests he operates from wide areas but still generates shooting opportunities.
+> **Development Areas**: Imai's priority gaps are Danger Rate (needs to increase by 55 to match target) and Central % (increase by 50). These high-weight metrics suggest coaching focus on finishing and central positioning could elevate his profile further.
 >
-> For development potential, **K. Bos** at 23 offers interesting upside. His similar separation values and emerging danger rate align with Alvarez's profile.
+> **Alternative Profiles**: T. Payne and K. Bos show similar movement patterns and could serve as backup targets. At 22 and 23, both offer development upside.
+>
+> **Scouting Recommendation**: Despite medium confidence (5 samples), Imai's P100 separation ranking across all 31 forwards is notable. K. Bos (23, High confidence with 12 samples) may be a safer bet for longer-term development.
 
 ### Example AI Output (Defender)
 
-> **N. Paull** leads the rankings with 82.4% similarity to Gvardiol. His stop danger rate of 68% and pressing rate of 72% suggest a similarly aggressive defensive approach.
+> **N. Paull** leads with 82.4% similarity to Gvardiol [High confidence]. His stop danger rate (68%, P85) and pressing rate (72%, P90) indicate an aggressive defensive approach.
 >
-> Unlike Gvardiol who excels at carrying the ball out, Paull shows lower progression metrics but stronger tackling numbers. This suggests a more traditional centre-back profile.
+> **Development Areas**: Primary gap is ball progression - Paull needs to increase carry distance by 15m to match Gvardiol's ball-playing ability.
+>
+> Unlike Gvardiol who excels at carrying into midfield, Paull shows a more traditional centre-back profile with stronger tackling numbers.
 
 ### Example AI Output (Goalkeeper)
 
-> **H. Devenish-Meares** shows 91.2% similarity to Lloris with excellent pass success (87%) and quick distribution tendency.
+> **H. Devenish-Meares** shows 91.2% similarity to Lloris [Medium confidence] with excellent pass success (87%, P95).
 >
-> At 22, he represents the strongest development prospect among the top candidates. His preference for short distribution matches the sweeper-keeper archetype.
+> At 22 in the U23 age group, he ranks in the top 10% for distribution accuracy among peers. His preference for short distribution matches the sweeper-keeper archetype.
+>
+> **Similar profiles**: J. Young and T. Sail offer comparable distribution styles if Devenish-Meares is unavailable.

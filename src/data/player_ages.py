@@ -44,6 +44,13 @@ PLAYER_AGES = {
     "B. Garuccio": 31,      # Brandon Garuccio (Adelaide United) - born 1994
     "I. Hughes": 22,        # Issac Hughes - born 2003
     "R. White": 25,         # Ryan White - born 2000
+    "M. Natta": 23,         # Mark Natta (Newcastle Jets) - born 2002
+    "F. Gallegos": 34,      # Felipe Gallegos (Auckland FC) - born 1991
+    "J. Barnett": 24,       # Jay Barnett (Adelaide United) - born 2001
+    "L. Verstraete": 26,    # Louis Verstraete (Auckland FC) - born 1999
+    "O. Lavale": 20,        # Oliver Lavale (Western United) - born 2005
+    "Isaias": 38,           # Isaías Sánchez (Adelaide United) - born 1987
+    "J. O'Shea": 37,        # Jay O'Shea (Brisbane Roar) - born 1988
     # === GOALKEEPERS ===
     "H. Devenish-Meares": 22,  # Harrison Devenish-Meares (Sydney FC) - born 2003
     "M. Freke": 24,            # Macklin Freke (Brisbane Roar) - born 2001
@@ -60,6 +67,8 @@ PLAYER_AGES = {
     "C. Cook": 26,             # Cameron Cook (Perth Glory) - born 1999
     "D. Peraic-Cullen": 23,    # Daniel Peraic-Cullen - born 2002
     "M. Langerak": 37,         # Mitchell Langerak (Melbourne Victory) - born 1988
+    "E. Cox": 21,              # Ethan Cox (Adelaide United) - born 2004
+    "R. Scott": 30,            # R. Scott (Newcastle Jets) - born 1995
 }
 
 

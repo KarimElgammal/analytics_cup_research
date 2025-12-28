@@ -6,6 +6,7 @@ A player similarity study for identifying A-League players who match world-class
 
 [Live Demo](https://huggingface.co/spaces/KarimElgammal/analytics-cup-research){ .md-button .md-button--primary }
 [GitHub](https://github.com/KarimElgammal/analytics_cup_research){ .md-button }
+[Submission Notebook](https://github.com/KarimElgammal/analytics_cup_research/blob/main/submission.ipynb){ .md-button }
 
 ## Features
 
@@ -21,8 +22,8 @@ A player similarity study for identifying A-League players who match world-class
 | Position | Players | Events |
 |----------|---------|--------|
 | **Forward** | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri | 245 entries |
-| **Defender** | Gvardiol, Romero, Hakimi | 8,911 engagements |
-| **Goalkeeper** | Lloris, Livakovic, Bounou | 522 distributions |
+| **Defender** | Gvardiol, Van Dijk, Hakimi | 8,911 engagements |
+| **Goalkeeper** | Neuer, Lloris, Bounou | 522 distributions |
 
 ## Quick Start
 
@@ -46,7 +47,7 @@ print(archetype.description)  # Shows actual World Cup 2022 stats
 # See all available archetypes
 print(Archetype.list_available())
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
-#  'gvardiol', 'romero', 'hakimi', 'lloris', 'livakovic', 'bounou']
+#  'gvardiol', 'vandijk', 'hakimi', 'neuer', 'lloris', 'bounou']
 
 # Compute similarity rankings against your player profiles
 engine = SimilarityEngine(archetype)
@@ -60,7 +61,7 @@ for row in rankings.to_dicts():
 
 ## A-League Results
 
-Using 10 A-League matches, the analysis identified **T. Imai** (Western United) as the closest match to the Alvarez archetype with a 96.5% similarity score. See [Examples](examples.md) for full results and figures.
+Using 10 A-League matches, the analysis identified **T. Imai** (Western United) as the closest match to the Alvarez archetype with a 95.7% similarity score. See [Examples](examples.md) for full results and figures.
 
 ## Project Origin
 

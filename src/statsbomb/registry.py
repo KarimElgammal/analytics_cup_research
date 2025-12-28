@@ -81,12 +81,12 @@ PLAYER_REGISTRY: dict[str, dict] = {
             (43, 106, "FIFA World Cup 2022"),
         ],
     },
-    "romero": {
-        "player_name": "Cristian Gabriel Romero",
-        "display_name": "Cristian Romero",
+    "vandijk": {
+        "player_name": "Virgil van Dijk",
+        "display_name": "Virgil van Dijk",
         "position": "Defender",
-        "nationality": "Argentina",
-        "style": "Aggressive CB, strong tackler, ball recovery",
+        "nationality": "Netherlands",
+        "style": "Commanding CB, excellent positioning, aerial dominant",
         "competitions": [
             (43, 106, "FIFA World Cup 2022"),
         ],
@@ -112,12 +112,12 @@ PLAYER_REGISTRY: dict[str, dict] = {
             (43, 106, "FIFA World Cup 2022"),
         ],
     },
-    "livakovic": {
-        "player_name": "Dominik Livaković",
-        "display_name": "Dominik Livakovic",
+    "neuer": {
+        "player_name": "Manuel Neuer",
+        "display_name": "Manuel Neuer",
         "position": "Goalkeeper",
-        "nationality": "Croatia",
-        "style": "Penalty hero, reflexes, high volume saves",
+        "nationality": "Germany",
+        "style": "Modern sweeper-keeper, excellent distribution, commanding",
         "competitions": [
             (43, 106, "FIFA World Cup 2022"),
         ],

@@ -1,8 +1,10 @@
 # Methodology: Finding Alvarez in the A-League
 
-> **Online Documentation**: [karimelgammal.github.io/analytics_cup_research](https://karimelgammal.github.io/analytics_cup_research/)
->
-> **Repository**: [github.com/KarimElgammal/analytics_cup_research](https://github.com/KarimElgammal/analytics_cup_research)
+[Live Demo](https://huggingface.co/spaces/KarimElgammal/analytics-cup-research){ .md-button .md-button--primary }
+[GitHub](https://github.com/KarimElgammal/analytics_cup_research){ .md-button }
+[Submission Notebook](https://github.com/KarimElgammal/analytics_cup_research/blob/main/submission.ipynb){ .md-button }
+
+> **Interactive App**: Try the [live demo on HuggingFace](https://huggingface.co/spaces/KarimElgammal/analytics-cup-research) or run locally with `streamlit run app.py`
 
 ## Overview
 
@@ -139,7 +141,7 @@ The `src/statsbomb/` package handles:
 - **loader.py**: Fetches events from StatsBomb free data API
 - **registry.py**: Maps player keys to StatsBomb names and competition IDs
 - **stats.py**: Calculates shooting, passing, dribbling statistics
-- **mapper.py**: Converts StatsBomb metrics to SkillCorner target profiles
+- **mappers/**: Position-specific mappers (ForwardMapper, DefenderMapper, GoalkeeperMapper) converting StatsBomb metrics to SkillCorner target profiles
 
 ---
 
@@ -231,7 +233,7 @@ PLAYER_REGISTRY = {
         "style": "Complete forward, link-up play, clinical finishing",
         "competitions": [(43, 106, "FIFA World Cup 2022")],
     },
-    # ... plus lewandowski, rashford, en_nesyri, gvardiol, romero, hakimi, lloris, livakovic, bounou
+    # ... plus lewandowski, rashford, en_nesyri, gvardiol, vandijk, hakimi, neuer, lloris, bounou
 }
 ```
 
@@ -479,7 +481,7 @@ This approach combines:
 
 ## Part 7: Player Archetype Selection Criteria
 
-### Why These 10 Players?
+### Why These 12 Players?
 
 The archetypes were selected based on three key criteria:
 
@@ -515,7 +517,7 @@ Computed from StatsBomb World Cup 2022 events:
 | Player | Country | Matches | Tackles | Duels | Pressures | Style |
 |--------|---------|---------|---------|-------|-----------|-------|
 | **Gvardiol** | CRO | 7 | 15 (67%) | 23 (44%) | 77 (57/90) | Ball-playing CB |
-| **Romero** | ARG | 7 | 12 (58%) | 28 (50%) | 65 (48/90) | Aggressive CB |
+| **Van Dijk** | NED | 3 | 10 (60%) | 22 (55%) | 42 (56/90) | Commanding CB |
 | **Hakimi** | MAR | 7 | 8 (50%) | 19 (42%) | 52 (39/90) | Attacking wing-back |
 
 #### Goalkeepers (3 players)
@@ -524,9 +526,9 @@ Computed from StatsBomb World Cup 2022 events:
 
 | Player | Country | Matches | Passes | Pass Success | Avg Distance | Long % |
 |--------|---------|---------|--------|--------------|--------------|--------|
-| **Lloris** | FRA | 6 | 185 | 78% | 28m | 35% |
-| **Livakovic** | CRO | 7 | 195 | 72% | 35m | 45% |
-| **Bounou** | MAR | 6 | 210 | 74% | 39m | 50% |
+| **Neuer** | GER | 2 | 59 | 85% | 32m | 40% |
+| **Lloris** | FRA | 2 | 69 | 78% | 28m | 35% |
+| **Bounou** | MAR | 5 | 83 | 74% | 39m | 50% |
 
 ### Why Not Messi/Mbappe?
 
@@ -769,7 +771,7 @@ if has_valid_token():
 
 For the Alvarez archetype:
 
-> **T. Imai** emerges as the closest match with a 96.5% similarity. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement.
+> **T. Imai** emerges as the closest match with a 95.7% similarity. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement.
 >
 > The key similarity lies in movement patterns. Imai consistently finds space away from defenders, a hallmark of the Alvarez archetype.
 >
@@ -777,18 +779,68 @@ For the Alvarez archetype:
 
 ### Configuration
 
-Available in `src/utils/ai_insights.py`:
+The module uses a class-based architecture in `src/utils/ai_insights.py`:
 
 ```python
-# position-specific metric configs
-POSITION_METRICS = {
-    "forward": {
-        "metrics": ["danger_rate", "central_pct", "avg_separation", ...],
-        "count_field": "total_entries",
-        "criteria": "Forwards are valued for creating danger...",
-    },
-    # defender and goalkeeper configs...
-}
+from src.utils.ai_insights import InsightGenerator, POSITION_CONFIGS
+
+# Position-specific configurations
+generator = InsightGenerator("forward")
+print(generator.config.metrics)  # MetricInfo objects with key, label, definition
+print(generator.config.count_field)  # "total_entries"
+print(generator.config.criteria)  # What makes a great forward
+
+# Available positions
+for pos, config in POSITION_CONFIGS.items():
+    print(f"{pos}: {len(config.metrics)} metrics")
+# forward: 5 metrics
+# defender: 5 metrics
+# goalkeeper: 4 metrics
+```
+
+### Enriched Prompts
+
+The AI receives context-rich prompts including:
+
+- **Feature weights**: Which metrics matter most (e.g., `avg_separation: 23%`, `danger_rate: 22%`)
+- **Archetype targets**: Ideal values from StatsBomb (e.g., `danger_rate: 95`, `central_pct: 70`)
+- **Percentile ranks**: Player metrics ranked vs full dataset (e.g., `40.0% (P85)` = 85th percentile)
+- **Confidence levels**: High (10+ samples), Medium (5-9), Low (<5) for reliability assessment
+- **Development gaps**: Priority areas to improve, calculated as `gap × weight` (e.g., "Danger Rate: increase by 55")
+- **Similar players**: Other players in the dataset with comparable profiles
+- **Age group context**: Percentile rankings within age groups (U21, U23, U25, 25+)
+- **Dataset statistics**: Mean ± std for each metric
+- **Domain knowledge request**: The model is asked to incorporate knowledge about players, teams, and leagues from its training data (career history, international experience, club reputation, etc.)
+
+### Enhanced Analysis Classes
+
+The module uses a class-based architecture for clean, modular analysis:
+
+```python
+from src.utils.ai_insights import (
+    PlayerAnalyzer,
+    DevelopmentGap,
+    ConfidenceLevel,
+    ArchetypeFit,
+)
+
+# Initialize analyzer for position
+analyzer = PlayerAnalyzer("forward")
+
+# Compute development gaps (prioritised by gap × weight)
+gaps = analyzer.compute_development_gaps(player_metrics, archetype_data)
+print(gaps[0].format())  # "Danger Rate: 40 → 95 (↑ 55 gap, 22% weight)"
+
+# Find similar players using cosine similarity
+similar = analyzer.find_similar_players("T. Imai", all_profiles, metric_keys)
+print(similar)  # ["T. Payne", "K. Bos"]
+
+# Get confidence level
+confidence = analyzer.get_confidence_level(sample_size=7)
+print(confidence.format())  # "🟡 Medium confidence (7 samples)"
+
+# Compute age group percentiles
+age_pcts = analyzer.compute_age_percentiles(age=24, metrics, all_profiles)
 ```
 
 ### Privacy Considerations

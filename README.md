@@ -18,11 +18,11 @@ This research assesses whether SkillCorner tracking data can identify A-League p
 
 ### Methods
 
-The workflow supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Romero, Hakimi), and goalkeepers (Lloris, Livakovic, Bounou). Each position uses different event data—forwards use final third entries (245 events), defenders use on-ball engagements (8,911 events), and goalkeepers use distribution events (522 events). Similarity is computed using weighted cosine similarity on z-score normalised features, with weights derived from correlation analysis on A-League data.
+The workflow supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Van Dijk, Hakimi), and goalkeepers (Neuer, Lloris, Bounou). Each position uses different event data—forwards use final third entries (245 events), defenders use on-ball engagements (8,911 events), and goalkeepers use distribution events (522 events). Similarity is computed using weighted cosine similarity on z-score normalised features, with weights derived from correlation analysis on A-League data.
 
 ### Results
 
-For the Alvarez archetype, top candidates are T. Imai (Western United) at 96.5% similarity with exceptional separation (5.64m), N. Atkinson (Melbourne City) at 93.5%, and K. Bos (Melbourne Victory) at 91.6%. These players exhibit Alvarez's key trait: creating danger through intelligent movement rather than dribbling.
+For the Alvarez archetype, top candidates are T. Imai (Western United) at 95.7% similarity with exceptional separation (5.64m), T. Payne (Wellington Phoenix) at 93.4%, and K. Bos (Melbourne Victory) at 92.3%. These players exhibit Alvarez's key trait: creating danger through intelligent movement rather than dribbling.
 
 ![Similarity Rankings](assets/similarity_rankings.png)
 
@@ -97,8 +97,8 @@ The interactive Streamlit app (`app.py`) allows comparison across all positions:
 | Position | Data Source | Players | Archetypes |
 |----------|-------------|---------|------------|
 | Forwards | Final third entries (245) | 31 | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri |
-| Defenders | Defensive engagements (8,911) | 185 | Gvardiol, Romero, Hakimi |
-| Goalkeepers | Distribution events (522) | 13 | Lloris, Livakovic, Bounou |
+| Defenders | Defensive engagements (8,911) | 185 | Gvardiol, Van Dijk, Hakimi |
+| Goalkeepers | Distribution events (522) | 13 | Neuer, Lloris, Bounou |
 
 ---
 
@@ -116,7 +116,8 @@ analytics_cup_research/
     ├── core/             # Archetype, SimilarityEngine
     ├── data/             # Data loading
     ├── analysis/         # Player profiles
-    ├── statsbomb/        # Archetype factory
+    ├── archetypes/       # Position-specific archetype configs
+    ├── statsbomb/        # StatsBomb loader and mappers
     ├── utils/            # AI insights
     └── visualization/
 ```

@@ -7,7 +7,7 @@ The `SimilarityEngine` computes weighted cosine similarity between players and a
 ```python
 from src.core import Archetype, SimilarityEngine
 
-archetype = Archetype.alvarez()
+archetype = Archetype.from_statsbomb("alvarez")
 engine = SimilarityEngine(archetype)
 engine.fit(profiler.profiles)
 rankings = engine.rank(top_n=10)

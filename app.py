@@ -4,18 +4,19 @@ A Streamlit app for comparing A-League players against different player archetyp
 Supports forwards (final third entries), defenders (defensive engagements),
 and goalkeepers (distribution).
 
-Run: streamlit run archetype_compare.py
+Run: streamlit run app.py
 """
 
 import warnings
 import streamlit as st
 import polars as pl
+import pandas as pd
 from packaging import version
 
 # Streamlit version compatibility for width parameter
-# use_container_width deprecated in 1.41+, removed after 2025-12-31
 _ST_VERSION = version.parse(st.__version__)
 _USE_NEW_WIDTH = _ST_VERSION >= version.parse("1.41.0")
+
 
 def get_dataframe_width_kwargs():
     """Return appropriate width kwargs for st.dataframe based on Streamlit version."""
@@ -23,6 +24,8 @@ def get_dataframe_width_kwargs():
         return {"width": "stretch"}
     return {"use_container_width": True}
 
+
+# Core imports
 from src.data.loader import load_all_events, add_team_names
 from src.data.player_ages import add_ages_to_profiles
 from src.analysis.entries import detect_entries, classify_entries
@@ -31,7 +34,6 @@ from src.analysis.defenders import detect_defensive_actions, build_defender_prof
 from src.analysis.goalkeepers import detect_gk_actions, build_goalkeeper_profiles, filter_goalkeeper_profiles
 from src.core.archetype import Archetype
 from src.core.similarity import SimilarityEngine
-from src.core.archetype_factory import ArchetypeFactory
 from src.visualization.radar import (
     plot_radar_comparison,
     plot_similarity_ranking,
@@ -40,7 +42,6 @@ from src.visualization.radar import (
 from src.utils.ai_insights import (
     generate_similarity_insight,
     has_valid_token,
-    get_available_backend,
     get_available_models,
     get_default_model,
 )
@@ -54,6 +55,20 @@ from src.utils.rate_limiter import (
     MAX_CALLS_PER_SESSION,
 )
 
+# Archetype imports
+from src.archetypes.base import (
+    DEFENDER_FEATURE_NAMES,
+    GOALKEEPER_FEATURE_NAMES,
+)
+from src.archetypes.forwards import FORWARD_ARCHETYPE_OPTIONS
+from src.archetypes.defenders import (
+    DEFENDER_ARCHETYPES,
+    DEFENDER_WEIGHTS,
+    DEFENDER_DIRECTIONS,
+)
+from src.archetypes.goalkeepers import GOALKEEPER_ARCHETYPES
+
+# Page config
 st.set_page_config(
     page_title="Finding Alvarez in the A-League",
     page_icon="\u26BD",
@@ -78,314 +93,8 @@ position = st.radio(
 
 st.markdown("---")
 
-# Forward archetypes (from StatsBomb)
-FORWARD_ARCHETYPES = [
-    ("Alvarez (ARG) - Movement-focused", "alvarez"),
-    ("Giroud (FRA) - Target man", "giroud"),
-    ("Kane (ENG) - Complete forward", "kane"),
-    ("Lewandowski (POL) - Clinical poacher", "lewandowski"),
-    ("Rashford (ENG) - Pace/dribbling", "rashford"),
-    ("En-Nesyri (MAR) - Physical forward", "en_nesyri"),
-]
 
-# Cached archetype loading from StatsBomb
-@st.cache_resource(show_spinner="Loading archetypes from StatsBomb...")
-def get_archetype_factory():
-    """Get cached archetype factory."""
-    return ArchetypeFactory(verbose=False)
-
-@st.cache_resource(show_spinner="Building defender archetype from World Cup data...")
-def load_defender_archetype(player_key: str):
-    """Load defender archetype from StatsBomb, with fallback."""
-    try:
-        factory = get_archetype_factory()
-        return factory.build_defender(player_key)
-    except Exception as e:
-        st.warning(f"Could not load {player_key} from StatsBomb: {e}")
-        return None
-
-@st.cache_resource(show_spinner="Building goalkeeper archetype from World Cup data...")
-def load_goalkeeper_archetype(player_key: str):
-    """Load goalkeeper archetype from StatsBomb, with fallback."""
-    try:
-        factory = get_archetype_factory()
-        return factory.build_goalkeeper(player_key)
-    except Exception as e:
-        st.warning(f"Could not load {player_key} from StatsBomb: {e}")
-        return None
-
-# Defender weights - derived from one-time ML analysis (GradientBoosting, AUC 0.845)
-# Weights are STATIC - extracted from feature importances, not computed live
-# Used as fallback when StatsBomb API fails
-DEFENDER_WEIGHTS = {
-    "stop_danger_rate": 0.30,
-    "avg_engagement_distance": 0.17,
-    "reduce_danger_rate": 0.15,
-    "beaten_by_possession_rate": 0.15,
-    "beaten_by_movement_rate": 0.08,
-    "force_backward_rate": 0.08,
-    "pressing_rate": 0.04,
-    "goal_side_rate": 0.03,
-}
-
-DEFENDER_DIRECTIONS = {
-    "stop_danger_rate": 1,
-    "reduce_danger_rate": 1,
-    "force_backward_rate": 1,
-    "beaten_by_possession_rate": -1,
-    "beaten_by_movement_rate": -1,
-    "pressing_rate": 1,
-    "goal_side_rate": 1,
-    "avg_engagement_distance": -1,
-    "defensive_third_pct": 1,
-    "middle_third_pct": 0,
-    "attacking_third_pct": -1,
-}
-
-# Goalkeeper weights - derived from one-time ML analysis (GradientBoosting, AUC 0.993)
-# Weights are STATIC - balanced for style comparison (ML found pass_distance dominates at 98.6%)
-# Used as fallback when StatsBomb API fails
-GOALKEEPER_WEIGHTS = {
-    "pass_success_rate": 0.20,
-    "avg_pass_distance": 0.20,
-    "long_pass_pct": 0.15,
-    "short_pass_pct": 0.15,
-    "quick_distribution_pct": 0.10,
-    "to_middle_third_pct": 0.10,
-    "avg_passing_options": 0.10,
-}
-
-GOALKEEPER_DIRECTIONS = {
-    "pass_success_rate": 1,
-    "long_pass_pct": 1,  # Depends on style
-    "short_pass_pct": 1,  # Depends on style
-    "avg_pass_distance": 1,  # Depends on style
-    "quick_distribution_pct": 1,
-    "high_pass_pct": 1,
-    "to_middle_third_pct": 1,
-    "to_attacking_third_pct": 1,
-    "avg_passing_options": 1,
-    "hand_pass_pct": -1,  # Less hand passes = more with feet
-}
-
-
-def format_target_table(profile: dict, feature_names: dict[str, str], computed_features: set[str] | None = None) -> str:
-    """Format target profile as markdown table."""
-    lines = ["Target profile (percentile targets 0-100):", "| Feature | Target | Source |", "|---------|--------|--------|"]
-    for key, value in profile.items():
-        display_name = feature_names.get(key, key.replace("_", " ").title())
-        source = "StatsBomb" if computed_features and key in computed_features else "Estimated"
-        lines.append(f"| {display_name} | {value:.0f} | {source} |")
-    return "\n".join(lines)
-
-
-DEFENDER_FEATURE_NAMES = {
-    "stop_danger_rate": "Stop Danger %",
-    "reduce_danger_rate": "Reduce Danger %",
-    "force_backward_rate": "Force Back %",
-    "beaten_by_possession_rate": "Beaten (Ball) %",
-    "beaten_by_movement_rate": "Beaten (Move) %",
-    "pressing_rate": "Pressing %",
-    "goal_side_rate": "Goal Side %",
-    "avg_engagement_distance": "Engagement Dist",
-    "defensive_third_pct": "Defensive 3rd %",
-    "middle_third_pct": "Middle 3rd %",
-    "attacking_third_pct": "Attacking 3rd %",
-}
-
-
-GK_FEATURE_NAMES = {
-    "pass_success_rate": "Pass Success %",
-    "short_pass_pct": "Short Pass %",
-    "long_pass_pct": "Long Pass %",
-    "avg_pass_distance": "Pass Distance",
-    "quick_distribution_pct": "Quick Dist %",
-    "high_pass_pct": "High Pass %",
-    "to_middle_third_pct": "To Middle 3rd %",
-    "to_attacking_third_pct": "To Attack 3rd %",
-    "avg_passing_options": "Passing Options",
-}
-
-
-# Features computed from StatsBomb (vs estimated)
-DEFENDER_COMPUTED = {"stop_danger_rate", "reduce_danger_rate", "pressing_rate", "goal_side_rate", "beaten_by_movement_rate", "avg_engagement_distance"}
-GOALKEEPER_COMPUTED = {"pass_success_rate", "long_pass_pct", "avg_pass_distance"}
-
-
-def create_defender_archetype(name: str, description: str, profile: dict) -> Archetype:
-    """Create a defender archetype."""
-    full_desc = description + "\n\n" + format_target_table(profile, DEFENDER_FEATURE_NAMES, DEFENDER_COMPUTED)
-    return Archetype(
-        name=name,
-        description=full_desc,
-        target_profile=profile,
-        weights=DEFENDER_WEIGHTS,
-        directions=DEFENDER_DIRECTIONS,
-    )
-
-
-def create_goalkeeper_archetype(name: str, description: str, profile: dict, weights: dict, directions: dict) -> Archetype:
-    """Create a goalkeeper archetype."""
-    full_desc = description + "\n\n" + format_target_table(profile, GK_FEATURE_NAMES, GOALKEEPER_COMPUTED)
-    return Archetype(
-        name=name,
-        description=full_desc,
-        target_profile=profile,
-        weights=weights,
-        directions=directions,
-    )
-
-
-# Defender archetypes - computed from StatsBomb open data (World Cup 2022, Euro 2024)
-# Source: https://github.com/statsbomb/open-data
-# Script: scripts/compute_archetype_profiles.py
-DEFENDER_ARCHETYPES = {
-    "gvardiol": create_defender_archetype(
-        "gvardiol",
-        "Josko Gvardiol (CRO) - Ball-playing CB\n\nComputed from 3 World Cup 2022 matches (48 events). "
-        "Balanced pressing, strong in duels, deeper engagement position.",
-        {
-            # Computed from StatsBomb open data
-            "stop_danger_rate": 67,          # 67% duel success
-            "reduce_danger_rate": 32,         # Interceptions + recoveries
-            "force_backward_rate": 50,        # Estimated
-            "beaten_by_possession_rate": 20,  # Estimated
-            "beaten_by_movement_rate": 33,    # 100 - stop_danger_rate
-            "pressing_rate": 50,              # Moderate pressing
-            "goal_side_rate": 62,             # Good positioning
-            "avg_engagement_distance": 32,    # Plays deeper
-            "middle_third_pct": 40,           # Estimated
-        }
-    ),
-    "vandijk": create_defender_archetype(
-        "vandijk",
-        "Virgil van Dijk (NED) - Commanding CB\n\nComputed from 3 Euro 2024 matches (42 events). "
-        "Excellent positional defender who reads the game. Minimal duels - wins through positioning.",
-        {
-            # Computed from StatsBomb open data
-            "stop_danger_rate": 50,           # Low duel count, but excellent positioning
-            "reduce_danger_rate": 17,         # Rare interceptions (doesn't need to)
-            "force_backward_rate": 60,        # Estimated
-            "beaten_by_possession_rate": 15,  # Estimated (rarely beaten)
-            "beaten_by_movement_rate": 20,    # Estimated (rarely beaten)
-            "pressing_rate": 36,              # Lower pressing - reads the game
-            "goal_side_rate": 90,             # Excellent positioning (blocks + clearances)
-            "avg_engagement_distance": 32,    # Plays deeper
-            "defensive_third_pct": 60,        # Estimated
-        }
-    ),
-    "hakimi": create_defender_archetype(
-        "hakimi",
-        "Achraf Hakimi (MAR) - Attacking Wing-back\n\nComputed from 6 World Cup 2022 matches (148 events). "
-        "High pressing, aggressive engagement, plays higher up the pitch.",
-        {
-            # Computed from StatsBomb open data
-            "stop_danger_rate": 41,           # 41% duel success (wing-back position)
-            "reduce_danger_rate": 25,         # Interceptions + recoveries
-            "force_backward_rate": 45,        # Estimated
-            "beaten_by_possession_rate": 30,  # Estimated (takes risks)
-            "beaten_by_movement_rate": 59,    # 100 - stop_danger_rate
-            "pressing_rate": 59,              # High pressing
-            "goal_side_rate": 42,             # Lower (attacking position)
-            "avg_engagement_distance": 35,    # Plays higher
-            "middle_third_pct": 45,           # Estimated
-            "attacking_third_pct": 25,        # Estimated
-        }
-    ),
-}
-
-# Goalkeeper archetypes - different distribution styles
-LLORIS_WEIGHTS = GOALKEEPER_WEIGHTS.copy()
-LLORIS_WEIGHTS["short_pass_pct"] = 0.20  # Emphasis on playing out
-LLORIS_WEIGHTS["long_pass_pct"] = 0.05
-
-LLORIS_DIRECTIONS = GOALKEEPER_DIRECTIONS.copy()
-LLORIS_DIRECTIONS["short_pass_pct"] = 1
-LLORIS_DIRECTIONS["long_pass_pct"] = -1  # Prefers short
-
-LIVAKOVIC_WEIGHTS = GOALKEEPER_WEIGHTS.copy()
-LIVAKOVIC_WEIGHTS["long_pass_pct"] = 0.20  # Emphasis on long distribution
-LIVAKOVIC_WEIGHTS["short_pass_pct"] = 0.05
-
-LIVAKOVIC_DIRECTIONS = GOALKEEPER_DIRECTIONS.copy()
-LIVAKOVIC_DIRECTIONS["long_pass_pct"] = 1
-LIVAKOVIC_DIRECTIONS["short_pass_pct"] = -1  # Prefers long
-
-# Bounou - Long distribution specialist (39m avg, 42% high balls)
-BOUNOU_WEIGHTS = GOALKEEPER_WEIGHTS.copy()
-BOUNOU_WEIGHTS["long_pass_pct"] = 0.20
-BOUNOU_WEIGHTS["avg_pass_distance"] = 0.20
-BOUNOU_WEIGHTS["high_pass_pct"] = 0.15
-BOUNOU_WEIGHTS["short_pass_pct"] = 0.00  # Doesn't rely on short passes
-
-BOUNOU_DIRECTIONS = GOALKEEPER_DIRECTIONS.copy()
-BOUNOU_DIRECTIONS["long_pass_pct"] = 1
-BOUNOU_DIRECTIONS["avg_pass_distance"] = 1
-BOUNOU_DIRECTIONS["high_pass_pct"] = 1
-BOUNOU_DIRECTIONS["short_pass_pct"] = -1
-
-# Neuer weights - balanced distribution (computed from Euro 2024)
-NEUER_WEIGHTS = GOALKEEPER_WEIGHTS.copy()
-NEUER_WEIGHTS["pass_success_rate"] = 0.25  # Excellent accuracy
-NEUER_WEIGHTS["long_pass_pct"] = 0.15
-NEUER_WEIGHTS["avg_pass_distance"] = 0.15
-
-NEUER_DIRECTIONS = GOALKEEPER_DIRECTIONS.copy()
-
-# Goalkeeper archetypes - all computed from StatsBomb open data
-# Source: https://github.com/statsbomb/open-data
-# Script: scripts/compute_archetype_profiles.py
-GOALKEEPER_ARCHETYPES = {
-    "neuer": create_goalkeeper_archetype(
-        "neuer",
-        "Manuel Neuer (GER) - Modern Sweeper\n\nComputed from 2 Euro 2024 matches. "
-        "90% pass accuracy, 46m average, 25% long balls. Excellent accuracy with balanced distribution.",
-        {
-            # Computed from StatsBomb open data (Euro 2024)
-            "pass_success_rate": 90,      # Very high accuracy
-            "long_pass_pct": 25,          # Moderate long balls
-            "short_pass_pct": 45,         # Estimated (100 - long - medium)
-            "avg_pass_distance": 46,      # Medium-long
-            "quick_distribution_pct": 50, # Estimated
-            "high_pass_pct": 30,          # Estimated
-        },
-        NEUER_WEIGHTS,
-        NEUER_DIRECTIONS,
-    ),
-    "lloris": create_goalkeeper_archetype(
-        "lloris",
-        "Hugo Lloris (FRA) - Direct Distributor\n\nComputed from 2 World Cup 2022 matches. "
-        "55% pass accuracy, 83m average, 69% long balls. France's direct style bypasses midfield.",
-        {
-            # Computed from StatsBomb open data (World Cup 2022)
-            "pass_success_rate": 55,      # Lower accuracy (direct style)
-            "long_pass_pct": 69,          # Mostly long balls
-            "short_pass_pct": 20,         # Estimated
-            "avg_pass_distance": 83,      # Very long distribution
-            "quick_distribution_pct": 40, # Estimated
-            "high_pass_pct": 60,          # Estimated (lofted balls)
-        },
-        LLORIS_WEIGHTS,
-        LLORIS_DIRECTIONS,
-    ),
-    "bounou": create_goalkeeper_archetype(
-        "bounou",
-        "Yassine Bounou (MAR) - Balanced Long Distributor\n\nComputed from 5 World Cup 2022 matches. "
-        "72% pass accuracy, 70m average, 50% long balls. Morocco's reliable distribution.",
-        {
-            # Computed from StatsBomb open data (World Cup 2022)
-            "pass_success_rate": 72,      # Good accuracy
-            "long_pass_pct": 50,          # Half long balls
-            "short_pass_pct": 30,         # Estimated
-            "avg_pass_distance": 70,      # Long distribution
-            "quick_distribution_pct": 45, # Estimated
-            "high_pass_pct": 45,          # Estimated
-        },
-        BOUNOU_WEIGHTS,
-        BOUNOU_DIRECTIONS,
-    ),
-}
-
+# --- Data Loading (cached) ---
 
 @st.cache_data(ttl=7776000, show_spinner="Loading A-League data...")
 def load_forward_data():
@@ -429,7 +138,35 @@ def load_forward_archetype(player_key: str):
         return Archetype.from_statsbomb(player_key, verbose=False)
 
 
-# Load data based on position
+# --- Position-specific Configuration ---
+
+DEFENDER_OPTIONS = [
+    ("Gvardiol (CRO) - Ball-playing CB", "gvardiol"),
+    ("Van Dijk (NED) - Commanding CB", "vandijk"),
+    ("Hakimi (MAR) - Attacking Wing-back", "hakimi"),
+]
+
+GOALKEEPER_OPTIONS = [
+    ("Neuer (GER) - Modern Sweeper", "neuer"),
+    ("Lloris (FRA) - Direct Distributor", "lloris"),
+    ("Bounou (MAR) - Balanced Long", "bounou"),
+]
+
+
+def get_defender_archetype(key: str) -> Archetype:
+    """Get defender archetype from pre-computed configs."""
+    config = DEFENDER_ARCHETYPES[key]
+    return config.to_archetype(DEFENDER_WEIGHTS, DEFENDER_DIRECTIONS, DEFENDER_FEATURE_NAMES)
+
+
+def get_goalkeeper_archetype(key: str) -> Archetype:
+    """Get goalkeeper archetype with style-specific weights."""
+    config, weights, directions = GOALKEEPER_ARCHETYPES[key]
+    return config.to_archetype(weights, directions, GOALKEEPER_FEATURE_NAMES)
+
+
+# --- Main Logic ---
+
 if position == "Forwards":
     profiles, n_events, n_matches = load_forward_data()
     event_type = "entries"
@@ -438,10 +175,10 @@ if position == "Forwards":
     st.sidebar.header("Forward Archetype")
     selected_label = st.sidebar.selectbox(
         "Select Archetype",
-        options=[label for label, _ in FORWARD_ARCHETYPES],
+        options=[label for label, _ in FORWARD_ARCHETYPE_OPTIONS],
         index=0,
     )
-    selected_key = next(key for label, key in FORWARD_ARCHETYPES if label == selected_label)
+    selected_key = next(key for label, key in FORWARD_ARCHETYPE_OPTIONS if label == selected_label)
     archetype = load_forward_archetype(selected_key)
 
     display_cols = [
@@ -458,19 +195,13 @@ elif position == "Defenders":
     position_type = "defender"
 
     st.sidebar.header("Defender Archetype")
-    defender_options = [
-        ("Gvardiol (CRO) - Ball-playing CB", "gvardiol"),
-        ("Van Dijk (NED) - Commanding CB", "vandijk"),
-        ("Hakimi (MAR) - Attacking Wing-back", "hakimi"),
-    ]
     selected_label = st.sidebar.selectbox(
         "Select Archetype",
-        options=[label for label, _ in defender_options],
+        options=[label for label, _ in DEFENDER_OPTIONS],
         index=0,
     )
-    selected_key = next(key for label, key in defender_options if label == selected_label)
-    # Archetypes computed from StatsBomb open data (World Cup 2022, Euro 2024)
-    archetype = DEFENDER_ARCHETYPES[selected_key]
+    selected_key = next(key for label, key in DEFENDER_OPTIONS if label == selected_label)
+    archetype = get_defender_archetype(selected_key)
 
     display_cols = [
         "rank", "player_name", "age", "team_name", "similarity_score",
@@ -486,19 +217,13 @@ else:  # Goalkeepers
     position_type = "goalkeeper"
 
     st.sidebar.header("Goalkeeper Archetype")
-    gk_options = [
-        ("Neuer (GER) - Modern Sweeper", "neuer"),
-        ("Lloris (FRA) - Direct Distributor", "lloris"),
-        ("Bounou (MAR) - Balanced Long", "bounou"),
-    ]
     selected_label = st.sidebar.selectbox(
         "Select Archetype",
-        options=[label for label, _ in gk_options],
+        options=[label for label, _ in GOALKEEPER_OPTIONS],
         index=0,
     )
-    selected_key = next(key for label, key in gk_options if label == selected_label)
-    # Archetypes: Neuer computed from StatsBomb, others estimated
-    archetype = GOALKEEPER_ARCHETYPES[selected_key]
+    selected_key = next(key for label, key in GOALKEEPER_OPTIONS if label == selected_label)
+    archetype = get_goalkeeper_archetype(selected_key)
 
     display_cols = [
         "rank", "player_name", "age", "team_name", "similarity_score",
@@ -508,6 +233,7 @@ else:  # Goalkeepers
     radar_features = ["pass_success_rate", "avg_pass_distance", "long_pass_pct", "quick_distribution_pct"]
     caption = "All archetypes computed from StatsBomb open data (Euro 2024 / World Cup 2022)."
 
+# Sidebar controls
 top_n = st.sidebar.slider("Number of results", min_value=5, max_value=min(20, len(profiles)), value=min(10, len(profiles)))
 
 st.sidebar.markdown("---")
@@ -516,7 +242,6 @@ st.sidebar.markdown(f"**Events:** {n_events:,} {event_type}")
 st.sidebar.markdown(f"**Matches:** {n_matches}")
 st.sidebar.markdown(f"**Players:** {len(profiles)} qualified")
 
-# Methodology note
 st.sidebar.markdown("---")
 st.sidebar.markdown("### Methodology")
 st.sidebar.markdown("Weighted cosine similarity on z-score normalised features.")
@@ -539,7 +264,7 @@ with st.expander("Archetype Profile", expanded=False):
         pct = item["weight"] * 100
         st.markdown(f"- `{item['feature']}`: {pct:.0f}%")
 
-# View selector (persists across reruns)
+# View selector
 view_options = ["Rankings", "Radar Profile", "AI Insights"]
 if "selected_view" not in st.session_state:
     st.session_state.selected_view = "Rankings"
@@ -568,6 +293,8 @@ if selected_view == "Rankings":
             format_dict[col] = "{:.1f}"
         elif "(m)" in col:
             format_dict[col] = "{:.2f}"
+        elif col == "Age":
+            format_dict[col] = lambda x: f"{int(x)}" if pd.notna(x) else ""
 
     st.dataframe(
         df_display.style.format(format_dict).background_gradient(

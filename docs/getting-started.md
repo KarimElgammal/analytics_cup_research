@@ -100,7 +100,7 @@ Load any of these 12 pre-built archetypes:
 # List all available
 Archetype.list_available()
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
-#  'gvardiol', 'romero', 'hakimi', 'lloris', 'livakovic', 'bounou']
+#  'gvardiol', 'vandijk', 'hakimi', 'neuer', 'lloris', 'bounou']
 
 # Load specific archetype
 archetype = Archetype.from_statsbomb("giroud")   # Target man style

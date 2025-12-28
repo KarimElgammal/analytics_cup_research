@@ -93,21 +93,76 @@ The AI receives different context based on position type. Each position has spec
 
 ## What Gets Sent to the AI
 
-The prompt includes:
+The prompt includes enriched context for accurate insights:
 
-1. Position type and archetype name
-2. Dataset size (events and players)
-3. Position-specific evaluation criteria
-4. Top 5 candidates with their metrics
-5. Dataset averages for comparison
+1. **Position type** and archetype name
+2. **Dataset size** (events and players)
+3. **Feature weights** showing what matters most (e.g., `avg_separation: 23%`, `danger_rate: 22%`)
+4. **Archetype targets** with ideal values from StatsBomb (e.g., `danger_rate: 95`, `central_pct: 70`)
+5. **Top candidates** with metrics and **percentile ranks** vs full dataset (e.g., `40.0% (P85)`)
+6. **Confidence levels** for each player: High (10+), Medium (5-9), Low (<5 samples)
+7. **Development gaps** showing priority areas to improve (metric, direction, gap size, weight)
+8. **Similar players** in the dataset with comparable profiles
+9. **Age group context** (U21, U23, U25, 25+) and group size
+10. **Dataset statistics** (mean ± std for each metric)
+11. **Domain knowledge request** asking the model to incorporate knowledge about players, teams, and leagues
 
 No raw tracking data or player identifiers beyond names are sent.
+
+## Enhanced Analysis Features
+
+The AI insights module provides several advanced analysis capabilities:
+
+### Confidence Levels
+
+Based on sample size, each player receives a confidence rating:
+
+| Level | Samples | Meaning |
+|-------|---------|---------|
+| 🟢 High | 10+ | Reliable profile based on sufficient data |
+| 🟡 Medium | 5-9 | Reasonable estimate, more data would help |
+| 🔴 Low | <5 | Preliminary profile, needs more observations |
+
+### Development Gaps
+
+For each player, the system identifies which metrics differ most from the archetype target:
+
+```
+Development areas: Danger Rate (increase by 55), Central % (increase by 50)
+```
+
+Gaps are prioritised by: `gap_size × metric_weight`, so high-weight metrics with large gaps are flagged first.
+
+### Similar Players
+
+The system finds other players in the dataset with similar profiles using cosine similarity on z-score normalised metrics:
+
+```
+Similar profiles: T. Payne, K. Bos, C. Elliott
+```
+
+This helps scouts identify backup candidates with comparable styles.
+
+### Age Group Percentiles
+
+Players are compared within their age group (U21, U23, U25, 25+) to contextualise their development stage.
+
+## Domain Knowledge
+
+The AI is encouraged to use its training knowledge to enrich insights:
+
+- **Player context**: Career history, international caps, previous clubs, known strengths
+- **Team context**: Club reputation, playing style, academy quality
+- **League context**: A-League level compared to other leagues, transfer market dynamics
+- **Archetype context**: The reference player's (e.g., Alvarez) actual playing style and career
+
+This adds valuable context beyond what the tracking data alone can show.
 
 ## Example Output
 
 For a forward archetype like Alvarez:
 
-> **T. Imai** from Western United emerges as the closest match with a 96.5% similarity score. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement rather than dribbling.
+> **T. Imai** from Western United emerges as the closest match with a 95.7% similarity score. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement rather than dribbling.
 >
 > The key similarity lies in movement patterns. Imai consistently finds space away from defenders, a hallmark of the Alvarez archetype. His 0% central percentage suggests he operates from wide areas but still generates shooting opportunities.
 >
@@ -138,7 +193,7 @@ from src.utils.ai_insights import generate_player_report
 report = generate_player_report(
     player_name="T. Imai",
     player_profile=player_dict,
-    similarity_score=96.5,
+    similarity_score=95.7,
     archetype=archetype,
     position_type="forward",
 )

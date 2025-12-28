@@ -4,71 +4,20 @@ from __future__ import annotations
 
 from src.core.archetype import Archetype
 from src.statsbomb.loader import StatsBombLoader
-from src.statsbomb.stats import calculate_player_stats, calculate_defender_stats, calculate_goalkeeper_stats
-from src.statsbomb.mapper import (
-    map_to_skillcorner_target, get_archetype_description, compute_archetype_weights,
-    map_defender_to_skillcorner, get_defender_description, compute_defender_weights,
-    map_goalkeeper_to_skillcorner, get_goalkeeper_description, compute_goalkeeper_weights,
+from src.statsbomb.stats import (
+    calculate_player_stats,
+    calculate_defender_stats,
+    calculate_goalkeeper_stats,
 )
-from src.statsbomb.registry import get_player_info, get_player_competitions, get_available_players
-
-
-# Static weights from one-time GradientBoosting analysis on A-League data
-# These are NOT computed live - they were extracted once and hardcoded
-# Original training: AUC 0.656 on 245 final third entries
-DEFAULT_WEIGHTS = {
-    "avg_separation": 0.23,           # Highest importance - finding space
-    "danger_rate": 0.18,              # Clinical finishing
-    "avg_entry_speed": 0.17,          # Dynamic entries
-    "avg_defensive_line_dist": 0.15,  # Penetration depth
-    "central_pct": 0.12,              # Central positioning
-    "quick_break_pct": 0.05,          # Counter-attack involvement
-    "avg_teammates_ahead": 0.05,      # Link-up context
-    "half_space_pct": 0.02,           # Half-space usage
-    "avg_passing_options": 0.02,      # Passing options
-    "carry_pct": 0.00,                # Low variance in data
-    "avg_distance": 0.01,             # Work rate
-    "goal_rate": 0.00,                # Too sparse in data
-}
-
-# Feature directions: 1 = higher is better, -1 = lower is better
-DEFAULT_DIRECTIONS = {
-    "avg_separation": 1,
-    "danger_rate": 1,
-    "avg_entry_speed": 1,
-    "avg_defensive_line_dist": -1,  # Closer to goal is better
-    "central_pct": 1,
-    "quick_break_pct": 1,
-    "avg_teammates_ahead": 1,
-    "half_space_pct": 1,
-    "avg_passing_options": 1,
-    "carry_pct": 1,
-    "avg_distance": 1,
-    "goal_rate": 1,
-}
-
-# Defender feature directions
-DEFENDER_DIRECTIONS = {
-    "stop_danger_rate": 1,
-    "reduce_danger_rate": 1,
-    "pressing_rate": 1,
-    "goal_side_rate": 1,
-    "avg_engagement_distance": -1,  # Closer engagement is better
-    "beaten_by_possession_rate": -1,  # Lower is better
-    "beaten_by_movement_rate": -1,  # Lower is better
-    "force_backward_rate": 1,
-}
-
-# Goalkeeper feature directions
-GOALKEEPER_DIRECTIONS = {
-    "pass_success_rate": 1,
-    "avg_pass_distance": 1,  # Context-dependent, but generally higher = more range
-    "long_pass_pct": 1,  # Style-dependent
-    "short_pass_pct": 1,  # Style-dependent
-    "high_pass_pct": 1,  # Style-dependent
-    "quick_distribution_pct": 1,
-    "to_attacking_third_pct": 1,
-}
+from src.statsbomb.mappers import ForwardMapper, DefenderMapper, GoalkeeperMapper
+from src.statsbomb.registry import (
+    get_player_info,
+    get_player_competitions,
+    get_available_players,
+)
+from src.archetypes.forwards import FORWARD_DIRECTIONS
+from src.archetypes.defenders import DEFENDER_DIRECTIONS
+from src.archetypes.goalkeepers import GOALKEEPER_DIRECTIONS
 
 
 class ArchetypeFactory:
@@ -78,14 +27,18 @@ class ArchetypeFactory:
     calculates statistics, and maps them to SkillCorner-compatible
     target profiles for similarity matching.
 
+    Uses position-specific mappers for clean separation of concerns.
+
     Example:
         factory = ArchetypeFactory()
         alvarez = factory.build("alvarez")
         print(alvarez.description)
-        # Shows actual stats from World Cup 2022
-
-    The factory caches built archetypes to avoid redundant API calls.
     """
+
+    # Position-specific mappers (class-level for efficiency)
+    _forward_mapper = ForwardMapper()
+    _defender_mapper = DefenderMapper()
+    _goalkeeper_mapper = GoalkeeperMapper()
 
     def __init__(self, verbose: bool = False) -> None:
         """Initialize the factory.
@@ -103,12 +56,12 @@ class ArchetypeFactory:
         weights: dict[str, float] | None = None,
         directions: dict[str, int] | None = None,
     ) -> Archetype:
-        """Build an archetype from StatsBomb data for a registered player.
+        """Build a forward archetype from StatsBomb data.
 
         Args:
             player_key: Key from PLAYER_REGISTRY (e.g., "alvarez", "messi")
-            weights: Optional custom weights (defaults to static pre-computed)
-            directions: Optional custom directions (defaults to standard)
+            weights: Optional custom weights (defaults to data-driven)
+            directions: Optional custom directions
 
         Returns:
             Archetype with data-driven target profile and description
@@ -117,11 +70,10 @@ class ArchetypeFactory:
             KeyError: If player_key not found in registry
             ValueError: If no events found for the player
         """
-        # Return cached if available
-        if player_key in self._cache and weights is None and directions is None:
-            return self._cache[player_key]
+        cache_key = player_key
+        if cache_key in self._cache and weights is None and directions is None:
+            return self._cache[cache_key]
 
-        # Get player info from registry
         info = get_player_info(player_key)
         competitions = get_player_competitions(player_key)
 
@@ -134,7 +86,6 @@ class ArchetypeFactory:
         if self.verbose:
             print(f"Loading events for {info['display_name']}...")
 
-        # Load player events from StatsBomb
         events = self.loader.get_player_events(
             player_name=info["player_name"],
             competitions=competitions,
@@ -150,23 +101,15 @@ class ArchetypeFactory:
         if self.verbose:
             print(f"Found {len(events)} events, calculating stats...")
 
-        # Calculate statistics
+        # Calculate statistics and map using ForwardMapper
         stats = calculate_player_stats(events)
+        mapper = self._forward_mapper
 
-        # Map to SkillCorner target profile
-        target = map_to_skillcorner_target(stats)
+        target = mapper.map_to_target(stats)
+        description = mapper.get_description(stats, target)
+        final_weights = weights if weights is not None else mapper.compute_weights(stats)
+        final_directions = directions if directions is not None else FORWARD_DIRECTIONS.copy()
 
-        # Generate description
-        description = get_archetype_description(stats, target)
-
-        # Compute weights from player stats (data-driven)
-        if weights is not None:
-            final_weights = weights
-        else:
-            final_weights = compute_archetype_weights(stats)
-        final_directions = directions if directions is not None else DEFAULT_DIRECTIONS.copy()
-
-        # Build the archetype
         archetype = Archetype(
             name=player_key,
             description=f"{info['display_name']}\n{description}",
@@ -175,9 +118,8 @@ class ArchetypeFactory:
             directions=final_directions,
         )
 
-        # Cache if using defaults
         if weights is None and directions is None:
-            self._cache[player_key] = archetype
+            self._cache[cache_key] = archetype
 
         return archetype
 
@@ -185,7 +127,7 @@ class ArchetypeFactory:
         """Build a defender archetype from StatsBomb data.
 
         Args:
-            player_key: Key from PLAYER_REGISTRY (e.g., "gvardiol", "romero")
+            player_key: Key from PLAYER_REGISTRY (e.g., "gvardiol", "vandijk")
 
         Returns:
             Archetype with data-driven target profile
@@ -215,17 +157,13 @@ class ArchetypeFactory:
         if self.verbose:
             print(f"Found {len(events)} events, calculating defender stats...")
 
-        # Calculate defender-specific statistics
+        # Calculate statistics and map using DefenderMapper
         stats = calculate_defender_stats(events)
+        mapper = self._defender_mapper
 
-        # Map to SkillCorner target profile
-        target = map_defender_to_skillcorner(stats)
-
-        # Generate description
-        description = get_defender_description(stats, target)
-
-        # Compute data-driven weights
-        weights = compute_defender_weights(stats)
+        target = mapper.map_to_target(stats)
+        description = mapper.get_description(stats, target)
+        weights = mapper.compute_weights(stats)
 
         archetype = Archetype(
             name=player_key,
@@ -242,7 +180,7 @@ class ArchetypeFactory:
         """Build a goalkeeper archetype from StatsBomb data.
 
         Args:
-            player_key: Key from PLAYER_REGISTRY (e.g., "lloris", "livakovic")
+            player_key: Key from PLAYER_REGISTRY (e.g., "neuer", "lloris")
 
         Returns:
             Archetype with data-driven target profile
@@ -272,17 +210,13 @@ class ArchetypeFactory:
         if self.verbose:
             print(f"Found {len(events)} events, calculating goalkeeper stats...")
 
-        # Calculate goalkeeper-specific statistics
+        # Calculate statistics and map using GoalkeeperMapper
         stats = calculate_goalkeeper_stats(events)
+        mapper = self._goalkeeper_mapper
 
-        # Map to SkillCorner target profile
-        target = map_goalkeeper_to_skillcorner(stats)
-
-        # Generate description
-        description = get_goalkeeper_description(stats, target)
-
-        # Compute data-driven weights
-        weights = compute_goalkeeper_weights(stats)
+        target = mapper.map_to_target(stats)
+        description = mapper.get_description(stats, target)
+        weights = mapper.compute_weights(stats)
 
         archetype = Archetype(
             name=player_key,
@@ -296,19 +230,11 @@ class ArchetypeFactory:
         return archetype
 
     def list_available(self) -> list[str]:
-        """Get list of available player archetypes.
-
-        Returns:
-            List of player keys that can be used with build()
-        """
+        """Get list of available player archetypes."""
         return get_available_players()
 
     def get_dropdown_options(self) -> list[tuple[str, str]]:
-        """Get options formatted for notebook dropdown widget.
-
-        Returns:
-            List of (display_name, key) tuples for ipywidgets.Dropdown
-        """
+        """Get options formatted for dropdown widget."""
         options = []
         for key in self.list_available():
             try:
@@ -342,21 +268,10 @@ def get_factory() -> ArchetypeFactory:
 
 
 def build_archetype(player_key: str) -> Archetype:
-    """Convenience function to build an archetype.
-
-    Args:
-        player_key: Key from PLAYER_REGISTRY
-
-    Returns:
-        Archetype built from StatsBomb data
-    """
+    """Convenience function to build an archetype."""
     return get_factory().build(player_key)
 
 
 def list_archetypes() -> list[str]:
-    """Convenience function to list available archetypes.
-
-    Returns:
-        List of available player keys
-    """
+    """Convenience function to list available archetypes."""
     return get_factory().list_available()
