@@ -973,10 +973,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#why-these-10-players" class="md-nav__link">
+  <a href="#why-these-12-players" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why These 10 Players?
+        Why These 12 Players?
       
     </span>
   </a>
@@ -1282,6 +1282,28 @@
     <span class="md-ellipsis">
       
         Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enriched-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enriched Prompts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enhanced-analysis-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enhanced Analysis Classes
       
     </span>
   </a>
@@ -2190,10 +2212,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#why-these-10-players" class="md-nav__link">
+  <a href="#why-these-12-players" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why These 10 Players?
+        Why These 12 Players?
       
     </span>
   </a>
@@ -2506,6 +2528,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#enriched-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enriched Prompts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enhanced-analysis-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enhanced Analysis Classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#privacy-considerations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2542,9 +2586,11 @@
 
 
 <h1 id="methodology-finding-alvarez-in-the-a-league">Methodology: Finding Alvarez in the A-League<a class="headerlink" href="#methodology-finding-alvarez-in-the-a-league" title="Permanent link">&para;</a></h1>
+<p><a class="md-button md-button--primary" href="https://huggingface.co/spaces/KarimElgammal/analytics-cup-research">Live Demo</a>
+<a class="md-button" href="https://github.com/KarimElgammal/analytics_cup_research">GitHub</a>
+<a class="md-button" href="https://github.com/KarimElgammal/analytics_cup_research/blob/main/submission.ipynb">Submission Notebook</a></p>
 <blockquote>
-<p><strong>Online Documentation</strong>: <a href="https://karimelgammal.github.io/analytics_cup_research/">karimelgammal.github.io/analytics_cup_research</a></p>
-<p><strong>Repository</strong>: <a href="https://github.com/KarimElgammal/analytics_cup_research">github.com/KarimElgammal/analytics_cup_research</a></p>
+<p><strong>Interactive App</strong>: Try the <a href="https://huggingface.co/spaces/KarimElgammal/analytics-cup-research">live demo on HuggingFace</a> or run locally with <code>streamlit run app.py</code></p>
 </blockquote>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p>This document explains how I derive player archetypes from StatsBomb event data and map them to SkillCorner tracking metrics for player similarity analysis.</p>
@@ -2899,7 +2945,7 @@
 <li><strong>loader.py</strong>: Fetches events from StatsBomb free data API</li>
 <li><strong>registry.py</strong>: Maps player keys to StatsBomb names and competition IDs</li>
 <li><strong>stats.py</strong>: Calculates shooting, passing, dribbling statistics</li>
-<li><strong>mapper.py</strong>: Converts StatsBomb metrics to SkillCorner target profiles</li>
+<li><strong>mappers/</strong>: Position-specific mappers (ForwardMapper, DefenderMapper, GoalkeeperMapper) converting StatsBomb metrics to SkillCorner target profiles</li>
 </ul>
 <hr />
 <h2 id="alvarez-target-profile-computed-from-statsbomb">Alvarez Target Profile (Computed from StatsBomb)<a class="headerlink" href="#alvarez-target-profile-computed-from-statsbomb" title="Permanent link">&para;</a></h2>
@@ -3032,7 +3078,7 @@
 </span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>        <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;Complete forward, link-up play, clinical finishing&quot;</span><span class="p">,</span>
 </span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>        <span class="s2">&quot;competitions&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">43</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;FIFA World Cup 2022&quot;</span><span class="p">)],</span>
 </span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="p">},</span>
-</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="c1"># ... plus lewandowski, rashford, en_nesyri, gvardiol, romero, hakimi, lloris, livakovic, bounou</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="c1"># ... plus lewandowski, rashford, en_nesyri, gvardiol, vandijk, hakimi, neuer, lloris, bounou</span>
 </span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="computed-player-profiles-world-cup-2022">Computed Player Profiles (World Cup 2022)<a class="headerlink" href="#computed-player-profiles-world-cup-2022" title="Permanent link">&para;</a></h3>
@@ -3380,7 +3426,7 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 </ul>
 <hr />
 <h2 id="part-7-player-archetype-selection-criteria">Part 7: Player Archetype Selection Criteria<a class="headerlink" href="#part-7-player-archetype-selection-criteria" title="Permanent link">&para;</a></h2>
-<h3 id="why-these-10-players">Why These 10 Players?<a class="headerlink" href="#why-these-10-players" title="Permanent link">&para;</a></h3>
+<h3 id="why-these-12-players">Why These 12 Players?<a class="headerlink" href="#why-these-12-players" title="Permanent link">&para;</a></h3>
 <p>The archetypes were selected based on three key criteria:</p>
 <ol>
 <li><strong>Data Availability</strong>: Players must have sufficient events in StatsBomb free data (World Cup 2022) for reliable statistics</li>
@@ -3490,13 +3536,13 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 <td>Ball-playing CB</td>
 </tr>
 <tr>
-<td><strong>Romero</strong></td>
-<td>ARG</td>
-<td>7</td>
-<td>12 (58%)</td>
-<td>28 (50%)</td>
-<td>65 (48/90)</td>
-<td>Aggressive CB</td>
+<td><strong>Van Dijk</strong></td>
+<td>NED</td>
+<td>3</td>
+<td>10 (60%)</td>
+<td>22 (55%)</td>
+<td>42 (56/90)</td>
+<td>Commanding CB</td>
 </tr>
 <tr>
 <td><strong>Hakimi</strong></td>
@@ -3525,28 +3571,28 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 </thead>
 <tbody>
 <tr>
+<td><strong>Neuer</strong></td>
+<td>GER</td>
+<td>2</td>
+<td>59</td>
+<td>85%</td>
+<td>32m</td>
+<td>40%</td>
+</tr>
+<tr>
 <td><strong>Lloris</strong></td>
 <td>FRA</td>
-<td>6</td>
-<td>185</td>
+<td>2</td>
+<td>69</td>
 <td>78%</td>
 <td>28m</td>
 <td>35%</td>
 </tr>
 <tr>
-<td><strong>Livakovic</strong></td>
-<td>CRO</td>
-<td>7</td>
-<td>195</td>
-<td>72%</td>
-<td>35m</td>
-<td>45%</td>
-</tr>
-<tr>
 <td><strong>Bounou</strong></td>
 <td>MAR</td>
-<td>6</td>
-<td>210</td>
+<td>5</td>
+<td>83</td>
 <td>74%</td>
 <td>39m</td>
 <td>50%</td>
@@ -3764,21 +3810,66 @@ For features where lower is better (direction=-1), target = 10th percentile.</p>
 <h3 id="sample-output">Sample Output<a class="headerlink" href="#sample-output" title="Permanent link">&para;</a></h3>
 <p>For the Alvarez archetype:</p>
 <blockquote>
-<p><strong>T. Imai</strong> emerges as the closest match with a 96.5% similarity. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement.</p>
+<p><strong>T. Imai</strong> emerges as the closest match with a 95.7% similarity. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement.</p>
 <p>The key similarity lies in movement patterns. Imai consistently finds space away from defenders, a hallmark of the Alvarez archetype.</p>
 <p>For development potential, <strong>K. Bos</strong> at 23 offers interesting upside with similar separation values and emerging danger rate.</p>
 </blockquote>
 <h3 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h3>
-<p>Available in <code>src/utils/ai_insights.py</code>:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># position-specific metric configs</span>
-</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">POSITION_METRICS</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>    <span class="s2">&quot;forward&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>        <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;danger_rate&quot;</span><span class="p">,</span> <span class="s2">&quot;central_pct&quot;</span><span class="p">,</span> <span class="s2">&quot;avg_separation&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
-</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>        <span class="s2">&quot;count_field&quot;</span><span class="p">:</span> <span class="s2">&quot;total_entries&quot;</span><span class="p">,</span>
-</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>        <span class="s2">&quot;criteria&quot;</span><span class="p">:</span> <span class="s2">&quot;Forwards are valued for creating danger...&quot;</span><span class="p">,</span>
-</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>    <span class="p">},</span>
-</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>    <span class="c1"># defender and goalkeeper configs...</span>
-</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="p">}</span>
+<p>The module uses a class-based architecture in <code>src/utils/ai_insights.py</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.ai_insights</span><span class="w"> </span><span class="kn">import</span> <span class="n">InsightGenerator</span><span class="p">,</span> <span class="n">POSITION_CONFIGS</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="c1"># Position-specific configurations</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">generator</span> <span class="o">=</span> <span class="n">InsightGenerator</span><span class="p">(</span><span class="s2">&quot;forward&quot;</span><span class="p">)</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">metrics</span><span class="p">)</span>  <span class="c1"># MetricInfo objects with key, label, definition</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">count_field</span><span class="p">)</span>  <span class="c1"># &quot;total_entries&quot;</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">criteria</span><span class="p">)</span>  <span class="c1"># What makes a great forward</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="c1"># Available positions</span>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">POSITION_CONFIGS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pos</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">metrics</span><span class="p">)</span><span class="si">}</span><span class="s2"> metrics&quot;</span><span class="p">)</span>
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="c1"># forward: 5 metrics</span>
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="c1"># defender: 5 metrics</span>
+</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="c1"># goalkeeper: 4 metrics</span>
+</span></code></pre></div>
+<h3 id="enriched-prompts">Enriched Prompts<a class="headerlink" href="#enriched-prompts" title="Permanent link">&para;</a></h3>
+<p>The AI receives context-rich prompts including:</p>
+<ul>
+<li><strong>Feature weights</strong>: Which metrics matter most (e.g., <code>avg_separation: 23%</code>, <code>danger_rate: 22%</code>)</li>
+<li><strong>Archetype targets</strong>: Ideal values from StatsBomb (e.g., <code>danger_rate: 95</code>, <code>central_pct: 70</code>)</li>
+<li><strong>Percentile ranks</strong>: Player metrics ranked vs full dataset (e.g., <code>40.0% (P85)</code> = 85th percentile)</li>
+<li><strong>Confidence levels</strong>: High (10+ samples), Medium (5-9), Low (&lt;5) for reliability assessment</li>
+<li><strong>Development gaps</strong>: Priority areas to improve, calculated as <code>gap × weight</code> (e.g., "Danger Rate: increase by 55")</li>
+<li><strong>Similar players</strong>: Other players in the dataset with comparable profiles</li>
+<li><strong>Age group context</strong>: Percentile rankings within age groups (U21, U23, U25, 25+)</li>
+<li><strong>Dataset statistics</strong>: Mean ± std for each metric</li>
+<li><strong>Domain knowledge request</strong>: The model is asked to incorporate knowledge about players, teams, and leagues from its training data (career history, international experience, club reputation, etc.)</li>
+</ul>
+<h3 id="enhanced-analysis-classes">Enhanced Analysis Classes<a class="headerlink" href="#enhanced-analysis-classes" title="Permanent link">&para;</a></h3>
+<p>The module uses a class-based architecture for clean, modular analysis:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.ai_insights</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>    <span class="n">PlayerAnalyzer</span><span class="p">,</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>    <span class="n">DevelopmentGap</span><span class="p">,</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    <span class="n">ConfidenceLevel</span><span class="p">,</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>    <span class="n">ArchetypeFit</span><span class="p">,</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="p">)</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="c1"># Initialize analyzer for position</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="n">analyzer</span> <span class="o">=</span> <span class="n">PlayerAnalyzer</span><span class="p">(</span><span class="s2">&quot;forward&quot;</span><span class="p">)</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="c1"># Compute development gaps (prioritised by gap × weight)</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="n">gaps</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">compute_development_gaps</span><span class="p">(</span><span class="n">player_metrics</span><span class="p">,</span> <span class="n">archetype_data</span><span class="p">)</span>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="nb">print</span><span class="p">(</span><span class="n">gaps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">())</span>  <span class="c1"># &quot;Danger Rate: 40 → 95 (↑ 55 gap, 22% weight)&quot;</span>
+</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>
+</span><span id="__span-19-15"><a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="c1"># Find similar players using cosine similarity</span>
+</span><span id="__span-19-16"><a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="n">similar</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">find_similar_players</span><span class="p">(</span><span class="s2">&quot;T. Imai&quot;</span><span class="p">,</span> <span class="n">all_profiles</span><span class="p">,</span> <span class="n">metric_keys</span><span class="p">)</span>
+</span><span id="__span-19-17"><a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="nb">print</span><span class="p">(</span><span class="n">similar</span><span class="p">)</span>  <span class="c1"># [&quot;T. Payne&quot;, &quot;K. Bos&quot;]</span>
+</span><span id="__span-19-18"><a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a>
+</span><span id="__span-19-19"><a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="c1"># Get confidence level</span>
+</span><span id="__span-19-20"><a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a><span class="n">confidence</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">get_confidence_level</span><span class="p">(</span><span class="n">sample_size</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+</span><span id="__span-19-21"><a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a><span class="nb">print</span><span class="p">(</span><span class="n">confidence</span><span class="o">.</span><span class="n">format</span><span class="p">())</span>  <span class="c1"># &quot;🟡 Medium confidence (7 samples)&quot;</span>
+</span><span id="__span-19-22"><a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a>
+</span><span id="__span-19-23"><a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a><span class="c1"># Compute age group percentiles</span>
+</span><span id="__span-19-24"><a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a><span class="n">age_pcts</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">compute_age_percentiles</span><span class="p">(</span><span class="n">age</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">all_profiles</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="privacy-considerations">Privacy Considerations<a class="headerlink" href="#privacy-considerations" title="Permanent link">&para;</a></h3>
 <p>Only aggregated metrics and player names are sent to the AI. No raw tracking coordinates or identifiers beyond public player names are transmitted. All inference is performed on GitHub Models or HuggingFace testbed APIs - data is not used for model training.</p>

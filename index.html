@@ -1131,7 +1131,8 @@
 <p><strong>Player archetype matching using SkillCorner tracking data</strong></p>
 <p>A player similarity study for identifying A-League players who match world-class archetypes. Define an archetype (like Julian Alvarez's intelligent movement style), and find similar players using SkillCorner broadcast tracking data.</p>
 <p><a class="md-button md-button--primary" href="https://huggingface.co/spaces/KarimElgammal/analytics-cup-research">Live Demo</a>
-<a class="md-button" href="https://github.com/KarimElgammal/analytics_cup_research">GitHub</a></p>
+<a class="md-button" href="https://github.com/KarimElgammal/analytics_cup_research">GitHub</a>
+<a class="md-button" href="https://github.com/KarimElgammal/analytics_cup_research/blob/main/submission.ipynb">Submission Notebook</a></p>
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>12 Pre-built Archetypes</strong>: Computed from StatsBomb World Cup 2022 data</li>
@@ -1158,12 +1159,12 @@
 </tr>
 <tr>
 <td><strong>Defender</strong></td>
-<td>Gvardiol, Romero, Hakimi</td>
+<td>Gvardiol, Van Dijk, Hakimi</td>
 <td>8,911 engagements</td>
 </tr>
 <tr>
 <td><strong>Goalkeeper</strong></td>
-<td>Lloris, Livakovic, Bounou</td>
+<td>Neuer, Lloris, Bounou</td>
 <td>522 distributions</td>
 </tr>
 </tbody>
@@ -1185,7 +1186,7 @@
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># See all available archetypes</span>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">Archetype</span><span class="o">.</span><span class="n">list_available</span><span class="p">())</span>
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># [&#39;alvarez&#39;, &#39;giroud&#39;, &#39;kane&#39;, &#39;lewandowski&#39;, &#39;rashford&#39;, &#39;en_nesyri&#39;,</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;romero&#39;, &#39;hakimi&#39;, &#39;lloris&#39;, &#39;livakovic&#39;, &#39;bounou&#39;]</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1">#  &#39;gvardiol&#39;, &#39;vandijk&#39;, &#39;hakimi&#39;, &#39;neuer&#39;, &#39;lloris&#39;, &#39;bounou&#39;]</span>
 </span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
 </span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># Compute similarity rankings against your player profiles</span>
 </span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">SimilarityEngine</span><span class="p">(</span><span class="n">archetype</span><span class="p">)</span>
@@ -1197,7 +1198,7 @@
 </span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;rank&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;similarity_score&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
 </span></code></pre></div>
 <h2 id="a-league-results">A-League Results<a class="headerlink" href="#a-league-results" title="Permanent link">&para;</a></h2>
-<p>Using 10 A-League matches, the analysis identified <strong>T. Imai</strong> (Western United) as the closest match to the Alvarez archetype with a 96.5% similarity score. See <a href="examples/">Examples</a> for full results and figures.</p>
+<p>Using 10 A-League matches, the analysis identified <strong>T. Imai</strong> (Western United) as the closest match to the Alvarez archetype with a 95.7% similarity score. See <a href="examples/">Examples</a> for full results and figures.</p>
 <h2 id="project-origin">Project Origin<a class="headerlink" href="#project-origin" title="Permanent link">&para;</a></h2>
 <p>Developed for the SkillCorner X PySport Analytics Cup 2026 Research Track. The research question: "Can SkillCorner tracking data identify A-League players with specific archetype characteristics?"</p>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>

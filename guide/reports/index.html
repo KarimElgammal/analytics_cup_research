@@ -823,6 +823,78 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#enhanced-analysis-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enhanced Analysis Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Enhanced Analysis Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#confidence-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confidence Levels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#development-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development Gaps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#similar-players" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Similar Players
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#age-group-percentiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Age Group Percentiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain-knowledge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Domain Knowledge
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example-output" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1286,6 +1358,78 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#enhanced-analysis-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enhanced Analysis Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Enhanced Analysis Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#confidence-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confidence Levels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#development-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development Gaps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#similar-players" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Similar Players
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#age-group-percentiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Age Group Percentiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain-knowledge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Domain Knowledge
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example-output" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1462,55 +1606,112 @@
 <li>Quick Distribution %: speed of restarts</li>
 </ul>
 <h2 id="what-gets-sent-to-the-ai">What Gets Sent to the AI<a class="headerlink" href="#what-gets-sent-to-the-ai" title="Permanent link">&para;</a></h2>
-<p>The prompt includes:</p>
+<p>The prompt includes enriched context for accurate insights:</p>
 <ol>
-<li>Position type and archetype name</li>
-<li>Dataset size (events and players)</li>
-<li>Position-specific evaluation criteria</li>
-<li>Top 5 candidates with their metrics</li>
-<li>Dataset averages for comparison</li>
+<li><strong>Position type</strong> and archetype name</li>
+<li><strong>Dataset size</strong> (events and players)</li>
+<li><strong>Feature weights</strong> showing what matters most (e.g., <code>avg_separation: 23%</code>, <code>danger_rate: 22%</code>)</li>
+<li><strong>Archetype targets</strong> with ideal values from StatsBomb (e.g., <code>danger_rate: 95</code>, <code>central_pct: 70</code>)</li>
+<li><strong>Top candidates</strong> with metrics and <strong>percentile ranks</strong> vs full dataset (e.g., <code>40.0% (P85)</code>)</li>
+<li><strong>Confidence levels</strong> for each player: High (10+), Medium (5-9), Low (&lt;5 samples)</li>
+<li><strong>Development gaps</strong> showing priority areas to improve (metric, direction, gap size, weight)</li>
+<li><strong>Similar players</strong> in the dataset with comparable profiles</li>
+<li><strong>Age group context</strong> (U21, U23, U25, 25+) and group size</li>
+<li><strong>Dataset statistics</strong> (mean ± std for each metric)</li>
+<li><strong>Domain knowledge request</strong> asking the model to incorporate knowledge about players, teams, and leagues</li>
 </ol>
 <p>No raw tracking data or player identifiers beyond names are sent.</p>
+<h2 id="enhanced-analysis-features">Enhanced Analysis Features<a class="headerlink" href="#enhanced-analysis-features" title="Permanent link">&para;</a></h2>
+<p>The AI insights module provides several advanced analysis capabilities:</p>
+<h3 id="confidence-levels">Confidence Levels<a class="headerlink" href="#confidence-levels" title="Permanent link">&para;</a></h3>
+<p>Based on sample size, each player receives a confidence rating:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Samples</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🟢 High</td>
+<td>10+</td>
+<td>Reliable profile based on sufficient data</td>
+</tr>
+<tr>
+<td>🟡 Medium</td>
+<td>5-9</td>
+<td>Reasonable estimate, more data would help</td>
+</tr>
+<tr>
+<td>🔴 Low</td>
+<td>&lt;5</td>
+<td>Preliminary profile, needs more observations</td>
+</tr>
+</tbody>
+</table>
+<h3 id="development-gaps">Development Gaps<a class="headerlink" href="#development-gaps" title="Permanent link">&para;</a></h3>
+<p>For each player, the system identifies which metrics differ most from the archetype target:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Development areas: Danger Rate (increase by 55), Central % (increase by 50)
+</span></code></pre></div>
+<p>Gaps are prioritised by: <code>gap_size × metric_weight</code>, so high-weight metrics with large gaps are flagged first.</p>
+<h3 id="similar-players">Similar Players<a class="headerlink" href="#similar-players" title="Permanent link">&para;</a></h3>
+<p>The system finds other players in the dataset with similar profiles using cosine similarity on z-score normalised metrics:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Similar profiles: T. Payne, K. Bos, C. Elliott
+</span></code></pre></div>
+<p>This helps scouts identify backup candidates with comparable styles.</p>
+<h3 id="age-group-percentiles">Age Group Percentiles<a class="headerlink" href="#age-group-percentiles" title="Permanent link">&para;</a></h3>
+<p>Players are compared within their age group (U21, U23, U25, 25+) to contextualise their development stage.</p>
+<h2 id="domain-knowledge">Domain Knowledge<a class="headerlink" href="#domain-knowledge" title="Permanent link">&para;</a></h2>
+<p>The AI is encouraged to use its training knowledge to enrich insights:</p>
+<ul>
+<li><strong>Player context</strong>: Career history, international caps, previous clubs, known strengths</li>
+<li><strong>Team context</strong>: Club reputation, playing style, academy quality</li>
+<li><strong>League context</strong>: A-League level compared to other leagues, transfer market dynamics</li>
+<li><strong>Archetype context</strong>: The reference player's (e.g., Alvarez) actual playing style and career</li>
+</ul>
+<p>This adds valuable context beyond what the tracking data alone can show.</p>
 <h2 id="example-output">Example Output<a class="headerlink" href="#example-output" title="Permanent link">&para;</a></h2>
 <p>For a forward archetype like Alvarez:</p>
 <blockquote>
-<p><strong>T. Imai</strong> from Western United emerges as the closest match with a 96.5% similarity score. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement rather than dribbling.</p>
+<p><strong>T. Imai</strong> from Western United emerges as the closest match with a 95.7% similarity score. His exceptional separation (5.64m) and 40% danger rate mirror Alvarez's key traits of creating danger through intelligent movement rather than dribbling.</p>
 <p>The key similarity lies in movement patterns. Imai consistently finds space away from defenders, a hallmark of the Alvarez archetype. His 0% central percentage suggests he operates from wide areas but still generates shooting opportunities.</p>
 <p>For development potential, <strong>K. Bos</strong> at 23 years old offers interesting upside with similar separation values and emerging danger rate that align with Alvarez's profile.</p>
 </blockquote>
 <h2 id="customisation">Customisation<a class="headerlink" href="#customisation" title="Permanent link">&para;</a></h2>
 <h3 id="change-model">Change Model<a class="headerlink" href="#change-model" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Available models:</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># GitHub: &quot;phi-4&quot;, &quot;gpt-4o-mini&quot;</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># HuggingFace: &quot;llama-3.1-8b&quot;, &quot;llama-3.2-3b&quot;, &quot;qwen-2.5-7b&quot;, &quot;smollm3-3b&quot;, &quot;gemma-2-2b&quot;</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">insight</span> <span class="o">=</span> <span class="n">generate_similarity_insight</span><span class="p">(</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">ranked</span><span class="p">,</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">archetype</span><span class="p">,</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama-3.1-8b&quot;</span><span class="p">,</span>  <span class="c1"># or any model above</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="n">position_type</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Available models:</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># GitHub: &quot;phi-4&quot;, &quot;gpt-4o-mini&quot;</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># HuggingFace: &quot;llama-3.1-8b&quot;, &quot;llama-3.2-3b&quot;, &quot;qwen-2.5-7b&quot;, &quot;smollm3-3b&quot;, &quot;gemma-2-2b&quot;</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">insight</span> <span class="o">=</span> <span class="n">generate_similarity_insight</span><span class="p">(</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">ranked</span><span class="p">,</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="n">archetype</span><span class="p">,</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;llama-3.1-8b&quot;</span><span class="p">,</span>  <span class="c1"># or any model above</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="n">position_type</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="individual-player-reports">Individual Player Reports<a class="headerlink" href="#individual-player-reports" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.ai_insights</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_player_report</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">report</span> <span class="o">=</span> <span class="n">generate_player_report</span><span class="p">(</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">player_name</span><span class="o">=</span><span class="s2">&quot;T. Imai&quot;</span><span class="p">,</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">player_profile</span><span class="o">=</span><span class="n">player_dict</span><span class="p">,</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="n">similarity_score</span><span class="o">=</span><span class="mf">96.5</span><span class="p">,</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="n">archetype</span><span class="o">=</span><span class="n">archetype</span><span class="p">,</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="n">position_type</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.utils.ai_insights</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_player_report</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">report</span> <span class="o">=</span> <span class="n">generate_player_report</span><span class="p">(</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">player_name</span><span class="o">=</span><span class="s2">&quot;T. Imai&quot;</span><span class="p">,</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">player_profile</span><span class="o">=</span><span class="n">player_dict</span><span class="p">,</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">similarity_score</span><span class="o">=</span><span class="mf">95.7</span><span class="p">,</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="n">archetype</span><span class="o">=</span><span class="n">archetype</span><span class="p">,</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="n">position_type</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="p">)</span>
 </span></code></pre></div>
 <h2 id="streamlit-integration">Streamlit Integration<a class="headerlink" href="#streamlit-integration" title="Permanent link">&para;</a></h2>
 <p>The interactive app includes AI insights in a dedicated tab:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># in app.py</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">if</span> <span class="n">has_valid_token</span><span class="p">():</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Generating AI scouting insight...&quot;</span><span class="p">):</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        <span class="n">insight</span> <span class="o">=</span> <span class="n">generate_similarity_insight</span><span class="p">(</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>            <span class="n">results</span><span class="p">,</span> <span class="n">archetype</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">position_type</span><span class="o">=</span><span class="n">position_type</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="p">)</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="n">insight</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># in app.py</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">if</span> <span class="n">has_valid_token</span><span class="p">():</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">spinner</span><span class="p">(</span><span class="s2">&quot;Generating AI scouting insight...&quot;</span><span class="p">):</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>        <span class="n">insight</span> <span class="o">=</span> <span class="n">generate_similarity_insight</span><span class="p">(</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>            <span class="n">results</span><span class="p">,</span> <span class="n">archetype</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">position_type</span><span class="o">=</span><span class="n">position_type</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>        <span class="p">)</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="n">insight</span><span class="p">)</span>
 </span></code></pre></div>
 
 
