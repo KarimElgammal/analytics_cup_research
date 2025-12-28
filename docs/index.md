@@ -4,9 +4,10 @@
 
 A player similarity study for identifying A-League players who match world-class archetypes. Define an archetype (like Julian Alvarez's intelligent movement style), and find similar players using SkillCorner broadcast tracking data.
 
-[Live Demo](https://huggingface.co/spaces/KarimElgammal/analytics-cup-research){ .md-button .md-button--primary }
+[Live Streamlit Demo](https://huggingface.co/spaces/KarimElgammal/analytics-cup-research){ .md-button .md-button--primary }
 [GitHub](https://github.com/KarimElgammal/analytics_cup_research){ .md-button }
 [Submission Notebook](https://github.com/KarimElgammal/analytics_cup_research/blob/main/submission.ipynb){ .md-button }
+[Open in Binder](https://mybinder.org/v2/gh/KarimElgammal/analytics_cup_research/HEAD?labpath=submission.ipynb){ .md-button }
 
 ## Features
 

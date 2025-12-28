@@ -1,5 +1,14 @@
 # Getting Started
 
+## Try Without Installing
+
+No setup required - try the project directly in your browser:
+
+[Live Streamlit Demo](https://huggingface.co/spaces/KarimElgammal/analytics-cup-research){ .md-button .md-button--primary }
+[Open Notebook in Binder](https://mybinder.org/v2/gh/KarimElgammal/analytics_cup_research/HEAD?labpath=submission.ipynb){ .md-button }
+
+---
+
 ## Quick Start (Recommended)
 
 The app launcher handles everything automatically:
