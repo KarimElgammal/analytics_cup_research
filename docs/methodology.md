@@ -17,21 +17,53 @@ This document explains how I derive player archetypes from StatsBomb event data 
 | Component | Source | Type | Notes |
 |-----------|--------|------|-------|
 | **Forward archetypes** | StatsBomb API | Computed at runtime | Stats from World Cup 2022 events |
-| **Defender archetypes** | StatsBomb API | Computed at runtime | Stats from World Cup 2022 events |
-| **Goalkeeper archetypes** | StatsBomb API | Computed at runtime | Stats from World Cup 2022 events |
-| **A-League player profiles** | SkillCorner GitHub | Computed at runtime | Loaded from dynamic_events.csv |
+| **Defender archetypes** | StatsBomb open data | Computed locally | Gvardiol, Van Dijk, Hakimi from WC22/Euro24 |
+| **Goalkeeper archetypes** | StatsBomb open data | Computed locally | Neuer, Lloris, Bounou from WC22/Euro24 |
+| **A-League player profiles** | SkillCorner Dynamic Events | Computed at runtime | From `dynamic_events.csv` (A-League 2024/25) |
 | **Feature weights** | Correlation analysis | Static | Derived from A-League data, hardcoded |
 | **Reference distributions** | Manual estimates | Static | Percentile thresholds for mapping |
 
 ### Archetype Computation Details
 
-All 12 archetypes are now computed from StatsBomb World Cup 2022 data:
+| Position | Players | Source | Data |
+|----------|---------|--------|------|
+| **Forwards** | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri | StatsBomb API | World Cup 2022 events (shots, goals, dribbles) |
+| **Defenders** | Gvardiol, Van Dijk, Hakimi | [StatsBomb open data](https://github.com/statsbomb/open-data) | WC22 + Euro24 events (duels, pressures, blocks) |
+| **Goalkeepers** | Neuer, Lloris, Bounou | [StatsBomb open data](https://github.com/statsbomb/open-data) | WC22 + Euro24 passes |
 
-| Position | Players | StatsBomb Stats Used | Mapping to SkillCorner |
-|----------|---------|---------------------|------------------------|
-| **Forwards** | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri | shots, goals, dribbles, passes, box touches | danger_rate, avg_separation, carry_pct |
-| **Defenders** | Gvardiol, Romero, Hakimi | tackles, duels, aerials, pressures, interceptions | stop_danger_rate, pressing_rate, goal_side_rate |
-| **Goalkeepers** | Lloris, Livakovic, Bounou | saves, passes, pass distances, pass heights | pass_success_rate, long_pass_pct, avg_pass_distance |
+**Script**: `scripts/compute_archetype_profiles.py` computes defender/goalkeeper metrics from StatsBomb open data.
+
+### Sample Sizes
+
+| Player | Competition | Matches | Events |
+|--------|-------------|---------|--------|
+| Gvardiol | WC22 | 3 | 48 defensive |
+| Van Dijk | Euro24 | 3 | 42 defensive |
+| Hakimi | WC22 | 6 | 148 defensive |
+| Neuer | Euro24 | 2 | 59 passes |
+| Lloris | WC22 | 2 | 69 passes |
+| Bounou | WC22 | 5 | 83 passes |
+
+### Mapping Event Data → Tracking Data
+
+**Event Data** (StatsBomb - World Cup 2022, Euro 2024):
+- Discrete on-ball actions: duels, pressures, passes, shots
+- What happened and when
+
+**Tracking Data** (SkillCorner - A-League 2024/25):
+- Positional data from optical tracking at 25Hz
+- Dynamic Events derived from tracking: entries, engagements, distributions
+
+The mapping assumes behavioural consistency across data types:
+
+| Event Data (StatsBomb) | → | Tracking Data (SkillCorner) |
+|------------------------|---|------------------------------|
+| High duel success rate | → | High `stop_danger_rate` |
+| High pressure count | → | High `pressing_rate` |
+| High clearance/block rate | → | High `goal_side_rate` |
+| Long pass distance | → | High `avg_pass_distance` |
+
+This is an approximation. A player with 67% duel success in event data should match players in tracking data who also stop ~67% of dangerous situations.
 
 ### Similarity Method
 
@@ -56,28 +88,32 @@ The tool uses **weighted cosine similarity** on z-score normalised features:
 
 ### Defender Target Features
 
-| Feature | Source | Type |
-|---------|--------|------|
-| `stop_danger_rate` | Duel success rate from StatsBomb | Computed |
-| `reduce_danger_rate` | Tackle success rate from StatsBomb | Computed |
-| `pressing_rate` | Pressures per 90 from StatsBomb | Computed |
-| `goal_side_rate` | Aerial success rate from StatsBomb | Computed |
-| `beaten_by_possession_rate` | Inverse of duel success | Computed |
-| `beaten_by_movement_rate` | Inverse of aerial success | Computed |
-| `avg_engagement_distance` | Derived from pressing activity | Derived |
-| `force_backward_rate` | Derived from tackle success | Derived |
+Computed using `scripts/compute_archetype_profiles.py` from StatsBomb open data events.
+
+| Feature | Calculation | Source |
+|---------|-------------|--------|
+| `stop_danger_rate` | `won_duels / total_duels * 100` where duel_outcome in ["Won", "Success In Play", "Success Out"] | StatsBomb |
+| `reduce_danger_rate` | `(interceptions + ball_recoveries) / (total_defensive + ball_recoveries) * 100` | StatsBomb |
+| `pressing_rate` | `pressures / total_defensive_events * 100` | StatsBomb |
+| `goal_side_rate` | `(clearances + blocks) / total_defensive * 100 * 2.5` (scaled) | StatsBomb |
+| `beaten_by_movement_rate` | `100 - stop_danger_rate` | StatsBomb |
+| `avg_engagement_distance` | `avg(location[0]) / 120 * 100` for Pressure/Duel/Interception events | StatsBomb |
+| `force_backward_rate` | Based on tackle patterns | Estimated |
+| `beaten_by_possession_rate` | Based on duel loss patterns | Estimated |
+| `middle_third_pct` | Zone distribution | Estimated |
 
 ### Goalkeeper Target Features
 
-| Feature | Source | Type |
-|---------|--------|------|
-| `pass_success_rate` | Pass accuracy from StatsBomb | Computed |
-| `avg_pass_distance` | Calculated from pass locations | Computed |
-| `long_pass_pct` | Passes > 32m from StatsBomb | Computed |
-| `short_pass_pct` | Passes < 20m from StatsBomb | Computed |
-| `high_pass_pct` | High/lofted passes from StatsBomb | Computed |
-| `quick_distribution_pct` | Derived from short pass tendency | Derived |
-| `to_attacking_third_pct` | Derived from long pass tendency | Derived |
+Computed from StatsBomb Pass events for goalkeeper players.
+
+| Feature | Calculation | Source |
+|---------|-------------|--------|
+| `pass_success_rate` | `successful_passes / total_passes * 100` (null outcome = success) | StatsBomb |
+| `avg_pass_distance` | `avg(pass_length) / 60 * 100` (normalised to 0-100) | StatsBomb |
+| `long_pass_pct` | `passes_over_35m / total_passes * 100` | StatsBomb |
+| `short_pass_pct` | Inverse of long pass tendency | Estimated |
+| `high_pass_pct` | Lofted/aerial passes | Estimated |
+| `quick_distribution_pct` | Speed of restarts | Estimated |
 
 ---
 
@@ -95,7 +131,7 @@ print(archetype.description)  # Shows actual stats
 # Available players (12 archetypes across 3 positions)
 Archetype.list_available()
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
-#  'gvardiol', 'romero', 'hakimi', 'lloris', 'livakovic', 'bounou']
+#  'gvardiol', 'vandijk', 'hakimi', 'neuer', 'lloris', 'bounou']
 ```
 
 The `src/statsbomb/` package handles:

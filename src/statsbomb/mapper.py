@@ -243,38 +243,46 @@ def get_archetype_description(stats: PlayerStats, target: dict[str, float]) -> s
     if stats.dribble_success > 60:
         style_notes.append("skilled dribbler")
     elif stats.dribble_success < 45:
-        style_notes.append("movement-focused (not a dribbler)")
+        style_notes.append("movement-focused")
 
     if stats.box_touches_per_90 > 10:
-        style_notes.append("frequent box presence")
+        style_notes.append("box presence")
 
     if stats.key_passes_per_90 > 1.5:
-        style_notes.append("creative passer")
+        style_notes.append("creative")
 
     style_str = ", ".join(style_notes) if style_notes else "balanced forward"
 
-    return f"""Archetype computed from StatsBomb event data:
-- {stats.matches} matches, ~{stats.minutes:.0f} minutes analyzed
-- {stats.shot_accuracy:.1f}% shot accuracy, {stats.conversion_rate:.1f}% conversion rate
-- {stats.goals} goals from {stats.shots} shots
-- {stats.box_touches} box touches ({stats.box_touches_per_90:.1f} per 90)
-- {stats.pass_accuracy:.1f}% pass accuracy, {stats.key_passes} key passes
-- {stats.dribble_success:.1f}% dribble success rate
+    # Format target table with clean source labels
+    table_lines = [
+        "Target profile (percentile targets 0-100):",
+        "| Feature | Target | Source |",
+        "|---------|--------|--------|",
+    ]
 
-Style: {style_str}
+    # Features computed from StatsBomb vs estimated
+    computed_features = {"danger_rate", "avg_separation", "carry_pct", "avg_passing_options"}
+    feature_names = {
+        "danger_rate": "Danger Rate",
+        "avg_separation": "Separation",
+        "carry_pct": "Carry %",
+        "central_pct": "Central %",
+        "avg_entry_speed": "Speed",
+        "avg_passing_options": "Passing Options",
+        "half_space_pct": "Half Space %",
+        "quick_break_pct": "Quick Break %",
+    }
 
-Target profile (percentile targets 0-100):
-| Feature | Target | Source |
-|---------|--------|--------|
-| Danger Rate | {target['danger_rate']:.0f} | Computed from conversion rate |
-| Separation | {target['avg_separation']:.0f} | Computed from box touches |
-| Carry % | {target['carry_pct']:.0f} | Computed from dribble success |
-| Central % | {target['central_pct']:.0f} | Guessed (no tracking data) |
-| Speed | {target['avg_entry_speed']:.0f} | Guessed (no tracking data) |
+    for key, value in target.items():
+        display_name = feature_names.get(key, key.replace("_", " ").title())
+        source = "StatsBomb" if key in computed_features else "Estimated"
+        table_lines.append(f"| {display_name} | {value:.0f} | {source} |")
 
-How radar values are calculated:
-Player values show their percentile rank across all A-League players analyzed.
-Example: A player at 60 on "Central %" is at the 60th percentile (better than 60% of players).
+    table_str = "\n".join(table_lines)
+
+    return f"""Computed from {stats.matches} matches (~{stats.minutes:.0f} minutes). {style_str.capitalize()}.
+
+{table_str}
 """
 
 
@@ -352,41 +360,53 @@ def get_defender_description(stats, target: dict[str, float]) -> str:
     style_notes = []
 
     if stats.pressures_per_90 > 20:
-        style_notes.append("high pressing intensity")
+        style_notes.append("high pressing")
     elif stats.pressures_per_90 < 10:
-        style_notes.append("positional defender")
+        style_notes.append("positional")
 
     if stats.duel_success_rate > 60:
-        style_notes.append("dominant in duels")
+        style_notes.append("strong in duels")
     elif stats.duel_success_rate < 45:
-        style_notes.append("sometimes beaten in 1v1")
+        style_notes.append("sometimes beaten")
 
     if stats.aerial_success_rate > 65:
         style_notes.append("aerial presence")
 
     if stats.progressive_carry_pct > 35:
-        style_notes.append("ball-playing defender")
+        style_notes.append("ball-playing")
 
     style_str = ", ".join(style_notes) if style_notes else "balanced defender"
 
-    return f"""Archetype computed from StatsBomb event data:
-- {stats.matches} matches analyzed
-- {stats.tackles} tackles ({stats.tackle_success_rate:.1f}% success)
-- {stats.duels} duels ({stats.duel_success_rate:.1f}% won)
-- {stats.aerial_duels} aerial duels ({stats.aerial_success_rate:.1f}% won)
-- {stats.pressures} pressures ({stats.pressures_per_90:.1f} per 90)
-- {stats.interceptions} interceptions, {stats.clearances} clearances
+    # Format target table with clean source labels
+    table_lines = [
+        "Target profile (percentile targets 0-100):",
+        "| Feature | Target | Source |",
+        "|---------|--------|--------|",
+    ]
 
-Style: {style_str}
+    # Features computed from StatsBomb vs estimated
+    computed_features = {"stop_danger_rate", "reduce_danger_rate", "pressing_rate", "goal_side_rate", "beaten_by_movement_rate"}
+    feature_names = {
+        "stop_danger_rate": "Stop Danger %",
+        "reduce_danger_rate": "Reduce Danger %",
+        "pressing_rate": "Pressing %",
+        "goal_side_rate": "Goal Side %",
+        "beaten_by_possession_rate": "Beaten (Ball) %",
+        "beaten_by_movement_rate": "Beaten (Move) %",
+        "avg_engagement_distance": "Engagement Dist",
+        "force_backward_rate": "Force Back %",
+    }
 
-Target profile (percentile targets 0-100):
-| Feature | Target | Source |
-|---------|--------|--------|
-| Stop Danger % | {target['stop_danger_rate']:.0f} | Computed from duel success |
-| Reduce Danger % | {target['reduce_danger_rate']:.0f} | Computed from tackle success |
-| Pressing % | {target['pressing_rate']:.0f} | Computed from pressures/90 |
-| Goal Side % | {target['goal_side_rate']:.0f} | Computed from aerial success |
-| Beaten (Ball) % | {target['beaten_by_possession_rate']:.0f} | Inverse of duel success |
+    for key, value in target.items():
+        display_name = feature_names.get(key, key.replace("_", " ").title())
+        source = "StatsBomb" if key in computed_features else "Estimated"
+        table_lines.append(f"| {display_name} | {value:.0f} | {source} |")
+
+    table_str = "\n".join(table_lines)
+
+    return f"""Computed from {stats.matches} matches ({stats.duels + stats.pressures} events). {style_str.capitalize()}.
+
+{table_str}
 """
 
 
@@ -489,41 +509,52 @@ def get_goalkeeper_description(stats, target: dict[str, float]) -> str:
     style_notes = []
 
     if stats.long_pass_pct > 50:
-        style_notes.append("long distribution specialist")
+        style_notes.append("long distribution")
     elif stats.short_pass_pct > 60:
-        style_notes.append("sweeper keeper (short passing)")
+        style_notes.append("sweeper keeper")
 
     if stats.pass_success_rate > 80:
-        style_notes.append("accurate distributor")
+        style_notes.append("accurate")
     elif stats.pass_success_rate < 70:
-        style_notes.append("direct but risky")
+        style_notes.append("direct")
 
     if stats.high_pass_pct > 45:
-        style_notes.append("frequent lofted passes")
+        style_notes.append("lofted passes")
 
     if stats.avg_pass_distance > 35:
-        style_notes.append("launches attacks from deep")
+        style_notes.append("deep launcher")
 
     style_str = ", ".join(style_notes) if style_notes else "balanced goalkeeper"
 
-    return f"""Archetype computed from StatsBomb event data:
-- {stats.matches} matches analyzed
-- {stats.saves} saves, {stats.goals_conceded} goals conceded
-- {stats.passes} distributions ({stats.pass_success_rate:.1f}% success)
-- {stats.avg_pass_distance:.1f}m average pass distance
-- {stats.long_pass_pct:.1f}% long passes, {stats.short_pass_pct:.1f}% short passes
-- {stats.high_pass_pct:.1f}% high/lofted passes
+    # Format target table with clean source labels
+    table_lines = [
+        "Target profile (percentile targets 0-100):",
+        "| Feature | Target | Source |",
+        "|---------|--------|--------|",
+    ]
 
-Style: {style_str}
+    # Features computed from StatsBomb vs estimated
+    computed_features = {"pass_success_rate", "avg_pass_distance", "long_pass_pct", "short_pass_pct", "high_pass_pct"}
+    feature_names = {
+        "pass_success_rate": "Pass Success %",
+        "avg_pass_distance": "Pass Distance",
+        "long_pass_pct": "Long Pass %",
+        "short_pass_pct": "Short Pass %",
+        "high_pass_pct": "High Pass %",
+        "quick_distribution_pct": "Quick Dist %",
+        "to_attacking_third_pct": "To Attack 3rd %",
+    }
 
-Target profile (percentile targets 0-100):
-| Feature | Target | Source |
-|---------|--------|--------|
-| Pass Success % | {target['pass_success_rate']:.0f} | Computed from pass accuracy |
-| Pass Distance | {target['avg_pass_distance']:.0f} | Computed from avg distance |
-| Long Pass % | {target['long_pass_pct']:.0f} | Computed from long pass ratio |
-| Short Pass % | {target['short_pass_pct']:.0f} | Computed from short pass ratio |
-| High Pass % | {target['high_pass_pct']:.0f} | Computed from lofted passes |
+    for key, value in target.items():
+        display_name = feature_names.get(key, key.replace("_", " ").title())
+        source = "StatsBomb" if key in computed_features else "Estimated"
+        table_lines.append(f"| {display_name} | {value:.0f} | {source} |")
+
+    table_str = "\n".join(table_lines)
+
+    return f"""Computed from {stats.matches} matches ({stats.passes} distributions). {style_str.capitalize()}.
+
+{table_str}
 """
 
 
