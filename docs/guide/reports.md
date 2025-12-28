@@ -74,7 +74,6 @@ The AI receives different context based on position type. Each position has spec
 - Central %: how often player operates centrally
 - Separation: distance from nearest defender
 - Entry Speed: pace entering final third
-- Carry %: dribbling vs passing entries
 
 ### Defender Metrics
 

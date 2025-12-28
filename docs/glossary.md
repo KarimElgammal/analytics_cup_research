@@ -13,7 +13,6 @@ Key metrics and terms used in the player similarity analysis.
 | **half_space_pct** | Percentage of entries through half-spaces (between central and wide). Associated with creative playmakers. |
 | **avg_separation** | Average distance (metres) from the nearest defender when entering the final third. Higher values suggest better movement to find space. |
 | **avg_entry_speed** | Average speed (m/s) when crossing into the final third. Higher speeds indicate direct, penetrating runs. |
-| **carry_pct** | Percentage of entries made by carrying the ball (dribbling) vs. receiving a pass. Low values indicate off-ball movement style. |
 | **avg_passing_options** | Average number of teammates available for a pass when entering. Higher values suggest good timing of runs. |
 | **avg_defensive_line_dist** | Average distance from the defensive line when entering. Indicates positioning depth. |
 

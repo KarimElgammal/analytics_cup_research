@@ -186,7 +186,7 @@ if position == "Forwards":
         "total_entries", "danger_rate", "avg_separation"
     ]
     col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Entries", "Danger %", "Separation (m)"]
-    radar_features = ["danger_rate", "central_pct", "avg_separation", "avg_entry_speed", "carry_pct"]
+    radar_features = ["danger_rate", "central_pct", "avg_separation", "avg_entry_speed"]
     caption = "Forward archetypes computed from StatsBomb World Cup 2022 event data."
 
 elif position == "Defenders":

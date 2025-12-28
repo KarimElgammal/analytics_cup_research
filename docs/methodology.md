@@ -81,7 +81,6 @@ The tool uses **weighted cosine similarity** on z-score normalised features:
 |---------|--------|------|
 | `danger_rate` | Conversion rate from StatsBomb | Computed |
 | `avg_separation` | Box touches per 90 from StatsBomb | Computed |
-| `carry_pct` | Dribble success from StatsBomb | Computed |
 | `avg_passing_options` | Pass accuracy from StatsBomb | Computed |
 | `central_pct` | No StatsBomb equivalent | Fixed estimate (70) |
 | `avg_entry_speed` | No StatsBomb equivalent | Fixed estimate (65) |
@@ -158,7 +157,7 @@ The archetype is **computed from StatsBomb data**. Example output from World Cup
 | Dribble Success | 0.0% | NOT a dribbler |
 | Box Touches | 8 | Finds dangerous positions |
 
-The low dribble success is critical: Alvarez creates through **movement and positioning**, not individual dribbling. This maps to a low `carry_pct` target, penalising dribble-reliant players.
+The low dribble success is critical: Alvarez creates through **movement and positioning**, not individual dribbling.
 
 ### Mapping to SkillCorner Targets
 
@@ -167,7 +166,6 @@ The low dribble success is critical: Alvarez creates through **movement and posi
 | Conversion Rate | `danger_rate` | 36.4% → ~95th percentile |
 | Box Touches/90 | `avg_separation` | High box presence → good separation |
 | Pass Accuracy | `avg_passing_options` | 78.9% → ~50th percentile |
-| Dribble Success | `carry_pct` | 0% → very low target |
 
 Fixed values for tracking-specific metrics (no StatsBomb equivalent):
 - `central_pct`: 70 (forwards typically central)
@@ -263,7 +261,6 @@ StatsBomb provides **event data** (shots, passes, dribbles), while SkillCorner p
 | 36.4% conversion rate | `danger_rate` | Entries leading to shots proxy finishing quality |
 | 8 box touches | `central_pct` | Central entries = box presence |
 | Intelligent movement | `avg_separation` | Finding space between lines |
-| NOT a dribbler (0%) | `carry_pct` (LOW weight) | Carries ≠ dribbles in tracking |
 | Link-up play | `avg_passing_options` | More options = better link-up |
 | High-pressure performer | `quick_break_pct` | Counter-attacks test composure |
 
@@ -339,7 +336,7 @@ profiles = filter_profiles(profiles, min_entries=3)
 
 # Compute correlations with danger_rate
 features = ['avg_separation', 'central_pct', 'half_space_pct',
-            'avg_entry_speed', 'avg_passing_options', 'carry_pct']
+            'avg_entry_speed', 'avg_passing_options']
 
 danger = profiles['danger_rate'].to_numpy()
 for feat in features:
@@ -359,15 +356,6 @@ for feat in features:
 | `avg_defensive_line_dist` | r=-0.259 | 12% - closer to goal |
 | `half_space_pct` | r=-0.012 | **3%** - no correlation! |
 | `avg_passing_options` | r=-0.050 | **2%** - no correlation! |
-| `carry_pct` | mean=98.8% | **1%** - no variance! |
-
-### Key Insight: carry_pct is Useless
-
-```
-carry_pct: mean=98.82%, std=4.60%
-```
-
-Almost ALL final third entries in A-League are carries. This feature has virtually no discriminating power and should be weighted near-zero.
 
 ---
 
@@ -393,7 +381,6 @@ FEATURE_WEIGHTS = {
     "avg_teammates_ahead": 0.03,      # r=-0.240 negative
 
     # NEAR-ZERO VARIANCE - effectively useless
-    "carry_pct": 0.01,                # 98.8% mean, no variance
     "goal_rate": 0.00,                # Too sparse
 }
 ```
@@ -650,7 +637,6 @@ pressing_forward.set_feature("avg_entry_speed", target=85, weight=0.25, directio
 pressing_forward.set_feature("danger_rate", target=60, weight=0.20, direction=1)
 pressing_forward.set_feature("avg_separation", target=70, weight=0.20, direction=1)
 pressing_forward.set_feature("central_pct", target=80, weight=0.15, direction=1)
-pressing_forward.set_feature("carry_pct", target=30, weight=0.10, direction=1)
 pressing_forward.set_feature("quick_break_pct", target=70, weight=0.10, direction=1)
 
 # Use with SimilarityEngine

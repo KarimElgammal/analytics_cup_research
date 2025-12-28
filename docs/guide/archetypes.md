@@ -62,7 +62,6 @@ archetype.set_feature("central_pct", target=90, weight=0.20, direction=1)
 | `avg_separation` | Distance from nearest defender (m) |
 | `central_pct` | % of entries through central zone |
 | `danger_rate` | % of entries leading to shots |
-| `carry_pct` | % of entries via carries |
 | `quick_break_pct` | % of entries in quick transitions |
 
 ### Defender Features
