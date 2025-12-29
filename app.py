@@ -265,9 +265,9 @@ with st.expander("Archetype Profile", expanded=False):
         st.markdown(f"- `{item['feature']}`: {pct:.0f}%")
 
 # View selector
-view_options = ["Rankings", "Radar Profile", "AI Insights"]
+view_options = ["Radar Profile", "Rankings", "AI Insights"]
 if "selected_view" not in st.session_state:
-    st.session_state.selected_view = "Rankings"
+    st.session_state.selected_view = "Radar Profile"
 
 selected_view = st.radio(
     "View",
