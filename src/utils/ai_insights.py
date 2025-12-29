@@ -485,7 +485,18 @@ class PlayerAnalyzer:
 
         # Get target player's z-scores
         target_row = normalized.filter(pl.col("player_name") == player_name)
-        target_z = np.array([float(target_row[f"{m}_z"][0]) for m in available_metrics], dtype=np.float64)
+        if len(target_row) == 0:
+            return []
+
+        # Extract z-scores, handling None values
+        target_z_list = []
+        for m in available_metrics:
+            val = target_row[f"{m}_z"][0]
+            if val is None:
+                target_z_list.append(np.nan)
+            else:
+                target_z_list.append(float(val))
+        target_z = np.array(target_z_list, dtype=np.float64)
 
         # Handle NaN in target
         if np.any(np.isnan(target_z)):
@@ -703,8 +714,10 @@ The A-League is Australia's top professional league, competitive but below Europ
                 if len(col) > 0:
                     avg = col.mean()
                     std = col.std()
-                    if avg is not None:
+                    if avg is not None and std is not None:
                         parts.append(f"{metric_info.label}: {avg:.1f} (±{std:.1f})")
+                    elif avg is not None:
+                        parts.append(f"{metric_info.label}: {avg:.1f}")
         return ", ".join(parts) if parts else "N/A"
 
     def format_metrics_glossary(self) -> str:
@@ -1137,4 +1150,4 @@ Write 2-3 paragraphs:
 Use your knowledge of the A-League, {archetype_data.name}, and {player_name} if available.
 Be specific and practical. Australian English."""
 
-    return _call_model(prompt, model, max_tokens=1000)
+    return _call_model(prompt, model, max_tokens=2000)

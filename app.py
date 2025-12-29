@@ -349,6 +349,94 @@ if selected_view == "Rankings":
     )
     st.pyplot(fig_bar)
 
+    # PDF Export Section
+    st.markdown("---")
+    st.markdown("#### Export Scouting Report")
+
+    # Player selector for PDF export
+    player_names = results["player_name"].to_list()
+    selected_player = st.selectbox(
+        "Select player for PDF report",
+        options=player_names,
+        index=0,
+        key="pdf_player_select",
+    )
+
+    # Get selected player data
+    selected_row = results.filter(pl.col("player_name") == selected_player).to_dicts()[0]
+
+    # AI insight options
+    include_ai = st.checkbox("Include AI insight", value=False, help="Generate AI insight for the report (uses API call)")
+
+    # Model selector (only show if AI insight is enabled and token available)
+    pdf_model = None
+    if include_ai:
+        if has_valid_token():
+            available_models = get_available_models()
+            if available_models:
+                model_options = {display: key for key, display in available_models}
+                default_model = get_default_model()
+                default_display = next(
+                    (display for key, display in available_models if key == default_model),
+                    available_models[0][1]
+                )
+                selected_display = st.selectbox(
+                    "AI Model",
+                    options=list(model_options.keys()),
+                    index=list(model_options.keys()).index(default_display) if default_display in model_options else 0,
+                    key="pdf_model_select",
+                )
+                pdf_model = model_options[selected_display]
+            else:
+                pdf_model = get_default_model()
+        else:
+            st.warning("No API token found. Add github_token.txt or hf_token.txt to enable AI insights.")
+
+    if st.button("Generate PDF Report", type="secondary"):
+        with st.spinner("Generating PDF report..."):
+            try:
+                from src.reports import generate_scouting_report
+
+                # Generate AI insight if requested
+                insight_text = None
+                model_name = None
+                if include_ai and has_valid_token() and pdf_model:
+                    from src.utils.ai_insights import generate_similarity_insight
+                    # Create a single-player result for insight
+                    single_player = results.filter(pl.col("player_name") == selected_player)
+                    insight_text = generate_similarity_insight(
+                        single_player,
+                        archetype,
+                        top_n=1,
+                        model=pdf_model,
+                        position_type=position_type,
+                    )
+                    model_name = pdf_model
+
+                # Generate PDF
+                pdf_bytes = generate_scouting_report(
+                    player_row=selected_row,
+                    archetype=archetype,
+                    all_profiles=profiles,
+                    position_type=position_type,
+                    insight=insight_text,
+                    model_name=model_name,
+                )
+
+                # Create download button
+                st.download_button(
+                    label="Download PDF",
+                    data=pdf_bytes,
+                    file_name=f"scouting_report_{selected_player.replace(' ', '_').lower()}.pdf",
+                    mime="application/pdf",
+                )
+                st.success(f"Report generated for {selected_player}!")
+
+            except ImportError as e:
+                st.error(f"PDF generation requires fpdf2. Install with: pip install fpdf2")
+            except Exception as e:
+                st.error(f"Error generating PDF: {e}")
+
 elif selected_view == "Radar Profile":
     st.subheader("Radar Profile Comparison")
 
