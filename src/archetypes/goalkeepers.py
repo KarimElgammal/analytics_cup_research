@@ -16,14 +16,20 @@ GOALKEEPER_COMPUTED = frozenset({
 
 # Base weights derived from one-time ML analysis (GradientBoosting, AUC 0.993)
 # Balanced for style comparison (ML found pass_distance dominates at 98.6%)
+# Rebalanced Dec 2025 to include distribution context metrics
 GOALKEEPER_WEIGHTS: dict[str, float] = {
-    "pass_success_rate": 0.20,
-    "avg_pass_distance": 0.20,
-    "long_pass_pct": 0.15,
-    "short_pass_pct": 0.15,
-    "quick_distribution_pct": 0.10,
-    "to_middle_third_pct": 0.10,
-    "avg_passing_options": 0.10,
+    # Core metrics (reduced to make room for new metrics)
+    "pass_success_rate": 0.18,
+    "avg_pass_distance": 0.18,
+    "long_pass_pct": 0.13,
+    "short_pass_pct": 0.13,
+    "quick_distribution_pct": 0.08,
+    "to_middle_third_pct": 0.08,
+    "avg_passing_options": 0.08,
+    # Distribution context metrics (new Dec 2025)
+    "avg_distribution_speed": 0.05,
+    "quick_counter_launch_pct": 0.05,
+    "distribution_attack_rate": 0.04,
 }
 
 GOALKEEPER_DIRECTIONS: dict[str, int] = {
@@ -37,6 +43,10 @@ GOALKEEPER_DIRECTIONS: dict[str, int] = {
     "to_attacking_third_pct": 1,
     "avg_passing_options": 1,
     "hand_pass_pct": -1,
+    # Distribution context metrics (new Dec 2025)
+    "avg_distribution_speed": -1,  # Lower = faster = better
+    "quick_counter_launch_pct": 1,
+    "distribution_attack_rate": 1,
 }
 
 # Style-specific weight/direction adjustments

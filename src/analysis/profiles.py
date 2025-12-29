@@ -7,6 +7,44 @@ import polars as pl
 from src.utils.alvarez_profile import MIN_ENTRIES_THRESHOLD, PROFILE_FEATURES
 
 
+def build_passer_profiles(entries: pl.DataFrame) -> pl.DataFrame:
+    """
+    Build profiles for players as passers/assisters.
+
+    Aggregates metrics for entries where the player was the passer
+    (i.e., the previous event player who enabled the entry).
+
+    Args:
+        entries: Classified entries with passer context
+
+    Returns:
+        DataFrame with passer-perspective metrics per player
+    """
+    # Filter to only entries that were assisted
+    if "is_assisted" not in entries.columns or "passer_player_id" not in entries.columns:
+        return pl.DataFrame()
+
+    assisted_entries = entries.filter(
+        pl.col("is_assisted") & pl.col("passer_player_id").is_not_null()
+    )
+
+    if len(assisted_entries) == 0:
+        return pl.DataFrame()
+
+    # Group by passer
+    passer_profiles = assisted_entries.group_by(
+        ["passer_player_id", "passer_player_name"]
+    ).agg([
+        pl.len().alias("total_entry_assists"),
+        pl.col("is_dangerous").mean().alias("assist_danger_rate"),
+    ])
+
+    return passer_profiles.rename({
+        "passer_player_id": "player_id",
+        "passer_player_name": "player_name"
+    })
+
+
 def build_player_profiles(entries: pl.DataFrame) -> pl.DataFrame:
     """
     Aggregate entry-level data to player profiles.
@@ -25,7 +63,8 @@ def build_player_profiles(entries: pl.DataFrame) -> pl.DataFrame:
     if "team_name" in entries.columns:
         group_cols.append("team_name")
 
-    profiles = entries.group_by(group_cols).agg([
+    # Build base aggregation list
+    agg_list = [
         # Count
         pl.len().alias("total_entries"),
 
@@ -64,13 +103,56 @@ def build_player_profiles(entries: pl.DataFrame) -> pl.DataFrame:
         pl.col("penalty_area_end").mean().alias("penalty_area_pct"),
         pl.col("n_opponents_bypassed").fill_null(0).mean().alias("avg_opponents_bypassed"),
         pl.col("forward_momentum").mean().alias("forward_momentum_pct"),
-    ])
+    ]
+
+    # Add transition speed metrics if context columns exist
+    if "transition_speed_seconds" in entries.columns:
+        agg_list.extend([
+            pl.col("transition_speed_seconds").mean().alias("avg_transition_speed"),
+            pl.col("is_fast_transition").mean().alias("fast_transition_pct"),
+        ])
+
+    # Add passer/receiver metrics if context columns exist
+    if "is_assisted" in entries.columns:
+        agg_list.extend([
+            pl.col("is_assisted").mean().alias("assisted_pct"),
+            # Danger rate on assisted entries only
+            pl.when(pl.col("is_assisted"))
+                .then(pl.col("is_dangerous"))
+                .otherwise(None)
+                .mean().alias("assisted_danger_rate"),
+            # Danger rate on unassisted entries only
+            pl.when(~pl.col("is_assisted"))
+                .then(pl.col("is_dangerous"))
+                .otherwise(None)
+                .mean().alias("solo_danger_rate"),
+        ])
+
+    profiles = entries.group_by(group_cols).agg(agg_list)
+
+    # Build and merge passer profiles if context exists
+    if "is_assisted" in entries.columns:
+        passer_profiles = build_passer_profiles(entries)
+        if len(passer_profiles) > 0:
+            profiles = profiles.join(
+                passer_profiles,
+                on=["player_id", "player_name"],
+                how="left"
+            )
+            # Fill nulls for players with no assists
+            profiles = profiles.with_columns([
+                pl.col("total_entry_assists").fill_null(0),
+                pl.col("assist_danger_rate").fill_null(0.0),
+            ])
 
     # Convert percentages to 0-100 scale for readability
     pct_cols = [
         "central_pct", "half_space_pct", "wide_pct", "carry_pct",
         "danger_rate", "goal_rate", "quick_break_pct", "build_up_pct", "transition_pct",
-        "one_touch_pct", "penalty_area_pct", "forward_momentum_pct"
+        "one_touch_pct", "penalty_area_pct", "forward_momentum_pct",
+        # New transition and passer/receiver metrics
+        "fast_transition_pct", "assisted_pct", "assisted_danger_rate", "solo_danger_rate",
+        "assist_danger_rate",
     ]
     for col in pct_cols:
         if col in profiles.columns:
@@ -82,7 +164,9 @@ def build_player_profiles(entries: pl.DataFrame) -> pl.DataFrame:
     numeric_cols = [
         "avg_entry_speed", "avg_distance", "avg_separation",
         "avg_defensive_line_dist", "avg_x_depth", "avg_passing_options", "avg_teammates_ahead",
-        "avg_opponents_bypassed"
+        "avg_opponents_bypassed",
+        # New transition metric
+        "avg_transition_speed",
     ]
     for col in numeric_cols:
         if col in profiles.columns:

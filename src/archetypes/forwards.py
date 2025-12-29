@@ -16,16 +16,25 @@ FORWARD_COMPUTED = frozenset({
 })
 
 # Weights from one-time GradientBoosting feature importance analysis
+# Rebalanced to include transition speed and passer/receiver metrics
 FORWARD_WEIGHTS: dict[str, float] = {
-    "avg_separation": 0.22,
-    "danger_rate": 0.20,
-    "avg_entry_speed": 0.16,
-    "avg_defensive_line_dist": 0.13,
-    "central_pct": 0.11,
-    "avg_passing_options": 0.09,
-    "quick_break_pct": 0.04,
-    "avg_teammates_ahead": 0.03,
+    # Core metrics (reduced to make room for new metrics)
+    "avg_separation": 0.18,
+    "danger_rate": 0.16,
+    "avg_entry_speed": 0.12,
+    "avg_defensive_line_dist": 0.10,
+    "central_pct": 0.09,
+    "avg_passing_options": 0.07,
+    "quick_break_pct": 0.03,
+    "avg_teammates_ahead": 0.02,
     "half_space_pct": 0.02,
+    # Transition speed metrics (new)
+    "avg_transition_speed": 0.04,
+    "fast_transition_pct": 0.04,
+    # Passer/Receiver credit metrics (new)
+    "assisted_danger_rate": 0.05,
+    "solo_danger_rate": 0.04,
+    "assist_danger_rate": 0.04,
 }
 
 FORWARD_DIRECTIONS: dict[str, int] = {
@@ -39,6 +48,15 @@ FORWARD_DIRECTIONS: dict[str, int] = {
     "avg_defensive_line_dist": 1,
     "avg_teammates_ahead": -1,
     "goal_rate": 1,
+    # Transition speed (lower = faster = better)
+    "avg_transition_speed": -1,
+    "fast_transition_pct": 1,
+    # Passer/Receiver metrics
+    "assisted_pct": 0,  # Neutral - style indicator, not quality
+    "assisted_danger_rate": 1,
+    "solo_danger_rate": 1,
+    "total_entry_assists": 1,
+    "assist_danger_rate": 1,
 }
 
 # Available forward archetypes (dynamically loaded from StatsBomb)

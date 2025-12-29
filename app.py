@@ -31,7 +31,7 @@ from src.data.player_ages import add_ages_to_profiles
 from src.analysis.entries import detect_entries, classify_entries
 from src.analysis.profiles import build_player_profiles, filter_profiles
 from src.analysis.defenders import detect_defensive_actions, build_defender_profiles, filter_defender_profiles
-from src.analysis.goalkeepers import detect_gk_actions, build_goalkeeper_profiles, filter_goalkeeper_profiles
+from src.analysis.goalkeepers import detect_gk_actions, classify_gk_actions, build_goalkeeper_profiles, filter_goalkeeper_profiles
 from src.core.archetype import Archetype
 from src.core.similarity import SimilarityEngine
 from src.visualization.radar import (
@@ -102,7 +102,7 @@ def load_forward_data():
     events = load_all_events()
     events = add_team_names(events)
     entries = detect_entries(events)
-    entries = classify_entries(entries)
+    entries = classify_entries(entries, all_events=events)  # Pass events for transition/passer context
     profiles = build_player_profiles(entries)
     profiles = filter_profiles(profiles, min_entries=3)
     return profiles, len(entries), events["match_id"].n_unique()
@@ -125,6 +125,7 @@ def load_goalkeeper_data():
     events = load_all_events()
     events = add_team_names(events)
     actions = detect_gk_actions(events)
+    actions = classify_gk_actions(actions, all_events=events)  # Pass events for distribution context
     profiles = build_goalkeeper_profiles(actions)
     profiles = filter_goalkeeper_profiles(profiles, min_distributions=10)
     return profiles, len(actions), events["match_id"].n_unique()

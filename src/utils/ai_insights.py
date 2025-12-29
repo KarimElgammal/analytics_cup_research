@@ -94,6 +94,15 @@ FORWARD_METRICS = (
     MetricInfo("penalty_area_pct", "Penalty Area %", "Entries ending in penalty area. Central finishing positions.", "percentage"),
     MetricInfo("avg_opponents_bypassed", "Opponents Bypassed", "Average opponents bypassed per entry.", "number"),
     MetricInfo("forward_momentum_pct", "Forward Momentum %", "Entries with forward momentum. Attacking intent.", "percentage"),
+    # Transition speed metrics (new)
+    MetricInfo("avg_transition_speed", "Transition Speed", "Seconds from possession start to entry. Lower = faster.", "number"),
+    MetricInfo("fast_transition_pct", "Fast Transition %", "Entries within 3 seconds of possession start.", "percentage"),
+    # Passer/Receiver credit metrics (new)
+    MetricInfo("assisted_pct", "Assisted %", "Entries received from teammate pass vs solo carries.", "percentage"),
+    MetricInfo("assisted_danger_rate", "Assisted Danger %", "Danger rate on assisted entries. Finishing quality.", "percentage"),
+    MetricInfo("solo_danger_rate", "Solo Danger %", "Danger rate on unassisted entries. Individual threat.", "percentage"),
+    MetricInfo("total_entry_assists", "Entry Assists", "Passes enabling teammate entries. Playmaking ability.", "number"),
+    MetricInfo("assist_danger_rate", "Assist Danger %", "Entry assists leading to shots. Creative impact.", "percentage"),
 )
 
 DEFENDER_METRICS = (
@@ -125,6 +134,10 @@ GOALKEEPER_METRICS = (
     MetricInfo("avg_targeted_xthreat", "Targeted xThreat", "Expected threat created by passes.", "number"),
     MetricInfo("avg_safe_dangerous_options", "Safe Dangerous Options", "Available safe but dangerous options.", "number"),
     MetricInfo("forward_momentum_pct", "Forward Momentum %", "Distributions with forward momentum.", "percentage"),
+    # Distribution context metrics (new Dec 2025)
+    MetricInfo("avg_distribution_speed", "Distribution Speed", "Seconds from possession start to distribution. Lower = faster.", "number"),
+    MetricInfo("quick_counter_launch_pct", "Counter Launch %", "Distributions that launch quick breaks.", "percentage"),
+    MetricInfo("distribution_attack_rate", "Attack Rate %", "Distributions leading to shots or goals.", "percentage"),
 )
 
 POSITION_CONFIGS: dict[str, PositionConfig] = {
