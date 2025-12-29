@@ -183,9 +183,20 @@ if position == "Forwards":
 
     display_cols = [
         "rank", "player_name", "age", "team_name", "similarity_score",
-        "total_entries", "danger_rate", "avg_separation"
+        "total_entries", "danger_rate", "avg_separation",
+        # Radar metrics
+        "quick_break_pct", "avg_entry_speed", "central_pct", "avg_defensive_line_dist",
+        # Other available
+        "avg_passing_options", "half_space_pct",
+        # SkillCorner advanced
+        "one_touch_pct", "penalty_area_pct", "avg_opponents_bypassed", "forward_momentum_pct",
     ]
-    col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Entries", "Danger %", "Separation (m)"]
+    col_names = [
+        "Rank", "Player", "Age", "Team", "Similarity %", "Entries", "Danger %", "Separation (m)",
+        "Quick Break %", "Speed (m/s)", "Central %", "Depth (m)",
+        "Pass Options", "Half-Space %",
+        "One Touch %", "Penalty Area %", "Opponents Bypassed", "Forward Momentum %",
+    ]
     radar_features = ["danger_rate", "central_pct", "avg_separation", "avg_entry_speed", "avg_defensive_line_dist", "quick_break_pct"]
     caption = "Forward archetypes computed from StatsBomb World Cup 2022 event data."
 
@@ -205,9 +216,20 @@ elif position == "Defenders":
 
     display_cols = [
         "rank", "player_name", "age", "team_name", "similarity_score",
-        "total_engagements", "stop_danger_rate", "pressing_rate"
+        "total_engagements", "stop_danger_rate", "pressing_rate",
+        # Radar metrics
+        "reduce_danger_rate", "goal_side_rate", "avg_engagement_distance",
+        # Other available
+        "force_backward_rate", "beaten_by_movement_rate", "beaten_by_possession_rate",
+        # SkillCorner advanced
+        "avg_engagement_angle", "avg_consecutive_engagements", "close_at_start_pct", "avg_possession_danger",
     ]
-    col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Engagements", "Stop Danger %", "Pressing %"]
+    col_names = [
+        "Rank", "Player", "Age", "Team", "Similarity %", "Engagements", "Stop Danger %", "Pressing %",
+        "Reduce Danger %", "Goal Side %", "Engage Dist (m)",
+        "Force Back %", "Beaten (Move) %", "Beaten (Ball) %",
+        "Engage Angle", "Consecutive", "Close at Start %", "Poss Danger",
+    ]
     radar_features = ["stop_danger_rate", "reduce_danger_rate", "pressing_rate", "goal_side_rate", "avg_engagement_distance"]
     caption = "Archetypes computed from StatsBomb open data (World Cup 2022, Euro 2024)."
 
@@ -227,9 +249,20 @@ else:  # Goalkeepers
 
     display_cols = [
         "rank", "player_name", "age", "team_name", "similarity_score",
-        "total_distributions", "pass_success_rate", "long_pass_pct"
+        "total_distributions", "pass_success_rate", "long_pass_pct",
+        # Radar metrics
+        "avg_pass_distance", "quick_distribution_pct",
+        # Other available
+        "short_pass_pct", "high_pass_pct", "to_attacking_third_pct",
+        # SkillCorner advanced
+        "pass_ahead_pct", "avg_targeted_xthreat", "avg_safe_dangerous_options", "forward_momentum_pct",
     ]
-    col_names = ["Rank", "Player", "Age", "Team", "Similarity %", "Distributions", "Pass Success %", "Long Pass %"]
+    col_names = [
+        "Rank", "Player", "Age", "Team", "Similarity %", "Distributions", "Pass Success %", "Long Pass %",
+        "Avg Dist (m)", "Quick Dist %",
+        "Short Pass %", "High Pass %", "To Attack 3rd %",
+        "Pass Ahead %", "xThreat", "Safe Options", "Forward %",
+    ]
     radar_features = ["pass_success_rate", "avg_pass_distance", "long_pass_pct", "quick_distribution_pct"]
     caption = "All archetypes computed from StatsBomb open data (Euro 2024 / World Cup 2022)."
 
@@ -291,10 +324,12 @@ if selected_view == "Rankings":
     for col in df_display.columns:
         if "%" in col and col != "Similarity %":
             format_dict[col] = "{:.1f}"
-        elif "(m)" in col:
-            format_dict[col] = "{:.2f}"
         elif col == "Age":
             format_dict[col] = lambda x: f"{int(x)}" if pd.notna(x) else ""
+        elif col in ["Rank", "Entries", "Engagements", "Distributions"]:
+            continue  # Keep as integers
+        elif df_display[col].dtype in ["float64", "float32"]:
+            format_dict[col] = "{:.2f}"
 
     st.dataframe(
         df_display.style.format(format_dict).background_gradient(

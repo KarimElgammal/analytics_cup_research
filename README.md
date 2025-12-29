@@ -22,7 +22,7 @@ The workflow supports three position types: forwards (Alvarez, Giroud, Kane, Lew
 
 ### Results
 
-For the Alvarez archetype, top candidates are T. Imai (Western United) at 95.7% similarity with exceptional separation (5.64m), T. Payne (Wellington Phoenix) at 93.4%, and K. Bos (Melbourne Victory) at 92.3%. These players exhibit Alvarez's key trait: creating danger through intelligent movement rather than dribbling.
+For the Alvarez archetype, top candidates are T. Imai (Western United) at 95.7% similarity with exceptional separation (5.64m), T. Payne (Wellington Phoenix) at 93.4%, and N. Atkinson (Melbourne City) at 92.3%. These players exhibit Alvarez's key trait: creating danger through intelligent movement rather than dribbling.
 
 ![Similarity Rankings](assets/similarity_rankings.png)
 

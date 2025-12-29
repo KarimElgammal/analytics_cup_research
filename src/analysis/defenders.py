@@ -38,20 +38,30 @@ def build_defender_profiles(actions: pl.DataFrame) -> pl.DataFrame:
         (pl.col("third_start") == "defensive_third").mean().alias("defensive_third_pct"),
         (pl.col("third_start") == "middle_third").mean().alias("middle_third_pct"),
         (pl.col("third_start") == "attacking_third").mean().alias("attacking_third_pct"),
+
+        # SkillCorner advanced metrics (only columns with data)
+        pl.col("angle_of_engagement").mean().alias("avg_engagement_angle"),
+        pl.col("consecutive_on_ball_engagements").mean().alias("avg_consecutive_engagements"),
+        pl.col("close_at_player_possession_start").mean().alias("close_at_start_pct"),
+        pl.col("possession_danger").mean().alias("avg_possession_danger"),
     ])
 
     # Convert to percentages
     pct_cols = [
         "stop_danger_rate", "reduce_danger_rate", "force_backward_rate",
         "beaten_by_possession_rate", "beaten_by_movement_rate", "pressing_rate",
-        "goal_side_rate", "defensive_third_pct", "middle_third_pct", "attacking_third_pct"
+        "goal_side_rate", "defensive_third_pct", "middle_third_pct", "attacking_third_pct",
+        "close_at_start_pct"
     ]
     for col in pct_cols:
         if col in profiles.columns:
             profiles = profiles.with_columns((pl.col(col) * 100).round(1).alias(col))
 
     # Round numeric columns
-    numeric_cols = ["avg_pressing_chain_length", "avg_engagement_distance"]
+    numeric_cols = [
+        "avg_pressing_chain_length", "avg_engagement_distance",
+        "avg_engagement_angle", "avg_consecutive_engagements", "avg_possession_danger"
+    ]
     for col in numeric_cols:
         if col in profiles.columns:
             profiles = profiles.with_columns(pl.col(col).round(2).alias(col))

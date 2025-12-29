@@ -779,9 +779,9 @@ print(generator.config.criteria)  # What makes a great forward
 # Available positions
 for pos, config in POSITION_CONFIGS.items():
     print(f"{pos}: {len(config.metrics)} metrics")
-# forward: 5 metrics
-# defender: 5 metrics
-# goalkeeper: 4 metrics
+# forward: 12 metrics
+# defender: 12 metrics
+# goalkeeper: 11 metrics
 ```
 
 ### Enriched Prompts

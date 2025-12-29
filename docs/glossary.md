@@ -16,6 +16,10 @@ Key metrics and terms used in the player similarity analysis.
 | **avg_passing_options** | Average number of teammates available for a pass when entering. Higher values suggest good timing of runs. |
 | **avg_defensive_line_dist** | Average distance from the defensive line when entering. Indicates positioning depth. |
 | **quick_break_pct** | Percentage of entries during quick break (counter-attack) phases. High values indicate transition threat. |
+| **one_touch_pct** | Percentage of entries involving one-touch play. Indicates quick combination play. |
+| **penalty_area_pct** | Percentage of entries ending in the penalty area. Higher = more central/dangerous finishing positions. |
+| **avg_opponents_bypassed** | Average number of opponents bypassed per entry. Higher = more direct penetration. |
+| **forward_momentum_pct** | Percentage of entries with forward momentum. Indicates attacking intent. |
 
 ---
 
@@ -31,6 +35,10 @@ Key metrics and terms used in the player similarity analysis.
 | **avg_engagement_distance** | Average distance from own goal when engaging. Higher values indicate a high defensive line. |
 | **beaten_by_possession_rate** | How often the defender is beaten while the opponent keeps possession. |
 | **beaten_by_movement_rate** | How often the defender is beaten by off-ball movement. |
+| **avg_engagement_angle** | Average angle of engagement (degrees). Indicates positioning approach. |
+| **avg_consecutive_engagements** | Average consecutive engagements per defensive action. Higher = sustained pressure. |
+| **close_at_start_pct** | Percentage of engagements where defender was close at possession start. Indicates proactive positioning. |
+| **avg_possession_danger** | Average possession danger level faced. Higher = defending more dangerous situations. |
 
 ---
 
@@ -44,8 +52,11 @@ Key metrics and terms used in the player similarity analysis.
 | **short_pass_pct** | Percentage of distributions that are short passes. |
 | **high_pass_pct** | Percentage of distributions that are aerial/high balls. |
 | **quick_distribution_pct** | Percentage of distributions made quickly after gaining possession. Indicates tempo-setting ability. |
-| **under_pressure_pct** | Percentage of distributions made while under pressure from opponents. |
 | **to_attacking_third_pct** | Percentage of distributions reaching the attacking third directly. |
+| **pass_ahead_pct** | Percentage of distributions that go forward. Higher = more progressive distribution. |
+| **avg_targeted_xthreat** | Average expected threat created by passes. Higher = more dangerous distribution. |
+| **avg_safe_dangerous_options** | Average number of safe but dangerous passing options available. |
+| **forward_momentum_pct** | Percentage of distributions with forward momentum. Indicates proactive distribution. |
 
 ---
 

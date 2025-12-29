@@ -85,8 +85,15 @@ FORWARD_METRICS = (
     MetricInfo("central_pct", "Central %", "Percentage through central zone. Central = striker-like role.", "percentage"),
     MetricInfo("avg_separation", "Separation", "Distance from nearest defender (m). Higher = better movement.", "distance"),
     MetricInfo("avg_entry_speed", "Entry Speed", "Speed entering final third (m/s). Higher = direct runs.", "speed"),
-    MetricInfo("avg_defensive_line_dist", "Depth", "Distance from defensive line (m). Lower = closer to goal, poacher-style.", "distance"),
-    MetricInfo("quick_break_pct", "Quick Break %", "Entries during counter-attacks. High = transition threat, Low = build-up specialist.", "percentage"),
+    MetricInfo("avg_defensive_line_dist", "Depth", "Distance from defensive line (m). Lower = closer to goal.", "distance"),
+    MetricInfo("quick_break_pct", "Quick Break %", "Entries during counter-attacks. High = transition threat.", "percentage"),
+    MetricInfo("avg_passing_options", "Pass Options", "Teammates available for pass. Higher = good timing.", "number"),
+    MetricInfo("half_space_pct", "Half-Space %", "Entries through half-spaces. Creative playmaker zones.", "percentage"),
+    # SkillCorner advanced metrics
+    MetricInfo("one_touch_pct", "One Touch %", "Entries involving one-touch play. Quick combination play.", "percentage"),
+    MetricInfo("penalty_area_pct", "Penalty Area %", "Entries ending in penalty area. Central finishing positions.", "percentage"),
+    MetricInfo("avg_opponents_bypassed", "Opponents Bypassed", "Average opponents bypassed per entry.", "number"),
+    MetricInfo("forward_momentum_pct", "Forward Momentum %", "Entries with forward momentum. Attacking intent.", "percentage"),
 )
 
 DEFENDER_METRICS = (
@@ -95,6 +102,14 @@ DEFENDER_METRICS = (
     MetricInfo("pressing_rate", "Pressing %", "How often defender engages proactively.", "percentage"),
     MetricInfo("goal_side_rate", "Goal-Side %", "Engagements with goal-side position maintained.", "percentage"),
     MetricInfo("avg_engagement_distance", "Engagement Dist", "Distance from own goal when engaging (m).", "distance"),
+    MetricInfo("force_backward_rate", "Force Back %", "Engagements forcing attacker to play backwards.", "percentage"),
+    MetricInfo("beaten_by_movement_rate", "Beaten (Move) %", "How often defender is beaten by off-ball movement.", "percentage"),
+    MetricInfo("beaten_by_possession_rate", "Beaten (Ball) %", "How often defender is beaten while opponent keeps ball.", "percentage"),
+    # SkillCorner advanced metrics
+    MetricInfo("avg_engagement_angle", "Engagement Angle", "Average angle of engagement (degrees).", "number"),
+    MetricInfo("avg_consecutive_engagements", "Consecutive Engagements", "Average consecutive engagements. Sustained pressure.", "number"),
+    MetricInfo("close_at_start_pct", "Close at Start %", "Engagements where defender was close at start.", "percentage"),
+    MetricInfo("avg_possession_danger", "Possession Danger", "Average danger level of possessions faced.", "number"),
 )
 
 GOALKEEPER_METRICS = (
@@ -102,6 +117,14 @@ GOALKEEPER_METRICS = (
     MetricInfo("avg_pass_distance", "Pass Distance", "Average distribution distance (m).", "distance"),
     MetricInfo("long_pass_pct", "Long Pass %", "Distributions that are long passes.", "percentage"),
     MetricInfo("quick_distribution_pct", "Quick Dist %", "Distributions made quickly.", "percentage"),
+    MetricInfo("short_pass_pct", "Short Pass %", "Distributions that are short passes.", "percentage"),
+    MetricInfo("high_pass_pct", "High Pass %", "Distributions that are aerial/lofted passes.", "percentage"),
+    MetricInfo("to_attacking_third_pct", "To Attack 3rd %", "Distributions reaching the attacking third.", "percentage"),
+    # SkillCorner advanced metrics
+    MetricInfo("pass_ahead_pct", "Pass Ahead %", "Distributions going forward.", "percentage"),
+    MetricInfo("avg_targeted_xthreat", "Targeted xThreat", "Expected threat created by passes.", "number"),
+    MetricInfo("avg_safe_dangerous_options", "Safe Dangerous Options", "Available safe but dangerous options.", "number"),
+    MetricInfo("forward_momentum_pct", "Forward Momentum %", "Distributions with forward momentum.", "percentage"),
 )
 
 POSITION_CONFIGS: dict[str, PositionConfig] = {
@@ -684,6 +707,13 @@ The A-League is Australia's top professional league, competitive but below Europ
                         parts.append(f"{metric_info.label}: {avg:.1f} (±{std:.1f})")
         return ", ".join(parts) if parts else "N/A"
 
+    def format_metrics_glossary(self) -> str:
+        """Format all metrics with their definitions as a glossary."""
+        lines = []
+        for metric_info in self.config.metrics:
+            lines.append(f"- **{metric_info.label}** ({metric_info.key}): {metric_info.definition}")
+        return "\n".join(lines)
+
     def build_prompt(
         self,
         players: list[PlayerInsightData],
@@ -722,6 +752,9 @@ TARGET PROFILE (ideal values):
 
 WHAT MAKES A GREAT {self.config.name.upper()}:
 {self.config.criteria}
+
+METRICS GLOSSARY (definitions for all metrics):
+{self.format_metrics_glossary()}
 
 TOP CANDIDATES (ranked by similarity):
 {player_summaries}
@@ -812,8 +845,8 @@ FORMATTING: Player names are already bold. Be specific and practical. Australian
             dataset_stats=dataset_stats,
         )
 
-        # Use higher token limit for enhanced analysis
-        return _call_model(prompt, model, max_tokens=1500)
+        
+        return _call_model(prompt, model, max_tokens=2000)
 
 
 # =============================================================================

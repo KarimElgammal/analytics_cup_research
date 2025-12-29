@@ -58,12 +58,19 @@ def build_player_profiles(entries: pl.DataFrame) -> pl.DataFrame:
         (pl.col("team_in_possession_phase_type") == "quick_break").mean().alias("quick_break_pct"),
         (pl.col("team_in_possession_phase_type") == "build_up").mean().alias("build_up_pct"),
         (pl.col("team_in_possession_phase_type") == "transition").mean().alias("transition_pct"),
+
+        # SkillCorner advanced metrics (only columns with data)
+        pl.col("one_touch").mean().alias("one_touch_pct"),
+        pl.col("penalty_area_end").mean().alias("penalty_area_pct"),
+        pl.col("n_opponents_bypassed").fill_null(0).mean().alias("avg_opponents_bypassed"),
+        pl.col("forward_momentum").mean().alias("forward_momentum_pct"),
     ])
 
     # Convert percentages to 0-100 scale for readability
     pct_cols = [
         "central_pct", "half_space_pct", "wide_pct", "carry_pct",
-        "danger_rate", "goal_rate", "quick_break_pct", "build_up_pct", "transition_pct"
+        "danger_rate", "goal_rate", "quick_break_pct", "build_up_pct", "transition_pct",
+        "one_touch_pct", "penalty_area_pct", "forward_momentum_pct"
     ]
     for col in pct_cols:
         if col in profiles.columns:
@@ -74,7 +81,8 @@ def build_player_profiles(entries: pl.DataFrame) -> pl.DataFrame:
     # Round other numeric columns
     numeric_cols = [
         "avg_entry_speed", "avg_distance", "avg_separation",
-        "avg_defensive_line_dist", "avg_x_depth", "avg_passing_options", "avg_teammates_ahead"
+        "avg_defensive_line_dist", "avg_x_depth", "avg_passing_options", "avg_teammates_ahead",
+        "avg_opponents_bypassed"
     ]
     for col in numeric_cols:
         if col in profiles.columns:

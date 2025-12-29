@@ -40,20 +40,29 @@ def build_goalkeeper_profiles(actions: pl.DataFrame) -> pl.DataFrame:
 
         # Speed of play
         pl.col("speed_avg").mean().alias("avg_speed"),
+
+        # SkillCorner advanced metrics (only columns with data)
+        pl.col("pass_ahead").mean().alias("pass_ahead_pct"),
+        pl.col("player_targeted_xthreat").mean().alias("avg_targeted_xthreat"),
+        pl.col("n_passing_options_dangerous_not_difficult").mean().alias("avg_safe_dangerous_options"),
+        pl.col("forward_momentum").mean().alias("forward_momentum_pct"),
     ])
 
     # Convert to percentages
     pct_cols = [
         "pass_success_rate", "long_pass_pct", "short_pass_pct", "high_pass_pct",
         "quick_distribution_pct", "hand_pass_pct", "to_middle_third_pct",
-        "to_attacking_third_pct"
+        "to_attacking_third_pct", "pass_ahead_pct", "forward_momentum_pct"
     ]
     for col in pct_cols:
         if col in profiles.columns:
             profiles = profiles.with_columns((pl.col(col) * 100).round(1).alias(col))
 
     # Round numeric columns
-    numeric_cols = ["avg_pass_distance", "avg_passing_options", "avg_speed"]
+    numeric_cols = [
+        "avg_pass_distance", "avg_passing_options", "avg_speed",
+        "avg_targeted_xthreat", "avg_safe_dangerous_options"
+    ]
     for col in numeric_cols:
         if col in profiles.columns:
             profiles = profiles.with_columns(pl.col(col).round(2).alias(col))
