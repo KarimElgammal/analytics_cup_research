@@ -2,9 +2,9 @@
 
 An archetype defines the target player profile you want to match.
 
-## Pre-built Archetypes (12 Available)
+## Pre-built Archetypes (18 Available)
 
-Load any of the 12 pre-built archetypes from StatsBomb World Cup 2022 data:
+Load any of the 18 pre-built archetypes from StatsBomb World Cup 2022 data:
 
 ```python
 from src.core import Archetype
@@ -12,6 +12,7 @@ from src.core import Archetype
 # List all available archetypes
 print(Archetype.list_available())
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
+#  'enzo', 'tchouameni', 'depaul', 'griezmann', 'pedri', 'bellingham',
 #  'gvardiol', 'vandijk', 'hakimi', 'neuer', 'lloris', 'bounou']
 
 # Load a specific archetype
@@ -24,6 +25,7 @@ print(archetype.description)  # Shows actual World Cup 2022 stats
 | Position | Archetypes | A-League Events |
 |----------|------------|-----------------|
 | **Forwards** | alvarez, giroud, kane, lewandowski, rashford, en_nesyri | 245 entries |
+| **Midfielders** | enzo, tchouameni, depaul, griezmann, pedri, bellingham | 12,975 possessions |
 | **Defenders** | gvardiol, vandijk, hakimi | 8,911 engagements |
 | **Goalkeepers** | neuer, lloris, bounou | 522 distributions |
 
@@ -34,6 +36,11 @@ print(archetype.description)  # Shows actual World Cup 2022 stats
 archetype = Archetype.from_statsbomb("alvarez")    # Intelligent movement
 archetype = Archetype.from_statsbomb("giroud")     # Target man
 archetype = Archetype.from_statsbomb("rashford")   # Pace and dribbling
+
+# Midfielders
+archetype = Archetype.from_statsbomb("enzo")       # Box-to-box
+archetype = Archetype.from_statsbomb("tchouameni") # Defensive anchor
+archetype = Archetype.from_statsbomb("pedri")      # Technical control
 
 # Defenders
 archetype = Archetype.from_statsbomb("gvardiol")   # Ball-playing CB
@@ -63,6 +70,15 @@ archetype.set_feature("central_pct", target=90, weight=0.20, direction=1)
 | `central_pct` | % of entries through central zone |
 | `danger_rate` | % of entries leading to shots |
 | `quick_break_pct` | % of entries in quick transitions |
+
+### Midfielder Features
+| Feature | Description |
+|---------|-------------|
+| `progressive_pass_pct` | % of passes advancing play forward |
+| `pressing_rate` | Pressing engagements frequency |
+| `tackle_success_rate` | % of successful tackles |
+| `key_pass_rate` | % of passes leading to shots |
+| `central_presence_pct` | % of time in central zones |
 
 ### Defender Features
 | Feature | Description |

@@ -32,6 +32,7 @@ from src.analysis.entries import detect_entries, classify_entries
 from src.analysis.profiles import build_player_profiles, filter_profiles
 from src.analysis.defenders import detect_defensive_actions, build_defender_profiles, filter_defender_profiles
 from src.analysis.goalkeepers import detect_gk_actions, classify_gk_actions, build_goalkeeper_profiles, filter_goalkeeper_profiles
+from src.analysis.midfielders import detect_midfielder_possessions, detect_midfielder_engagements, build_midfielder_profiles, filter_midfielder_profiles
 from src.core.archetype import Archetype
 from src.core.similarity import SimilarityEngine
 from src.visualization.radar import (
@@ -59,6 +60,7 @@ from src.utils.rate_limiter import (
 from src.archetypes.base import (
     DEFENDER_FEATURE_NAMES,
     GOALKEEPER_FEATURE_NAMES,
+    MIDFIELDER_FEATURE_NAMES,
 )
 from src.archetypes.forwards import FORWARD_ARCHETYPE_OPTIONS
 from src.archetypes.defenders import (
@@ -67,6 +69,7 @@ from src.archetypes.defenders import (
     DEFENDER_DIRECTIONS,
 )
 from src.archetypes.goalkeepers import GOALKEEPER_ARCHETYPES
+from src.archetypes.midfielders import MIDFIELDER_ARCHETYPE_OPTIONS, MIDFIELDER_WEIGHTS, MIDFIELDER_DIRECTIONS
 
 # Page config
 st.set_page_config(
@@ -86,7 +89,7 @@ st.title("\u26BD Finding Alvarez (and Others) in the A-League")
 # Position selector at the top
 position = st.radio(
     "Select Position Type",
-    ["Forwards", "Defenders", "Goalkeepers"],
+    ["Forwards", "Midfielders", "Defenders", "Goalkeepers"],
     horizontal=True,
     help="Each position uses different event data and metrics."
 )
@@ -131,6 +134,19 @@ def load_goalkeeper_data():
     return profiles, len(actions), events["match_id"].n_unique()
 
 
+@st.cache_data(ttl=7776000, show_spinner="Loading A-League midfielder data...")
+def load_midfielder_data():
+    """Load and prepare midfielder profiles from possession and engagement events."""
+    events = load_all_events()
+    events = add_team_names(events)
+    possession_actions = detect_midfielder_possessions(events)
+    engagement_actions = detect_midfielder_engagements(events)
+    profiles = build_midfielder_profiles(possession_actions, engagement_actions)
+    profiles = filter_midfielder_profiles(profiles, min_events=20)
+    total_events = len(possession_actions) + len(engagement_actions)
+    return profiles, total_events, events["match_id"].n_unique()
+
+
 @st.cache_data(ttl=7776000, show_spinner="Loading archetype...")
 def load_forward_archetype(player_key: str):
     """Load forward archetype from StatsBomb data."""
@@ -164,6 +180,16 @@ def get_goalkeeper_archetype(key: str) -> Archetype:
     """Get goalkeeper archetype with style-specific weights."""
     config, weights, directions = GOALKEEPER_ARCHETYPES[key]
     return config.to_archetype(weights, directions, GOALKEEPER_FEATURE_NAMES)
+
+
+@st.cache_data(ttl=7776000, show_spinner="Loading midfielder archetype...")
+def get_midfielder_archetype(player_key: str) -> Archetype:
+    """Load midfielder archetype from StatsBomb data."""
+    from src.core.archetype_factory import ArchetypeFactory
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        factory = ArchetypeFactory(verbose=False)
+        return factory.build_midfielder(player_key)
 
 
 # --- Main Logic ---
@@ -200,6 +226,39 @@ if position == "Forwards":
     ]
     radar_features = ["danger_rate", "central_pct", "avg_separation", "avg_entry_speed", "avg_defensive_line_dist", "quick_break_pct"]
     caption = "Forward archetypes computed from StatsBomb World Cup 2022 event data."
+
+elif position == "Midfielders":
+    profiles, n_events, n_matches = load_midfielder_data()
+    event_type = "events"
+    position_type = "midfielder"
+
+    st.sidebar.header("Midfielder Archetype")
+    selected_label = st.sidebar.selectbox(
+        "Select Archetype",
+        options=[label for label, _ in MIDFIELDER_ARCHETYPE_OPTIONS],
+        index=0,
+    )
+    selected_key = next(key for label, key in MIDFIELDER_ARCHETYPE_OPTIONS if label == selected_label)
+    archetype = get_midfielder_archetype(selected_key)
+
+    display_cols = [
+        "rank", "player_name", "age", "team_name", "similarity_score",
+        "total_events", "progressive_pass_pct", "pressing_rate",
+        # Radar metrics
+        "progressive_carry_pct", "tackle_success_rate", "key_pass_rate",
+        # Other available
+        "final_third_pass_pct", "pass_accuracy", "central_presence_pct",
+        # Advanced
+        "through_ball_pct", "danger_creation_rate", "attacking_third_pct",
+    ]
+    col_names = [
+        "Rank", "Player", "Age", "Team", "Similarity %", "Events", "Prog Pass %", "Pressing %",
+        "Prog Carry %", "Tackle Success %", "Key Pass %",
+        "Final Third %", "Pass Acc %", "Central %",
+        "Through Ball %", "Danger Creation %", "Attack Third %",
+    ]
+    radar_features = ["progressive_pass_pct", "progressive_carry_pct", "pressing_rate", "tackle_success_rate", "key_pass_rate", "central_presence_pct"]
+    caption = "Midfielder archetypes computed from StatsBomb World Cup 2022 event data."
 
 elif position == "Defenders":
     profiles, n_events, n_matches = load_defender_data()

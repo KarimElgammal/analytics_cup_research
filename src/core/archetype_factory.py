@@ -8,8 +8,9 @@ from src.statsbomb.stats import (
     calculate_player_stats,
     calculate_defender_stats,
     calculate_goalkeeper_stats,
+    calculate_midfielder_stats,
 )
-from src.statsbomb.mappers import ForwardMapper, DefenderMapper, GoalkeeperMapper
+from src.statsbomb.mappers import ForwardMapper, DefenderMapper, GoalkeeperMapper, MidfielderMapper
 from src.statsbomb.registry import (
     get_player_info,
     get_player_competitions,
@@ -18,6 +19,7 @@ from src.statsbomb.registry import (
 from src.archetypes.forwards import FORWARD_DIRECTIONS
 from src.archetypes.defenders import DEFENDER_DIRECTIONS
 from src.archetypes.goalkeepers import GOALKEEPER_DIRECTIONS
+from src.archetypes.midfielders import MIDFIELDER_DIRECTIONS
 
 
 class ArchetypeFactory:
@@ -39,6 +41,7 @@ class ArchetypeFactory:
     _forward_mapper = ForwardMapper()
     _defender_mapper = DefenderMapper()
     _goalkeeper_mapper = GoalkeeperMapper()
+    _midfielder_mapper = MidfielderMapper()
 
     def __init__(self, verbose: bool = False) -> None:
         """Initialize the factory.
@@ -224,6 +227,59 @@ class ArchetypeFactory:
             target_profile=target,
             weights=weights,
             directions=GOALKEEPER_DIRECTIONS.copy(),
+        )
+
+        self._cache[cache_key] = archetype
+        return archetype
+
+    def build_midfielder(self, player_key: str) -> Archetype:
+        """Build a midfielder archetype from StatsBomb data.
+
+        Args:
+            player_key: Key from PLAYER_REGISTRY (e.g., "enzo", "tchouameni")
+
+        Returns:
+            Archetype with data-driven target profile
+        """
+        cache_key = f"midfielder_{player_key}"
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+
+        info = get_player_info(player_key)
+        competitions = get_player_competitions(player_key)
+
+        if not competitions:
+            raise ValueError(f"No competitions for midfielder '{player_key}'")
+
+        if self.verbose:
+            print(f"Loading events for {info['display_name']}...")
+
+        events = self.loader.get_player_events(
+            player_name=info["player_name"],
+            competitions=competitions,
+            verbose=self.verbose,
+        )
+
+        if len(events) == 0:
+            raise ValueError(f"No events found for '{info['player_name']}'")
+
+        if self.verbose:
+            print(f"Found {len(events)} events, calculating midfielder stats...")
+
+        # Calculate statistics and map using MidfielderMapper
+        stats = calculate_midfielder_stats(events)
+        mapper = self._midfielder_mapper
+
+        target = mapper.map_to_target(stats)
+        description = mapper.get_description(stats, target)
+        weights = mapper.compute_weights(stats)
+
+        archetype = Archetype(
+            name=player_key,
+            description=f"{info['display_name']}\n{description}",
+            target_profile=target,
+            weights=weights,
+            directions=MIDFIELDER_DIRECTIONS.copy(),
         )
 
         self._cache[cache_key] = archetype

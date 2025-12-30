@@ -15,6 +15,7 @@ class Position(Enum):
     FORWARD = auto()
     DEFENDER = auto()
     GOALKEEPER = auto()
+    MIDFIELDER = auto()
 
 
 @dataclass(frozen=True, slots=True)
@@ -132,4 +133,27 @@ GOALKEEPER_FEATURE_NAMES: dict[str, str] = {
     "to_middle_third_pct": "To Middle 3rd %",
     "to_attacking_third_pct": "To Attack 3rd %",
     "avg_passing_options": "Passing Options",
+}
+
+MIDFIELDER_FEATURE_NAMES: dict[str, str] = {
+    # Ball Progression
+    "progressive_pass_pct": "Progressive Pass %",
+    "progressive_carry_pct": "Progressive Carry %",
+    "final_third_pass_pct": "Final Third Pass %",
+    "avg_pass_distance": "Pass Distance",
+    # Defensive
+    "pressing_rate": "Pressing Rate",
+    "tackle_success_rate": "Tackle Success %",
+    "interception_rate": "Interception Rate",
+    "ball_recovery_rate": "Ball Recovery Rate",
+    # Creativity
+    "key_pass_rate": "Key Pass Rate",
+    "through_ball_pct": "Through Ball %",
+    "danger_creation_rate": "Danger Creation %",
+    # Work Rate
+    "central_presence_pct": "Central Presence %",
+    "attacking_third_pct": "Attacking Third %",
+    "avg_speed": "Avg Speed",
+    # Extra
+    "pass_accuracy": "Pass Accuracy %",
 }

@@ -87,7 +87,7 @@ entries = classify_entries(entries)
 profiles = build_player_profiles(entries)
 profiles = filter_profiles(profiles, min_entries=3)
 
-# Load archetype from StatsBomb data (12 available)
+# Load archetype from StatsBomb data (18 available)
 archetype = Archetype.from_statsbomb("alvarez")
 print(archetype.description)  # Shows actual stats
 
@@ -103,17 +103,20 @@ for row in rankings.to_dicts():
 
 ## Available Archetypes
 
-Load any of these 12 pre-built archetypes:
+Load any of these 18 pre-built archetypes:
 
 ```python
 # List all available
 Archetype.list_available()
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
+#  'enzo', 'tchouameni', 'depaul', 'griezmann', 'pedri', 'bellingham',
 #  'gvardiol', 'vandijk', 'hakimi', 'neuer', 'lloris', 'bounou']
 
 # Load specific archetype
-archetype = Archetype.from_statsbomb("giroud")   # Target man style
-archetype = Archetype.from_statsbomb("rashford") # Pace/dribbling style
-archetype = Archetype.from_statsbomb("gvardiol") # Ball-playing CB
-archetype = Archetype.from_statsbomb("hakimi")   # Attacking wing-back
+archetype = Archetype.from_statsbomb("giroud")      # Target man style
+archetype = Archetype.from_statsbomb("rashford")    # Pace/dribbling style
+archetype = Archetype.from_statsbomb("enzo")        # Box-to-box midfielder
+archetype = Archetype.from_statsbomb("tchouameni")  # Defensive anchor
+archetype = Archetype.from_statsbomb("gvardiol")    # Ball-playing CB
+archetype = Archetype.from_statsbomb("hakimi")      # Attacking wing-back
 ```

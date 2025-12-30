@@ -132,6 +132,67 @@ PLAYER_REGISTRY: dict[str, dict] = {
             (43, 106, "FIFA World Cup 2022"),
         ],
     },
+    # === MIDFIELDERS ===
+    "enzo": {
+        "player_name": "Enzo Fernandez",
+        "display_name": "Enzo Fernandez",
+        "position": "Midfielder",
+        "nationality": "Argentina",
+        "style": "Box-to-box, progressive passing, ball winner",
+        "competitions": [
+            (43, 106, "FIFA World Cup 2022"),
+        ],
+    },
+    "tchouameni": {
+        "player_name": "Aurélien Djani Tchouaméni",
+        "display_name": "Aurelien Tchouameni",
+        "position": "Midfielder",
+        "nationality": "France",
+        "style": "Defensive anchor, excellent positioning, high pressing",
+        "competitions": [
+            (43, 106, "FIFA World Cup 2022"),
+        ],
+    },
+    "depaul": {
+        "player_name": "Rodrigo Javier De Paul",
+        "display_name": "Rodrigo De Paul",
+        "position": "Midfielder",
+        "nationality": "Argentina",
+        "style": "Engine, high work rate, link-up play",
+        "competitions": [
+            (43, 106, "FIFA World Cup 2022"),
+        ],
+    },
+    "griezmann": {
+        "player_name": "Antoine Griezmann",
+        "display_name": "Antoine Griezmann",
+        "position": "Midfielder",
+        "nationality": "France",
+        "style": "Attacking midfielder, creativity, chance creation",
+        "competitions": [
+            (43, 106, "FIFA World Cup 2022"),
+        ],
+    },
+    "pedri": {
+        "player_name": "Pedro González López",
+        "display_name": "Pedri",
+        "position": "Midfielder",
+        "nationality": "Spain",
+        "style": "Technical control, possession retention, low turnovers",
+        "competitions": [
+            (43, 106, "FIFA World Cup 2022"),
+        ],
+    },
+    "bellingham": {
+        "player_name": "Jude Bellingham",
+        "display_name": "Jude Bellingham",
+        "position": "Midfielder",
+        "nationality": "England",
+        "style": "Complete midfielder, goal threat, box arrivals",
+        "competitions": [
+            (43, 106, "FIFA World Cup 2022"),
+        ],
+    },
 }
 
 

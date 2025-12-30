@@ -11,7 +11,7 @@ A player similarity study for identifying A-League players who match world-class
 
 ## Features
 
-- **12 Pre-built Archetypes**: Computed from StatsBomb World Cup 2022 data
+- **18 Pre-built Archetypes**: Computed from StatsBomb World Cup 2022 data
 - **Correlation-based Weights**: Feature weights derived from A-League data analysis
 - **Profile Building**: Automatically extract player profiles from SkillCorner tracking data
 - **Similarity Scoring**: Rank players by weighted cosine similarity
@@ -23,6 +23,7 @@ A player similarity study for identifying A-League players who match world-class
 | Position | Players | Events |
 |----------|---------|--------|
 | **Forward** | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri | 245 entries |
+| **Midfielder** | Enzo, Tchouaméni, De Paul, Griezmann, Pedri, Bellingham | 12,975 possessions |
 | **Defender** | Gvardiol, Van Dijk, Hakimi | 8,911 engagements |
 | **Goalkeeper** | Neuer, Lloris, Bounou | 522 distributions |
 
@@ -41,13 +42,14 @@ cd analytics_cup_research
 from src.core.archetype import Archetype
 from src.core.similarity import SimilarityEngine
 
-# Load archetype from StatsBomb data (12 players available)
+# Load archetype from StatsBomb data (18 players available)
 archetype = Archetype.from_statsbomb("alvarez")
 print(archetype.description)  # Shows actual World Cup 2022 stats
 
 # See all available archetypes
 print(Archetype.list_available())
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
+#  'enzo', 'tchouameni', 'depaul', 'griezmann', 'pedri', 'bellingham',
 #  'gvardiol', 'vandijk', 'hakimi', 'neuer', 'lloris', 'bounou']
 
 # Compute similarity rankings against your player profiles

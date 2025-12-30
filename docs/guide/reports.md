@@ -77,6 +77,15 @@ The AI receives different context based on position type. Each position has spec
 - Depth: distance from defensive line (lower = closer to goal)
 - Quick Break %: percentage of entries during counter-attacks
 
+### Midfielder Metrics
+
+- Progressive Pass %: percentage of passes advancing play forward
+- Progressive Carry %: percentage of carries moving ball forward
+- Pressing Rate: frequency of pressing engagements
+- Tackle Success Rate: percentage of successful tackles
+- Key Pass Rate: percentage of passes leading to shots
+- Central Presence %: time spent in central zones
+
 ### Defender Metrics
 
 - Stop Danger Rate: percentage of engagements stopping danger

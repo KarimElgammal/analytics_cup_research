@@ -2,11 +2,12 @@
 
 ## A-League Analysis Results
 
-This example shows results from analysing 10 A-League matches using 12 pre-built archetypes across forwards, defenders, and goalkeepers.
+This example shows results from analysing 10 A-League matches using 18 pre-built archetypes across forwards, midfielders, defenders, and goalkeepers.
 
 ### Data Summary
 
 - **245** final third entries detected (forwards)
+- **12,975** possession/engagement events detected (midfielders)
 - **8,911** defensive engagements detected (defenders)
 - **522** goalkeeper distributions detected
 - **10** matches analysed
@@ -41,9 +42,10 @@ The radar chart compares the top 3 candidates against the Alvarez target profile
 from src.core.archetype import Archetype
 from src.core.similarity import SimilarityEngine
 
-# See all 12 available archetypes
+# See all 18 available archetypes
 print(Archetype.list_available())
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
+#  'enzo', 'tchouameni', 'depaul', 'griezmann', 'pedri', 'bellingham',
 #  'gvardiol', 'vandijk', 'hakimi', 'neuer', 'lloris', 'bounou']
 
 # Load any archetype from StatsBomb World Cup 2022 data
@@ -75,6 +77,12 @@ forward_archetype = Archetype.from_statsbomb("giroud")  # Target man
 engine = SimilarityEngine(forward_archetype)
 engine.fit(forward_profiles)
 forward_rankings = engine.rank(top_n=5)
+
+# Midfielder analysis
+midfielder_archetype = Archetype.from_statsbomb("enzo")  # Box-to-box
+engine = SimilarityEngine(midfielder_archetype)
+engine.fit(midfielder_profiles)
+midfielder_rankings = engine.rank(top_n=5)
 
 # Defender analysis
 defender_archetype = Archetype.from_statsbomb("hakimi")  # Attacking wing-back

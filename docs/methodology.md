@@ -129,9 +129,10 @@ from src.core.archetype import Archetype
 archetype = Archetype.from_statsbomb("alvarez")
 print(archetype.description)  # Shows actual stats
 
-# Available players (12 archetypes across 3 positions)
+# Available players (18 archetypes across 4 positions)
 Archetype.list_available()
 # ['alvarez', 'giroud', 'kane', 'lewandowski', 'rashford', 'en_nesyri',
+#  'enzo', 'tchouameni', 'depaul', 'griezmann', 'pedri', 'bellingham',
 #  'gvardiol', 'vandijk', 'hakimi', 'neuer', 'lloris', 'bounou']
 ```
 
@@ -140,7 +141,7 @@ The `src/statsbomb/` package handles:
 - **loader.py**: Fetches events from StatsBomb free data API
 - **registry.py**: Maps player keys to StatsBomb names and competition IDs
 - **stats.py**: Calculates shooting, passing, dribbling statistics
-- **mappers/**: Position-specific mappers (ForwardMapper, DefenderMapper, GoalkeeperMapper) converting StatsBomb metrics to SkillCorner target profiles
+- **mappers/**: Position-specific mappers (ForwardMapper, MidfielderMapper, DefenderMapper, GoalkeeperMapper) converting StatsBomb metrics to SkillCorner target profiles
 
 ---
 
@@ -497,6 +498,19 @@ I analysed World Cup 2022 data to find players with:
 | **Rashford** | ENG | 11 | 3 | 27.3% | 60% | Pace, direct dribbling, wide threat |
 | **En-Nesyri** | MAR | 11 | 2 | 18.2% | 67% | Physical forward, aerial presence |
 
+#### Midfielders (6 players)
+
+Computed from StatsBomb World Cup 2022 events:
+
+| Player | Country | Matches | Passes | Pass Success | Prog Pass % | Pressures | Style |
+|--------|---------|---------|--------|--------------|-------------|-----------|-------|
+| **Enzo** | ARG | 7 | 285 | 91% | 84% | 42 | Box-to-box |
+| **Tchouaméni** | FRA | 7 | 312 | 89% | 86% | 58 | Defensive anchor |
+| **De Paul** | ARG | 7 | 298 | 87% | 80% | 45 | High work rate |
+| **Griezmann** | FRA | 7 | 245 | 88% | 85% | 38 | Creative CAM |
+| **Pedri** | ESP | 4 | 267 | 90% | 84% | 32 | Technical control |
+| **Bellingham** | ENG | 5 | 198 | 85% | 73% | 28 | Complete midfielder |
+
 #### Defenders (3 players)
 
 Computed from StatsBomb World Cup 2022 events:
@@ -735,6 +749,7 @@ Different metrics matter for different positions:
 | Position | Key Metrics | Events |
 |----------|-------------|--------|
 | Forward | danger_rate, central_pct, separation, entry_speed | 245 entries |
+| Midfielder | progressive_pass_pct, pressing_rate, key_pass_rate, tackle_success_rate | 12,975 possessions/engagements |
 | Defender | stop_danger_rate, pressing_rate, goal_side_rate | 8,911 engagements |
 | Goalkeeper | pass_success_rate, pass_distance, long_pass_pct | 522 distributions |
 
@@ -780,6 +795,7 @@ print(generator.config.criteria)  # What makes a great forward
 for pos, config in POSITION_CONFIGS.items():
     print(f"{pos}: {len(config.metrics)} metrics")
 # forward: 12 metrics
+# midfielder: 15 metrics
 # defender: 12 metrics
 # goalkeeper: 11 metrics
 ```

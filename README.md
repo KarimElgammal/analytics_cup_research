@@ -14,11 +14,11 @@ A player similarity study using broadcast tracking data to identify A-League pla
 
 ### Introduction
 
-This research assesses whether SkillCorner tracking data can identify A-League players matching world-class archetypes. Using broadcast tracking data from 10 A-League matches, I compare players against 12 archetypes derived from StatsBomb World Cup 2022 data across forwards, defenders, and goalkeepers.
+This research assesses whether SkillCorner tracking data can identify A-League players matching world-class archetypes. Using broadcast tracking data from 10 A-League matches, I compare players against 18 archetypes derived from StatsBomb World Cup 2022 data across forwards, midfielders, defenders, and goalkeepers.
 
 ### Methods
 
-The workflow supports three position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), defenders (Gvardiol, Van Dijk, Hakimi), and goalkeepers (Neuer, Lloris, Bounou). Each position uses different event data—forwards use final third entries (245 events), defenders use on-ball engagements (8,911 events), and goalkeepers use distribution events (522 events). Similarity is computed using weighted cosine similarity on z-score normalised features, with weights derived from correlation analysis on A-League data.
+The workflow supports four position types: forwards (Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri), midfielders (Enzo Fernandez, Tchouaméni, De Paul, Griezmann, Pedri, Bellingham), defenders (Gvardiol, Van Dijk, Hakimi), and goalkeepers (Neuer, Lloris, Bounou). Each position uses different event data—forwards use final third entries (245 events), midfielders use possession and engagement events (12,975 events), defenders use on-ball engagements (8,911 events), and goalkeepers use distribution events (522 events). Similarity is computed using weighted cosine similarity on z-score normalised features, with weights derived from correlation analysis on A-League data.
 
 ### Results
 
@@ -97,6 +97,7 @@ The interactive Streamlit app (`app.py`) allows comparison across all positions:
 | Position | Data Source | Players | Archetypes |
 |----------|-------------|---------|------------|
 | Forwards | Final third entries (245) | 31 | Alvarez, Giroud, Kane, Lewandowski, Rashford, En-Nesyri |
+| Midfielders | Possession/Engagement (12,975) | 58 | Enzo, Tchouaméni, De Paul, Griezmann, Pedri, Bellingham |
 | Defenders | Defensive engagements (8,911) | 185 | Gvardiol, Van Dijk, Hakimi |
 | Goalkeepers | Distribution events (522) | 13 | Neuer, Lloris, Bounou |
 
@@ -181,7 +182,7 @@ def call_local_model(prompt: str) -> str:
 ## Highlights
   - Cross-dataset integration: StatsBomb World Cup 2022 → SkillCorner A-League archetypes
   - Weighted cosine similarity with correlation-based feature weights
-  - 12 archetypes across 3 positions: 6 forwards, 3 defenders, 3 goalkeepers
+  - 18 archetypes across 4 positions: 6 forwards, 6 midfielders, 3 defenders, 3 goalkeepers
   - AI-powered scouting insights via GitHub Models / HuggingFace APIs
 
 ## Research Focus:

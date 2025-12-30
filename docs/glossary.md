@@ -23,6 +23,28 @@ Key metrics and terms used in the player similarity analysis.
 
 ---
 
+## Midfielder Metrics
+
+| Metric | Description |
+|--------|-------------|
+| **progressive_pass_pct** | Percentage of passes that advance play forward significantly. Higher values indicate better ball progression. |
+| **progressive_carry_pct** | Percentage of carries moving the ball forward. Indicates willingness to drive forward with the ball. |
+| **final_third_pass_pct** | Percentage of passes ending in the attacking third. Shows creativity and final third involvement. |
+| **avg_pass_distance** | Average pass distance in metres. Indicates passing range and style. |
+| **pressing_rate** | How often the midfielder engages in pressing actions. High values indicate high work rate. |
+| **tackle_success_rate** | Percentage of successful tackles. Indicates defensive reliability. |
+| **interception_rate** | Interceptions per possession. Shows reading of the game. |
+| **ball_recovery_rate** | Ball recoveries per 90 minutes. Indicates ability to win the ball back. |
+| **key_pass_rate** | Passes leading to shots as a percentage. Measures chance creation. |
+| **through_ball_pct** | Percentage of through balls attempted. Indicates creative vision. |
+| **danger_creation_rate** | Possessions leading to dangerous situations. Overall attacking contribution. |
+| **central_presence_pct** | Percentage of time in central zones. Indicates positional discipline. |
+| **attacking_third_pct** | Percentage of time in attacking third. Shows offensive positioning. |
+| **avg_speed** | Average speed during actions. Indicates mobility and intensity. |
+| **pass_accuracy** | Overall pass completion percentage. Basic technical quality indicator. |
+
+---
+
 ## Defender Metrics
 
 | Metric | Description |

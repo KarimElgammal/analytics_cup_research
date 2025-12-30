@@ -134,10 +134,33 @@ GOALKEEPER_METRICS = (
     MetricInfo("avg_targeted_xthreat", "Targeted xThreat", "Expected threat created by passes.", "number"),
     MetricInfo("avg_safe_dangerous_options", "Safe Dangerous Options", "Available safe but dangerous options.", "number"),
     MetricInfo("forward_momentum_pct", "Forward Momentum %", "Distributions with forward momentum.", "percentage"),
-    # Distribution context metrics (new Dec 2025)
+    # Distribution context metrics
     MetricInfo("avg_distribution_speed", "Distribution Speed", "Seconds from possession start to distribution. Lower = faster.", "number"),
     MetricInfo("quick_counter_launch_pct", "Counter Launch %", "Distributions that launch quick breaks.", "percentage"),
     MetricInfo("distribution_attack_rate", "Attack Rate %", "Distributions leading to shots or goals.", "percentage"),
+)
+
+MIDFIELDER_METRICS = (
+    # Ball Progression
+    MetricInfo("progressive_pass_pct", "Progressive Pass %", "Percentage of passes that progress play forward.", "percentage"),
+    MetricInfo("progressive_carry_pct", "Progressive Carry %", "Percentage of carries moving ball forward.", "percentage"),
+    MetricInfo("final_third_pass_pct", "Final Third Pass %", "Percentage of passes into the attacking third.", "percentage"),
+    MetricInfo("avg_pass_distance", "Pass Distance", "Average pass distance in meters.", "distance"),
+    # Defensive Contribution
+    MetricInfo("pressing_rate", "Pressing %", "How often midfielder engages proactively.", "percentage"),
+    MetricInfo("tackle_success_rate", "Tackle Success %", "Percentage of successful defensive engagements.", "percentage"),
+    MetricInfo("interception_rate", "Interception Rate", "Interceptions per possession event.", "number"),
+    MetricInfo("ball_recovery_rate", "Ball Recovery Rate", "Ball recoveries per possession event.", "number"),
+    # Creativity
+    MetricInfo("key_pass_rate", "Key Pass %", "Percentage of passes leading to shots.", "percentage"),
+    MetricInfo("through_ball_pct", "Through Ball %", "Percentage of through ball passes.", "percentage"),
+    MetricInfo("danger_creation_rate", "Danger Creation %", "Possessions creating danger.", "percentage"),
+    # Work Rate & Positioning
+    MetricInfo("central_presence_pct", "Central %", "Percentage of events in central zones.", "percentage"),
+    MetricInfo("attacking_third_pct", "Attacking Third %", "Time spent in attacking third.", "percentage"),
+    MetricInfo("avg_speed", "Avg Speed", "Average speed during actions (m/s).", "speed"),
+    # Extra
+    MetricInfo("pass_accuracy", "Pass Accuracy %", "Percentage of completed passes.", "percentage"),
 )
 
 POSITION_CONFIGS: dict[str, PositionConfig] = {
@@ -158,6 +181,12 @@ POSITION_CONFIGS: dict[str, PositionConfig] = {
         metrics=GOALKEEPER_METRICS,
         count_field="total_distributions",
         criteria="Goalkeepers distribute effectively and make good decisions. Key: high pass success, appropriate distance for style, quick distribution.",
+    ),
+    "midfielder": PositionConfig(
+        name="Midfielder",
+        metrics=MIDFIELDER_METRICS,
+        count_field="total_events",
+        criteria="Midfielders control tempo, progress play, contribute defensively, and create chances. Key: high progressive pass %, good pressing rate, creativity in key passes.",
     ),
 }
 
@@ -334,6 +363,7 @@ class PlayerAnalyzer:
         "forward": ["alvarez", "giroud", "kane", "lewandowski", "rashford", "en_nesyri"],
         "defender": ["gvardiol", "vandijk", "hakimi"],
         "goalkeeper": ["neuer", "lloris", "bounou"],
+        "midfielder": ["enzo", "tchouameni", "depaul", "griezmann", "pedri", "bellingham"],
     }
 
     def __init__(self, position_type: str = "forward"):

@@ -605,6 +605,150 @@ def calculate_defender_stats(events: pl.DataFrame) -> DefenderStats:
     )
 
 
+@dataclass
+class MidfielderStats:
+    """Computed statistics for midfielders from StatsBomb events.
+
+    Attributes:
+        player_name: Name of the player
+        matches: Number of matches with events
+        minutes: Estimated minutes played
+
+        passes: Total passes attempted
+        passes_completed: Successful passes
+        progressive_passes: Passes that advance play significantly
+        key_passes: Passes leading to shots
+
+        carries: Ball carries
+        progressive_carries: Carries that advance play significantly
+
+        pressures: Pressure events
+        pressure_success: Successful pressures (regained possession)
+
+        tackles: Tackle attempts
+        tackles_won: Successful tackles
+        interceptions: Ball interceptions
+        ball_recoveries: Ball recovery events
+
+        through_balls: Through ball passes
+        final_third_passes: Passes into final third
+    """
+
+    player_name: str
+    matches: int
+    minutes: float
+
+    # Passing
+    passes: int
+    passes_completed: int
+    progressive_passes: int
+    key_passes: int
+
+    # Ball progression
+    carries: int
+    progressive_carries: int
+
+    # Defensive contribution
+    pressures: int
+    pressure_success: int
+    tackles: int
+    tackles_won: int
+    interceptions: int
+    ball_recoveries: int
+
+    # Creativity
+    through_balls: int
+    final_third_passes: int
+
+    @property
+    def pass_accuracy(self) -> float:
+        """Percentage of completed passes."""
+        return (self.passes_completed / self.passes * 100) if self.passes > 0 else 0.0
+
+    @property
+    def progressive_pass_pct(self) -> float:
+        """Percentage of passes that were progressive."""
+        return (self.progressive_passes / self.passes * 100) if self.passes > 0 else 0.0
+
+    @property
+    def progressive_carry_pct(self) -> float:
+        """Percentage of carries that were progressive."""
+        return (self.progressive_carries / self.carries * 100) if self.carries > 0 else 0.0
+
+    @property
+    def tackle_success_rate(self) -> float:
+        """Percentage of successful tackles."""
+        return (self.tackles_won / self.tackles * 100) if self.tackles > 0 else 0.0
+
+    @property
+    def pressure_success_rate(self) -> float:
+        """Percentage of successful pressures."""
+        return (self.pressure_success / self.pressures * 100) if self.pressures > 0 else 0.0
+
+    @property
+    def key_pass_rate(self) -> float:
+        """Key passes per 100 passes."""
+        return (self.key_passes / self.passes * 100) if self.passes > 0 else 0.0
+
+    @property
+    def through_ball_pct(self) -> float:
+        """Percentage of passes that were through balls."""
+        return (self.through_balls / self.passes * 100) if self.passes > 0 else 0.0
+
+    @property
+    def final_third_pass_pct(self) -> float:
+        """Percentage of passes into final third."""
+        return (self.final_third_passes / self.passes * 100) if self.passes > 0 else 0.0
+
+    @property
+    def pressures_per_90(self) -> float:
+        """Pressures per 90 minutes."""
+        return (self.pressures / self.minutes) * 90 if self.minutes > 0 else 0.0
+
+    @property
+    def tackles_per_90(self) -> float:
+        """Tackles per 90 minutes."""
+        return (self.tackles / self.minutes) * 90 if self.minutes > 0 else 0.0
+
+    @property
+    def interceptions_per_90(self) -> float:
+        """Interceptions per 90 minutes."""
+        return (self.interceptions / self.minutes) * 90 if self.minutes > 0 else 0.0
+
+    @property
+    def ball_recoveries_per_90(self) -> float:
+        """Ball recoveries per 90 minutes."""
+        return (self.ball_recoveries / self.minutes) * 90 if self.minutes > 0 else 0.0
+
+    def to_dict(self) -> dict:
+        """Convert to dictionary for display/export."""
+        return {
+            "player_name": self.player_name,
+            "matches": self.matches,
+            "minutes": self.minutes,
+            "passes": self.passes,
+            "passes_completed": self.passes_completed,
+            "pass_accuracy": round(self.pass_accuracy, 1),
+            "progressive_passes": self.progressive_passes,
+            "progressive_pass_pct": round(self.progressive_pass_pct, 1),
+            "key_passes": self.key_passes,
+            "key_pass_rate": round(self.key_pass_rate, 2),
+            "carries": self.carries,
+            "progressive_carries": self.progressive_carries,
+            "progressive_carry_pct": round(self.progressive_carry_pct, 1),
+            "pressures": self.pressures,
+            "pressure_success_rate": round(self.pressure_success_rate, 1),
+            "tackles": self.tackles,
+            "tackle_success_rate": round(self.tackle_success_rate, 1),
+            "interceptions": self.interceptions,
+            "ball_recoveries": self.ball_recoveries,
+            "through_balls": self.through_balls,
+            "through_ball_pct": round(self.through_ball_pct, 2),
+            "final_third_passes": self.final_third_passes,
+            "final_third_pass_pct": round(self.final_third_pass_pct, 1),
+        }
+
+
 def calculate_goalkeeper_stats(events: pl.DataFrame) -> GoalkeeperStats:
     """Calculate goalkeeper statistics from StatsBomb events.
 
@@ -709,4 +853,161 @@ def calculate_goalkeeper_stats(events: pl.DataFrame) -> GoalkeeperStats:
         short_passes=short_passes,
         high_passes=high_passes,
         total_pass_distance=total_pass_distance,
+    )
+
+
+def calculate_midfielder_stats(events: pl.DataFrame) -> MidfielderStats:
+    """Calculate midfielder statistics from StatsBomb events.
+
+    Args:
+        events: DataFrame of StatsBomb events for one midfielder
+
+    Returns:
+        MidfielderStats dataclass with computed statistics
+    """
+    if len(events) == 0:
+        return MidfielderStats(
+            player_name="Unknown", matches=0, minutes=0,
+            passes=0, passes_completed=0, progressive_passes=0, key_passes=0,
+            carries=0, progressive_carries=0,
+            pressures=0, pressure_success=0, tackles=0, tackles_won=0,
+            interceptions=0, ball_recoveries=0, through_balls=0, final_third_passes=0,
+        )
+
+    # Get player name
+    player_name = ""
+    if "player" in events.columns:
+        first_player = events["player"].drop_nulls().first()
+        player_name = first_player if first_player else "Unknown"
+
+    # Count matches
+    matches = 0
+    if "match_id" in events.columns:
+        matches = events.select(pl.col("match_id").n_unique()).item()
+
+    # Estimate minutes
+    minutes = 1.0
+    if "minute" in events.columns:
+        unique_minutes = events.select(pl.col("minute").n_unique()).item()
+        minutes = max(unique_minutes or 1, 1)
+
+    # === PASSES ===
+    passes = 0
+    passes_completed = 0
+    progressive_passes = 0
+    key_passes = 0
+    through_balls = 0
+    final_third_passes = 0
+
+    if "type" in events.columns:
+        passes_df = events.filter(pl.col("type") == "Pass")
+        passes = len(passes_df)
+
+        if passes > 0:
+            # Successful passes
+            if "pass_outcome" in events.columns:
+                passes_completed = len(passes_df.filter(pl.col("pass_outcome").is_null()))
+            else:
+                passes_completed = passes
+
+            # Key passes (shot assists)
+            if "pass_shot_assist" in events.columns:
+                key_passes = len(passes_df.filter(pl.col("pass_shot_assist") == True))
+
+            # Through balls
+            if "pass_technique" in events.columns:
+                through_balls = len(passes_df.filter(
+                    pl.col("pass_technique") == "Through Ball"
+                ))
+
+            # Progressive passes and final third passes
+            if "location" in events.columns and "pass_end_location" in events.columns:
+                try:
+                    for row in passes_df.to_dicts():
+                        loc = row.get("location")
+                        end_loc = row.get("pass_end_location")
+                        if loc and end_loc and len(loc) >= 2 and len(end_loc) >= 2:
+                            # Progressive = moved ball forward by 10+ meters
+                            if end_loc[0] - loc[0] >= 10:
+                                progressive_passes += 1
+                            # Final third = pass ending in x >= 80 (StatsBomb coordinates)
+                            if end_loc[0] >= 80:
+                                final_third_passes += 1
+                except Exception:
+                    pass
+
+    # === CARRIES ===
+    carries = 0
+    progressive_carries = 0
+
+    if "type" in events.columns:
+        carry_df = events.filter(pl.col("type") == "Carry")
+        carries = len(carry_df)
+
+        if "carry_end_location" in events.columns and carries > 0:
+            try:
+                for row in carry_df.to_dicts():
+                    loc = row.get("location")
+                    end_loc = row.get("carry_end_location")
+                    if loc and end_loc and len(loc) >= 2 and len(end_loc) >= 2:
+                        # Progressive carry = advanced ball forward by 10+ meters
+                        if end_loc[0] - loc[0] >= 10:
+                            progressive_carries += 1
+            except Exception:
+                pass
+
+    # === PRESSURES ===
+    pressures = 0
+    pressure_success = 0
+
+    if "type" in events.columns:
+        pressure_df = events.filter(pl.col("type") == "Pressure")
+        pressures = len(pressure_df)
+
+        if "counterpress" in events.columns and pressures > 0:
+            pressure_success = len(pressure_df.filter(pl.col("counterpress") == True))
+
+    # === TACKLES ===
+    tackles = 0
+    tackles_won = 0
+
+    if "type" in events.columns:
+        tackles_df = events.filter(pl.col("type") == "Duel")
+        if "duel_type" in events.columns:
+            tackles_df = tackles_df.filter(pl.col("duel_type") == "Tackle")
+        tackles = len(tackles_df)
+
+        if "duel_outcome" in events.columns and tackles > 0:
+            tackles_won = len(tackles_df.filter(
+                pl.col("duel_outcome").is_in(["Won", "Success", "Success In Play"])
+            ))
+
+    # === INTERCEPTIONS ===
+    interceptions = 0
+    if "type" in events.columns:
+        interceptions = len(events.filter(pl.col("type") == "Interception"))
+
+    # === BALL RECOVERIES ===
+    ball_recoveries = 0
+    if "type" in events.columns:
+        ball_recoveries = len(events.filter(pl.col("type") == "Ball Recovery"))
+
+    return MidfielderStats(
+        player_name=player_name,
+        matches=matches,
+        minutes=minutes,
+        passes=passes,
+        passes_completed=passes_completed,
+        progressive_passes=progressive_passes,
+        key_passes=key_passes,
+        carries=carries,
+        progressive_carries=progressive_carries,
+        pressures=pressures,
+        pressure_success=pressure_success,
+        tackles=tackles,
+        tackles_won=tackles_won,
+        interceptions=interceptions,
+        ball_recoveries=ball_recoveries,
+        through_balls=through_balls,
+        final_third_passes=final_third_passes,
     )
